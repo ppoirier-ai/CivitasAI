@@ -26,7 +26,6 @@ export default function OpportunitiesPage() {
     const { data } = await supabase
       .from('venture_briefs')
       .select('*')
-      .eq('is_public', true)
       .order('created_at', { ascending: false });
     if (data) setBriefs(data as VentureBrief[]);
     setLoading(false);
