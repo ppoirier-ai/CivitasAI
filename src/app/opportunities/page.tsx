@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { useSupabase } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,7 +10,6 @@ import Link from 'next/link';
 import type { VentureBrief } from '@/lib/types';
 
 export default function OpportunitiesPage() {
-  const supabase = useSupabase();
   const [briefs, setBriefs] = useState<VentureBrief[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -19,17 +17,14 @@ export default function OpportunitiesPage() {
   const [sortBy, setSortBy] = useState<string>('newest');
 
   useEffect(() => {
-    loadPublicBriefs();
+    fetch('/api/public-briefs')
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) setBriefs(data as VentureBrief[]);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
-
-  async function loadPublicBriefs() {
-    const { data } = await supabase
-      .from('venture_briefs')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (data) setBriefs(data as VentureBrief[]);
-    setLoading(false);
-  }
 
   const categories = useMemo(() => {
     const cats = new Set<string>();
