@@ -18,11 +18,11 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -39,7 +39,6 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --color-point: #ff2e9a;
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -133,8 +132,7 @@
 
 /* ============ Cosmic landing styles ============ */
 
-/* Twinkling starfield (two tiled layers for parallax shimmer; a few
-   magenta stars for the point-color pop) */
+/* Twinkling starfield (two tiled layers for parallax shimmer) */
 .cosmic-stars {
   background-image:
     radial-gradient(1px 1px at 15% 25%, rgba(255, 255, 255, 0.95) 0, transparent 100%),
@@ -146,9 +144,7 @@
     radial-gradient(1px 1px at 45% 40%, rgba(190, 230, 255, 0.8) 0, transparent 100%),
     radial-gradient(1px 1px at 65% 85%, rgba(190, 230, 255, 0.6) 0, transparent 100%),
     radial-gradient(1.5px 1.5px at 10% 60%, rgba(255, 255, 255, 0.75) 0, transparent 100%),
-    radial-gradient(1px 1px at 92% 20%, rgba(255, 255, 255, 0.55) 0, transparent 100%),
-    radial-gradient(1.5px 1.5px at 30% 40%, rgba(255, 46, 154, 0.9) 0, transparent 100%),
-    radial-gradient(1px 1px at 80% 60%, rgba(255, 46, 154, 0.7) 0, transparent 100%);
+    radial-gradient(1px 1px at 92% 20%, rgba(255, 255, 255, 0.55) 0, transparent 100%);
   background-size: 480px 480px;
   animation: cosmic-twinkle 5s ease-in-out infinite alternate;
 }
@@ -165,14 +161,6 @@
   to { opacity: 1; }
 }
 
-/* Point-color glow text (neon magenta) */
-.point-text {
-  color: var(--color-point);
-  text-shadow:
-    0 0 24px rgba(255, 46, 154, 0.55),
-    0 0 64px rgba(255, 46, 154, 0.3);
-}
-
 /* Drifting nebula glows */
 .nebula {
   filter: blur(90px);
@@ -182,7 +170,6 @@
 .nebula-teal { background: rgba(46, 196, 198, 0.16); }
 .nebula-indigo { background: rgba(99, 102, 241, 0.13); animation-delay: -8s; }
 .nebula-purple { background: rgba(168, 85, 247, 0.1); animation-delay: -14s; }
-.nebula-magenta { background: rgba(255, 46, 154, 0.13); animation-delay: -4s; }
 
 @keyframes nebula-drift {
   from { transform: translate3d(0, 0, 0) scale(1); }
@@ -222,8 +209,7 @@
     radial-gradient(circle at 32% 28%, #93c5fd 0%, #2563eb 32%, #1e3a8a 62%, #0b1530 88%);
   box-shadow:
     inset -24px -24px 70px rgba(0, 0, 0, 0.75),
-    0 0 70px rgba(46, 196, 198, 0.35),
-    0 0 120px rgba(255, 46, 154, 0.22);
+    0 0 70px rgba(46, 196, 198, 0.35);
 }
 
 .planet-ring {

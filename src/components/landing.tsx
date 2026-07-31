@@ -53,7 +53,6 @@ export default function LandingPage() {
         <div className="absolute -top-40 -left-40 w-[520px] h-[520px] rounded-full nebula nebula-teal" />
         <div className="absolute -bottom-52 -right-32 w-[600px] h-[600px] rounded-full nebula nebula-indigo" />
         <div className="absolute top-1/3 right-1/4 w-[380px] h-[380px] rounded-full nebula nebula-purple" />
-        <div className="absolute bottom-1/4 left-1/5 w-[420px] h-[420px] rounded-full nebula nebula-magenta" />
 
         {/* CSS planet */}
         <div className="absolute right-[8%] top-[18%] hidden lg:block planet-scene">
@@ -64,13 +63,13 @@ export default function LandingPage() {
         </div>
 
         <div className="relative max-w-3xl mx-auto text-center px-6 py-24">
-          <Badge className="mx-auto mb-6 text-[10px] h-5 px-3 bg-point/10 text-point border border-point/25 rounded-full uppercase tracking-[0.2em]">
+          <Badge className="mx-auto mb-6 text-[10px] h-5 px-3 bg-[#2EC4C6]/10 text-[#2EC4C6] border border-[#2EC4C6]/20 rounded-full uppercase tracking-[0.2em]">
             <Sparkles className="w-3 h-3 mr-1.5" /> Institutional Space Market Intelligence
           </Badge>
 
           <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.05]">
             The Commercial Space Economy,
-            <span className="point-text block mt-2">Decoded.</span>
+            <span className="cosmic-text block mt-2">Decoded.</span>
           </h1>
 
           <p className="text-sm sm:text-base text-gray-400 mt-6 leading-relaxed max-w-xl mx-auto">
@@ -80,12 +79,12 @@ export default function LandingPage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-9">
             <Link href="/opportunities">
-              <Button className="w-full sm:w-auto bg-point hover:bg-[#e0288e] text-white font-semibold h-12 px-8 rounded-xl text-sm shadow-[0_0_40px_rgba(255,46,154,0.35)] transition-all active:scale-[0.98]">
+              <Button className="w-full sm:w-auto bg-[#2EC4C6] hover:bg-[#28B0B2] text-black font-semibold h-12 px-8 rounded-xl text-sm transition-all active:scale-[0.98]">
                 <Rocket className="w-4 h-4 mr-2" /> Explore Opportunities
               </Button>
             </Link>
             <Link href="#inside">
-              <Button variant="outline" className="w-full sm:w-auto border-gray-700/60 text-gray-300 hover:text-white hover:border-point/50 h-12 px-8 rounded-xl text-sm">
+              <Button variant="outline" className="w-full sm:w-auto border-gray-700/60 text-gray-300 hover:text-white hover:border-[#2EC4C6]/50 h-12 px-8 rounded-xl text-sm">
                 <BookOpen className="w-4 h-4 mr-2" /> See What&apos;s Inside
               </Button>
             </Link>
@@ -120,7 +119,7 @@ export default function LandingPage() {
       {/* ============ FEATURED BRIEFS ============ */}
       <section className="max-w-6xl mx-auto px-6 py-20">
         <div className="text-center mb-12">
-          <p className="text-[10px] text-point uppercase tracking-[0.25em] font-medium">Featured Briefs</p>
+          <p className="text-[10px] text-[#2EC4C6] uppercase tracking-[0.25em] font-medium">Featured Briefs</p>
           <h2 className="text-3xl font-bold text-white tracking-tight mt-2">Opportunities in orbit, on the ground</h2>
           <p className="text-sm text-gray-500 mt-3 max-w-xl mx-auto">
             Every brief is a complete teardown of one commercial space opportunity — the same format we use internally.
@@ -139,7 +138,7 @@ export default function LandingPage() {
               <Link
                 key={brief.id}
                 href={`/preview/${brief.id}`}
-                className="group rounded-xl overflow-hidden border border-gray-800/50 bg-gray-900/40 hover:border-point/40 hover:bg-gray-900/70 transition-all hover:-translate-y-1"
+                className="group rounded-xl overflow-hidden border border-gray-800/50 bg-gray-900/40 hover:border-[#2EC4C6]/40 hover:bg-gray-900/70 transition-all hover:-translate-y-1"
               >
                 <div className="aspect-[3/4] overflow-hidden">
                   {brief.cover_image_url ? (
@@ -157,7 +156,7 @@ export default function LandingPage() {
                 <div className="p-4 space-y-2">
                   <div className="flex items-center justify-between gap-2">
                     <h3 className="text-sm font-semibold text-white truncate">{brief.title}</h3>
-                    <Badge className="text-[9px] h-4 px-1.5 bg-point/10 text-point border-0 rounded-full shrink-0">
+                    <Badge className="text-[9px] h-4 px-1.5 bg-[#2EC4C6]/10 text-[#2EC4C6] border-0 rounded-full shrink-0">
                       {BRIEF_PRICE}
                     </Badge>
                   </div>
@@ -165,7 +164,7 @@ export default function LandingPage() {
                     <p className="text-[10px] text-gray-600 uppercase tracking-wider">{brief.category}</p>
                   )}
                   <p className="text-[11px] text-gray-500 line-clamp-2">{brief.summary || brief.subtitle}</p>
-                  <span className="inline-flex items-center gap-1 text-[11px] text-point opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="inline-flex items-center gap-1 text-[11px] text-[#2EC4C6] opacity-0 group-hover:opacity-100 transition-opacity">
                     Preview the brief <ArrowRight className="w-3 h-3" />
                   </span>
                 </div>
@@ -176,7 +175,7 @@ export default function LandingPage() {
 
         <div className="text-center mt-10">
           <Link href="/opportunities">
-            <Button variant="outline" className="border-gray-700/60 text-gray-300 hover:text-white hover:border-point/50 h-11 px-6 rounded-xl text-sm">
+            <Button variant="outline" className="border-gray-700/60 text-gray-300 hover:text-white hover:border-[#2EC4C6]/50 h-11 px-6 rounded-xl text-sm">
               Browse all opportunities <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Link>
@@ -188,7 +187,7 @@ export default function LandingPage() {
         <div className="absolute inset-0 cosmic-stars cosmic-stars-2 opacity-40" />
         <div className="relative max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
-            <p className="text-[10px] text-point uppercase tracking-[0.25em] font-medium">Inside Every Brief</p>
+            <p className="text-[10px] text-[#2EC4C6] uppercase tracking-[0.25em] font-medium">Inside Every Brief</p>
             <h2 className="text-3xl font-bold text-white tracking-tight mt-2">Seven sections. Zero fluff.</h2>
             <p className="text-sm text-gray-500 mt-3 max-w-xl mx-auto">
               The same analytical framework a PE deal team would use, distilled into a readable brief.
@@ -215,13 +214,13 @@ export default function LandingPage() {
       {/* ============ HOW IT WORKS ============ */}
       <section className="max-w-6xl mx-auto px-6 py-20">
         <div className="text-center mb-12">
-          <p className="text-[10px] text-point uppercase tracking-[0.25em] font-medium">How It Works</p>
+          <p className="text-[10px] text-[#2EC4C6] uppercase tracking-[0.25em] font-medium">How It Works</p>
           <h2 className="text-3xl font-bold text-white tracking-tight mt-2">From orbit to your inbox in three steps</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {STEPS.map(({ icon: Icon, title, desc }, i) => (
             <div key={title} className="relative rounded-xl border border-gray-800/50 bg-gray-900/40 p-6">
-              <span className="absolute top-4 right-5 text-4xl font-black text-point/25">{i + 1}</span>
+              <span className="absolute top-4 right-5 text-4xl font-black text-gray-800/60">{i + 1}</span>
               <div className="w-10 h-10 rounded-lg bg-[#2EC4C6]/10 flex items-center justify-center mb-4">
                 <Icon className="w-5 h-5 text-[#2EC4C6]" />
               </div>
@@ -236,10 +235,9 @@ export default function LandingPage() {
       <section className="relative py-24 overflow-hidden border-t border-gray-800/40">
         <div className="absolute inset-0 cosmic-stars" />
         <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full nebula nebula-teal" />
-        <div className="absolute -top-24 right-1/4 w-[400px] h-[300px] rounded-full nebula nebula-magenta" />
         <div className="relative max-w-2xl mx-auto text-center px-6">
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-            Your next venture is <span className="point-text">in orbit.</span>
+            Your next venture is <span className="cosmic-text">in orbit.</span>
           </h2>
           <p className="text-sm text-gray-400 mt-4">
             Stop reading headlines. Start reading the numbers — {BRIEF_PRICE} per brief, yours forever.
