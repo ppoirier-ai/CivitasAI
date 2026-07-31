@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useRole } from '@/lib/auth';
 import { Badge } from '@/components/ui/badge';
 import {
-  LayoutDashboard, FilePlus, CalendarDays, LogOut, Store, BookOpen, ShieldCheck, Settings,
+  LayoutDashboard, FilePlus, CalendarDays, LogOut, Store, ShieldCheck, Settings,
 } from 'lucide-react';
 import './globals.css';
 
@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           { href: '/admin', label: 'Admin Console', icon: ShieldCheck },
         ]
       : [
-          { href: '/library', label: 'My Library', icon: BookOpen },
+          // Customers: purchase + access everything via the marketplace
           { href: '/opportunities', label: 'Opportunities', icon: Store },
         ];
 

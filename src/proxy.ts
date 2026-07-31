@@ -53,7 +53,7 @@ export async function proxy(request: NextRequest) {
   if (isPublic) {
     // Already signed in? Skip the login page.
     if (pathname === '/auth/login' && user) {
-      const dest = isAdmin ? '/' : '/library';
+      const dest = isAdmin ? '/' : '/opportunities';
       return NextResponse.redirect(new URL(dest, request.url));
     }
     return supabaseResponse;
@@ -73,7 +73,7 @@ export async function proxy(request: NextRequest) {
     (p) => pathname === p || pathname.startsWith(`${p}/`)
   );
   if (needsAdmin && !isAdmin) {
-    return NextResponse.redirect(new URL('/library', request.url));
+    return NextResponse.redirect(new URL('/opportunities', request.url));
   }
 
   return supabaseResponse;

@@ -53,7 +53,7 @@ function LoginForm() {
     if (role === 'admin') {
       router.push(next && !isAdminPath(next) ? next : '/');
     } else {
-      router.push(next && !isAdminPath(next) ? next : '/library');
+      router.push(next && !isAdminPath(next) ? next : '/opportunities');
     }
   }
 
