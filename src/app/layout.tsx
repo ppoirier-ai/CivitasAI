@@ -2,25 +2,19 @@
 
 import { useSupabase } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import type { User } from '@supabase/supabase-js';
-import { LayoutDashboard, FilePlus, CalendarDays, LogOut } from 'lucide-react';
+import { useRole } from '@/lib/auth';
+import { Badge } from '@/components/ui/badge';
+import {
+  LayoutDashboard, FilePlus, CalendarDays, LogOut, Store, BookOpen, ShieldCheck, Settings,
+} from 'lucide-react';
 import './globals.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const supabase = useSupabase();
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user ?? null));
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => { try { subscription.unsubscribe(); } catch {} };
-  }, [supabase]);
+  const { user, role, loading } = useRole();
 
   const handleSignOut = async () => {
     try {
@@ -29,12 +23,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     router.push('/auth/login');
   };
 
-  const navLinks = [
-    { href: '/', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/opportunities', label: 'Opportunities', icon: LayoutDashboard },
-    { href: '/briefs/new', label: 'New Brief', icon: FilePlus },
-    { href: '/calendar', label: 'Calendar', icon: CalendarDays },
-  ];
+  const isAdmin = role === 'admin';
+  const signedIn = !!user;
+
+  const navLinks = !signedIn
+    ? [{ href: '/opportunities', label: 'Opportunities', icon: Store }]
+    : isAdmin
+      ? [
+          { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+          { href: '/opportunities', label: 'Opportunities', icon: Store },
+          { href: '/briefs/new', label: 'New Brief', icon: FilePlus },
+          { href: '/calendar', label: 'Calendar', icon: CalendarDays },
+          { href: '/admin', label: 'Admin Console', icon: ShieldCheck },
+        ]
+      : [
+          { href: '/library', label: 'My Library', icon: BookOpen },
+          { href: '/opportunities', label: 'Opportunities', icon: Store },
+        ];
 
   return (
     <html lang="en" className="dark">
@@ -46,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-14">
               <div className="flex items-center gap-8">
-                <Link href="/" className="flex items-center gap-3 group">
+                <Link href={signedIn ? (isAdmin ? '/' : '/library') : '/opportunities'} className="flex items-center gap-3 group">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2EC4C6] to-[#1A8A8C] flex items-center justify-center">
                     <span className="text-xs font-black text-black">S</span>
                   </div>
@@ -73,27 +78,46 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </nav>
               </div>
               <div className="flex items-center gap-3">
-                {user && (
-                  <span className="text-xs text-gray-500 hidden sm:inline">{user.email}</span>
+                {!loading && !signedIn && (
+                  <Link href="/auth/login">
+                    <Button className="bg-[#2EC4C6] hover:bg-[#28B0B2] text-black font-medium h-8 px-3.5 text-xs rounded-lg">
+                      Sign In
+                    </Button>
+                  </Link>
                 )}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleSignOut}
-                  className="text-gray-500 hover:text-white hover:bg-white/5 h-8 px-2.5"
-                >
-                  <LogOut className="w-3.5 h-3.5 mr-1.5" />
-                  <span className="text-xs">Sign Out</span>
-                </Button>
+                {signedIn && (
+                  <>
+                    <span className="text-xs text-gray-500 hidden sm:inline max-w-[160px] truncate">{user?.email}</span>
+                    {isAdmin && (
+                      <Badge className="text-[9px] h-4 px-1.5 bg-[#2EC4C6]/10 text-[#2EC4C6] border-0 rounded-full hidden sm:inline-flex">
+                        Admin
+                      </Badge>
+                    )}
+                    <Link href="/settings">
+                      <Button variant="ghost" size="sm" className="text-gray-500 hover:text-white hover:bg-white/5 h-8 w-8 p-0">
+                        <Settings className="w-3.5 h-3.5" />
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleSignOut}
+                      className="text-gray-500 hover:text-white hover:bg-white/5 h-8 px-2.5"
+                    >
+                      <LogOut className="w-3.5 h-3.5 mr-1.5" />
+                      <span className="text-xs">Sign Out</span>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
             {/* Mobile nav */}
-            <nav className="flex md:hidden items-center gap-1 pb-2.5">
+            <nav className="flex md:hidden items-center gap-1 pb-2.5 overflow-x-auto">
               {navLinks.map(({ href, label, icon: Icon }) => (
                 <Link
                   key={href}
                   href={href}
-                  className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] text-gray-400 hover:text-white hover:bg-white/5 rounded-md transition-all"
+                  className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] text-gray-400 hover:text-white hover:bg-white/5 rounded-md transition-all whitespace-nowrap"
                 >
                   <Icon className="w-3 h-3" />
                   {label}

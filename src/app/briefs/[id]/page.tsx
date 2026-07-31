@@ -12,16 +12,18 @@ import Link from 'next/link';
 import type { VentureBrief, Approval } from '@/lib/types';
 import { STATUS_LABELS, STATUS_COLORS, STATUS_ORDER } from '@/lib/types';
 import { formatDate } from '@/lib/utils';
+import { useAdminGuard } from '@/lib/auth';
 
 export default function BriefDetailPage() {
   const { id } = useParams<{ id: string }>();
   const supabase = useSupabase();
+  const { allowed, loading: guardLoading } = useAdminGuard();
   const [brief, setBrief] = useState<VentureBrief | null>(null);
   const [approvals, setApprovals] = useState<Approval[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
-  useEffect(() => { loadData(); }, [id]);
+  useEffect(() => { if (allowed) loadData(); }, [id, allowed]);
 
   async function loadData() {
     const { data: b } = await supabase.from('venture_briefs').select('*').eq('id', id).single();
@@ -82,7 +84,7 @@ export default function BriefDetailPage() {
     loadData();
   }
 
-  if (loading) return <div className="flex items-center justify-center py-32"><div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" /></div>;
+  if (loading || guardLoading) return <div className="flex items-center justify-center py-32"><div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" /></div>;
   if (!brief) return <div className="text-center py-20"><p className="text-gray-500">Brief not found</p><Link href="/" className="text-[#2EC4C6] text-sm hover:underline mt-2 inline-block">Back to Dashboard</Link></div>;
 
   const detailItems = [

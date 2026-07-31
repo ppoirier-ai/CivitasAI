@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Plus, X } from 'lucide-react';
 import Link from 'next/link';
+import { useAdminGuard } from '@/lib/auth';
 
 const VIDEO_TOPIC_CATEGORIES = [
   'Foundational / Cross-Cutting',
@@ -24,6 +25,7 @@ const VIDEO_TOPIC_CATEGORIES = [
 export default function NewBriefPage() {
   const supabase = useSupabase();
   const router = useRouter();
+  const { allowed, loading: guardLoading } = useAdminGuard();
   const [saving, setSaving] = useState(false);
   const [tagInput, setTagInput] = useState('');
   const [form, setForm] = useState({
@@ -125,6 +127,14 @@ export default function NewBriefPage() {
       { id: 'scheduled_date', label: 'Scheduled Date', required: false, component: 'date' as const },
     ]},
   ];
+
+  if (guardLoading) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto">

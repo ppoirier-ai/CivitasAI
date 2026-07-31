@@ -38,7 +38,29 @@ export interface VentureBrief {
   is_public: boolean;
   tags: string[];
   category: string | null;
+  // Shop
+  price_cents: number | null;
 }
+
+export interface Purchase {
+  id: string;
+  user_id: string;
+  brief_id: string;
+  amount_cents: number;
+  status: string;
+  created_at: string;
+}
+
+export interface PurchaseWithBrief {
+  purchase: Purchase;
+  brief: VentureBrief;
+}
+
+export type UserRole = 'admin' | 'customer' | 'none';
+
+/** Flat $99.99 price for every venture brief (mock store). */
+export const BRIEF_PRICE_CENTS = 9999;
+export const BRIEF_PRICE = '$99.99';
 
 export interface Approval {
   id: string;
