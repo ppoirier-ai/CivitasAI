@@ -162,22 +162,22 @@ export default function NewBriefPage() {
                     {required && <span className="text-red-400 ml-0.5">*</span>}
                   </Label>
                   {component === 'textarea' ? (
-                    <Textarea id={id} value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                    <Textarea id={id} value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
                       placeholder={placeholder} rows={3}
                       className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg focus:border-[#2EC4C6]/50 resize-none" />
                   ) : component === 'textarea2' ? (
-                    <Textarea id={id} value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                    <Textarea id={id} value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
                       placeholder={placeholder} rows={2}
                       className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg focus:border-[#2EC4C6]/50 resize-none" />
                   ) : component === 'textarea4' ? (
-                    <Textarea id={id} value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                    <Textarea id={id} value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
                       placeholder={placeholder} rows={4}
                       className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg focus:border-[#2EC4C6]/50 resize-none" />
                   ) : component === 'date' ? (
-                    <Input id={id} type="date" value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                    <Input id={id} type="date" value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
                       className="bg-gray-800/60 border-gray-700/50 text-white text-sm rounded-lg h-9 focus:border-[#2EC4C6]/50" />
                   ) : component === 'select' ? (
-                    <select id={id} value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                    <select id={id} value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
                       className="w-full bg-gray-800/60 border border-gray-700/50 text-white text-sm rounded-lg h-9 px-3 focus:border-[#2EC4C6]/50 focus:outline-none">
                       <option value="" className="bg-gray-800">{placeholder}</option>
                       {VIDEO_TOPIC_CATEGORIES.map((cat) => (
@@ -185,7 +185,7 @@ export default function NewBriefPage() {
                       ))}
                     </select>
                   ) : (
-                    <Input id={id} value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                    <Input id={id} value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
                       placeholder={placeholder}
                       className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg h-9 focus:border-[#2EC4C6]/50" />
                   )}

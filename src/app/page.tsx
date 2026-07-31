@@ -18,16 +18,6 @@ export default function DashboardPage() {
   const [briefs, setBriefs] = useState<VentureBrief[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!allowed) return;
-    loadBriefs();
-    const sub = supabase
-      .channel('briefs_changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'venture_briefs' }, () => loadBriefs())
-      .subscribe();
-    return () => { void sub.unsubscribe(); };
-  }, [supabase, allowed]);
-
   async function loadBriefs() {
     const { data } = await supabase
       .from('venture_briefs')
@@ -36,6 +26,20 @@ export default function DashboardPage() {
     if (data) setBriefs(data as VentureBrief[]);
     setLoading(false);
   }
+
+  useEffect(() => {
+    if (!allowed) return;
+    // Async fetch — setState happens after await, never synchronously in the effect body
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadBriefs();
+    const sub = supabase
+      .channel('briefs_changes')
+      // Realtime events fire asynchronously — never synchronously during the effect body
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'venture_briefs' }, () => loadBriefs())
+      .subscribe();
+    return () => { void sub.unsubscribe(); };
+  }, [supabase, allowed]);
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this brief permanently?')) return;
