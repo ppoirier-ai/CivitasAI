@@ -47,12 +47,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Teal accent bar */}
         <div className="h-0.5 bg-gradient-to-r from-[#2EC4C6] via-[#2EC4C6]/50 to-transparent" />
 
-        <header className="border-b border-gray-800/60 bg-[#0D1529]/95 backdrop-blur-sm sticky top-0 z-50">
+        <header className="border-b border-white/5 bg-[#0D1529]/95 backdrop-blur-sm sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-14">
               <div className="flex items-center gap-8">
                 <Link href={signedIn ? (isAdmin ? '/dashboard' : '/opportunities') : '/opportunities'} className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2EC4C6] to-[#1A8A8C] flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#2EC4C6] to-[#1A8A8C] ring-1 ring-white/10 flex items-center justify-center shadow-[0_2px_12px_rgba(46,196,198,0.25)]">
                     <span className="text-xs font-black text-black">S</span>
                   </div>
                   <div className="hidden sm:block">
@@ -131,12 +131,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
 
-        <footer className="border-t border-gray-800/40 mt-auto py-5">
+        <footer className="border-t border-white/5 mt-auto py-6">
           <div className="max-w-7xl mx-auto px-4 text-center">
-            <p className="text-[11px] text-gray-600">
+            <p className="text-[11px] text-gray-500 tracking-wide">
               Prepared by Smooth Capital LLC &bull; Spacenomics Venture Briefs
             </p>
-            <p className="text-[9px] text-gray-700/60 mt-1 max-w-lg mx-auto">
+            <p className="text-[9px] text-gray-700/60 mt-1.5 max-w-lg mx-auto">
               Educational and commercial intelligence only. Not investment advice. Not an offer to sell securities.
             </p>
           </div>
