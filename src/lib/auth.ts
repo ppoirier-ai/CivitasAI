@@ -101,7 +101,7 @@ export function useRole(): RoleState {
 
 /** Route a freshly signed-in user to the right home. */
 export function homeForRole(role: UserRole): string {
-  return role === 'admin' ? '/' : '/opportunities';
+  return role === 'admin' ? '/dashboard' : '/opportunities';
 }
 
 /**

@@ -126,5 +126,140 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+}
+
+/* ============ Cosmic landing styles ============ */
+
+/* Twinkling starfield (two tiled layers for parallax shimmer) */
+.cosmic-stars {
+  background-image:
+    radial-gradient(1px 1px at 15% 25%, rgba(255, 255, 255, 0.95) 0, transparent 100%),
+    radial-gradient(1px 1px at 35% 65%, rgba(255, 255, 255, 0.7) 0, transparent 100%),
+    radial-gradient(1.5px 1.5px at 55% 15%, rgba(255, 255, 255, 0.9) 0, transparent 100%),
+    radial-gradient(1px 1px at 72% 45%, rgba(255, 255, 255, 0.6) 0, transparent 100%),
+    radial-gradient(1.5px 1.5px at 88% 75%, rgba(255, 255, 255, 0.85) 0, transparent 100%),
+    radial-gradient(1px 1px at 25% 85%, rgba(255, 255, 255, 0.5) 0, transparent 100%),
+    radial-gradient(1px 1px at 45% 40%, rgba(190, 230, 255, 0.8) 0, transparent 100%),
+    radial-gradient(1px 1px at 65% 85%, rgba(190, 230, 255, 0.6) 0, transparent 100%),
+    radial-gradient(1.5px 1.5px at 10% 60%, rgba(255, 255, 255, 0.75) 0, transparent 100%),
+    radial-gradient(1px 1px at 92% 20%, rgba(255, 255, 255, 0.55) 0, transparent 100%);
+  background-size: 480px 480px;
+  animation: cosmic-twinkle 5s ease-in-out infinite alternate;
+}
+
+.cosmic-stars-2 {
+  background-size: 300px 300px;
+  opacity: 0.7;
+  animation-delay: -2.5s;
+  animation-duration: 7s;
+}
+
+@keyframes cosmic-twinkle {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+/* Drifting nebula glows */
+.nebula {
+  filter: blur(90px);
+  pointer-events: none;
+  animation: nebula-drift 22s ease-in-out infinite alternate;
+}
+.nebula-teal { background: rgba(46, 196, 198, 0.16); }
+.nebula-indigo { background: rgba(99, 102, 241, 0.13); animation-delay: -8s; }
+.nebula-purple { background: rgba(168, 85, 247, 0.1); animation-delay: -14s; }
+
+@keyframes nebula-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(40px, -30px, 0) scale(1.12); }
+}
+
+/* Gradient headline text */
+.cosmic-text {
+  background: linear-gradient(120deg, #2EC4C6 0%, #7dd3fc 45%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: cosmic-shimmer 6s ease-in-out infinite alternate;
+}
+
+@keyframes cosmic-shimmer {
+  from { filter: brightness(1); }
+  to { filter: brightness(1.25); }
+}
+
+/* CSS planet with orbital ring + moon */
+.planet-scene {
+  perspective: 900px;
+  animation: planet-float 14s ease-in-out infinite alternate;
+}
+@keyframes planet-float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-18px); }
+}
+
+.planet {
+  position: relative;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, #93c5fd 0%, #2563eb 32%, #1e3a8a 62%, #0b1530 88%);
+  box-shadow:
+    inset -24px -24px 70px rgba(0, 0, 0, 0.75),
+    0 0 70px rgba(46, 196, 198, 0.35);
+}
+
+.planet-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 330px;
+  height: 100px;
+  border: 2px solid rgba(46, 196, 198, 0.45);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotateX(72deg) rotateZ(-14deg);
+  box-shadow: 0 0 24px rgba(46, 196, 198, 0.25);
+  animation: ring-spin 26s linear infinite;
+}
+
+@keyframes ring-spin {
+  from { transform: translate(-50%, -50%) rotateX(72deg) rotateZ(-14deg) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotateX(72deg) rotateZ(-14deg) rotate(360deg); }
+}
+
+.planet-moon {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #e2e8f0, #94a3b8 60%, #475569);
+  box-shadow: 0 0 12px rgba(226, 232, 240, 0.5);
+  transform-origin: 0 120px;
+  animation: moon-orbit 12s linear infinite;
+}
+
+@keyframes moon-orbit {
+  from { transform: rotate(0deg) translateX(105px); }
+  to { transform: rotate(360deg) translateX(105px); }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .cosmic-stars,
+  .cosmic-stars-2,
+  .nebula,
+  .cosmic-text,
+  .planet-scene,
+  .planet-ring,
+  .planet-moon {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }

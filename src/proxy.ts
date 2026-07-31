@@ -42,6 +42,7 @@ export async function proxy(request: NextRequest) {
 
   // Public paths (no session required)
   const isPublic = [
+    '/',
     '/opportunities',
     '/preview',
     '/auth/login',
@@ -49,12 +50,12 @@ export async function proxy(request: NextRequest) {
     '/api/public-briefs',
     '/api/auth/signup',
     '/api/cron',
-  ].some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  ].some((p) => pathname === p || (p !== '/' && pathname.startsWith(`${p}/`)));
 
   if (isPublic) {
     // Already signed in? Skip the login page.
     if (pathname === '/auth/login' && user) {
-      const dest = isAdmin ? '/' : '/opportunities';
+      const dest = isAdmin ? '/dashboard' : '/opportunities';
       return NextResponse.redirect(new URL(dest, request.url));
     }
     return supabaseResponse;
@@ -69,7 +70,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // Admin-only paths
-  const adminOnly = ['/', '/briefs', '/calendar', '/admin', '/api/admin'];
+  const adminOnly = ['/dashboard', '/briefs', '/calendar', '/admin', '/api/admin'];
   const needsAdmin = adminOnly.some(
     (p) => pathname === p || pathname.startsWith(`${p}/`)
   );

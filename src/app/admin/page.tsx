@@ -86,7 +86,7 @@ export default function AdminPage() {
           <h1 className="text-xl font-bold text-white tracking-tight">Admin Console</h1>
           <p className="text-sm text-gray-500 mt-0.5">Store performance &amp; operations at a glance</p>
         </div>
-        <Link href="/">
+        <Link href="/dashboard">
           <ButtonGhost>Brief Pipeline</ButtonGhost>
         </Link>
       </div>
