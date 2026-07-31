@@ -237,7 +237,7 @@ export default function OpportunitiesPage() {
       </div>
 
       {/* Results count */}
-      <p className="text-xs text-gray-600">{filtered.length} opportunity{filtered.length !== 1 ? 'ies' : 'y'} found</p>
+      <p className="text-xs text-gray-600">{filtered.length} {filtered.length === 1 ? 'opportunity' : 'opportunities'} found</p>
 
       {/* Grid */}
       {filtered.length === 0 ? (
