@@ -41,24 +41,18 @@ const fmtMoney = (cents: number) =>
 export default function AdminPage() {
   const { role, loading: roleLoading } = useRole();
   const [data, setData] = useState<AdminStats | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (roleLoading) return;
-    if (role !== 'admin') {
-      setLoading(false);
-      return;
-    }
+    if (roleLoading || role !== 'admin') return;
     fetch('/api/admin/stats')
       .then((r) => r.json())
       .then((d) => {
         if (d?.stats) setData(d);
-        setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {});
   }, [role, roleLoading]);
 
-  if (loading || roleLoading) {
+  if (roleLoading || !data) {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" />
@@ -77,7 +71,7 @@ export default function AdminPage() {
     );
   }
 
-  const s = data?.stats;
+  const s = data.stats;
   const statCards = [
     { label: 'Total Revenue', value: s ? fmtMoney(s.total_revenue_cents) : '$0.00', icon: DollarSign, color: 'text-[#2EC4C6]', bg: 'bg-[#2EC4C6]/10' },
     { label: 'Orders', value: s ? String(s.orders) : '0', icon: ShoppingCart, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
