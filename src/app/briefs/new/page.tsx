@@ -142,7 +142,7 @@ export default function NewBriefPage() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="flex items-center gap-3 mb-6">
-        <Link href="/">
+        <Link href="/dashboard">
           <Button variant="ghost" size="icon" className="w-8 h-8 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg">
             <ArrowLeft className="w-4 h-4" />
           </Button>
@@ -223,7 +223,7 @@ export default function NewBriefPage() {
 
         {/* Submit */}
         <div className="flex items-center justify-end gap-2.5">
-          <Link href="/">
+          <Link href="/dashboard">
             <Button type="button" variant="ghost" size="sm" className="text-gray-500 hover:text-white h-9 text-sm">Cancel</Button>
           </Link>
           <Button type="submit" disabled={saving || !form.title}

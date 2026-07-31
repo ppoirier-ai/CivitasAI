@@ -85,7 +85,7 @@ export default function BriefDetailPage() {
   }
 
   if (loading || guardLoading) return <div className="flex items-center justify-center py-32"><div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" /></div>;
-  if (!brief) return <div className="text-center py-20"><p className="text-gray-500">Brief not found</p><Link href="/" className="text-[#2EC4C6] text-sm hover:underline mt-2 inline-block">Back to Dashboard</Link></div>;
+  if (!brief) return <div className="text-center py-20"><p className="text-gray-500">Brief not found</p><Link href="/dashboard" className="text-[#2EC4C6] text-sm hover:underline mt-2 inline-block">Back to Dashboard</Link></div>;
 
   const detailItems = [
     { icon: Tag, label: 'Topic', value: brief.topic || 'Not specified' },
@@ -98,7 +98,7 @@ export default function BriefDetailPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-start gap-3">
-        <Link href="/">
+        <Link href="/dashboard">
           <Button variant="ghost" size="icon" className="w-8 h-8 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg mt-0.5">
             <ArrowLeft className="w-4 h-4" />
           </Button>

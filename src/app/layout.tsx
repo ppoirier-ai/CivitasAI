@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     ? [{ href: '/opportunities', label: 'Opportunities', icon: Store }]
     : isAdmin
       ? [
-          { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+          { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
           { href: '/opportunities', label: 'Opportunities', icon: Store },
           { href: '/briefs/new', label: 'New Brief', icon: FilePlus },
           { href: '/calendar', label: 'Calendar', icon: CalendarDays },
@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-14">
               <div className="flex items-center gap-8">
-                <Link href={signedIn ? (isAdmin ? '/' : '/library') : '/opportunities'} className="flex items-center gap-3 group">
+                <Link href={signedIn ? (isAdmin ? '/dashboard' : '/opportunities') : '/opportunities'} className="flex items-center gap-3 group">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2EC4C6] to-[#1A8A8C] flex items-center justify-center">
                     <span className="text-xs font-black text-black">S</span>
                   </div>

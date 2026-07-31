@@ -11,7 +11,7 @@ import { ArrowRight, User, ShieldCheck, ArrowLeft } from 'lucide-react';
 import { homeForRole } from '@/lib/auth';
 import type { UserRole } from '@/lib/types';
 
-const ADMIN_PATHS = ['/', '/briefs', '/calendar', '/admin'];
+const ADMIN_PATHS = ['/dashboard', '/briefs', '/calendar', '/admin'];
 
 function isAdminPath(p: string) {
   return ADMIN_PATHS.some(
@@ -51,7 +51,7 @@ function LoginForm() {
 
   function routeByRole(role: UserRole) {
     if (role === 'admin') {
-      router.push(next && !isAdminPath(next) ? next : '/');
+      router.push(next && !isAdminPath(next) ? next : '/dashboard');
     } else {
       router.push(next && !isAdminPath(next) ? next : '/opportunities');
     }
