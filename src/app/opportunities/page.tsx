@@ -12,6 +12,7 @@ import {
 import Link from 'next/link';
 import { useRole } from '@/lib/auth';
 import { BRIEF_PRICE } from '@/lib/types';
+import { firstMoneyToken, firstPercent } from '@/lib/metrics';
 import type { MarketplaceBrief } from '@/lib/types';
 
 export default function OpportunitiesPage() {
@@ -305,14 +306,14 @@ export default function OpportunitiesPage() {
                         <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
                           <BarChart3 className="w-3 h-3 text-[#2EC4C6]/60 mx-auto mb-0.5" />
                           <p className="text-[9px] text-gray-600 uppercase tracking-wider">TAM</p>
-                          <p className="text-[10px] text-gray-300 font-medium truncate">{brief.tam.replace(/[^0-9$BTMkb]/g, '')}</p>
+                          <p className="text-[10px] text-gray-300 font-medium truncate">{firstMoneyToken(brief.tam) ?? brief.tam}</p>
                         </div>
                       )}
                       {brief.cagr && (
                         <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
                           <TrendingUp className="w-3 h-3 text-emerald-400/60 mx-auto mb-0.5" />
                           <p className="text-[9px] text-gray-600 uppercase tracking-wider">CAGR</p>
-                          <p className="text-[10px] text-emerald-300 font-medium">{brief.cagr.replace(/[^0-9.%]/g, '')}</p>
+                          <p className="text-[10px] text-emerald-300 font-medium">{firstPercent(brief.cagr) ?? brief.cagr}</p>
                         </div>
                       )}
                       {brief.roi && (
@@ -326,7 +327,7 @@ export default function OpportunitiesPage() {
                         <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
                           <DollarSign className="w-3 h-3 text-amber-400/60 mx-auto mb-0.5" />
                           <p className="text-[9px] text-gray-600 uppercase tracking-wider">Capital</p>
-                          <p className="text-[10px] text-amber-300 font-medium truncate">{brief.capital_required.replace(/[^0-9$BTMkb]/g, '')}</p>
+                          <p className="text-[10px] text-amber-300 font-medium truncate">{firstMoneyToken(brief.capital_required) ?? brief.capital_required}</p>
                         </div>
                       )}
                     </div>
@@ -367,12 +368,19 @@ export default function OpportunitiesPage() {
                           )}
                         </>
                       ) : (
-                        <Button
-                          onClick={() => handlePurchase(brief.id)}
-                          className="flex-1 bg-[#2EC4C6] hover:bg-[#28B0B2] text-black text-[10px] h-7 rounded-lg font-medium"
-                        >
-                          <ShoppingBag className="w-3 h-3 mr-1" /> Purchase · {BRIEF_PRICE}
-                        </Button>
+                        <>
+                          <Link href={`/preview/${brief.id}`} className="shrink-0">
+                            <Button variant="outline" size="sm" className="border-gray-700/50 text-gray-400 hover:text-white h-7 text-[10px] rounded-lg">
+                              <BookOpen className="w-3 h-3 mr-1" /> Preview
+                            </Button>
+                          </Link>
+                          <Button
+                            onClick={() => handlePurchase(brief.id)}
+                            className="flex-1 bg-[#2EC4C6] hover:bg-[#28B0B2] text-black text-[10px] h-7 rounded-lg font-medium"
+                          >
+                            <ShoppingBag className="w-3 h-3 mr-1" /> Purchase · {BRIEF_PRICE}
+                          </Button>
+                        </>
                       )}
                       {brief.video_url && (
                         <a href={brief.video_url} target="_blank" rel="noreferrer">

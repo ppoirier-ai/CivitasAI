@@ -43,6 +43,7 @@ export async function proxy(request: NextRequest) {
   // Public paths (no session required)
   const isPublic = [
     '/opportunities',
+    '/preview',
     '/auth/login',
     '/auth/callback',
     '/api/public-briefs',
