@@ -133,8 +133,8 @@ export default function PreviewPage() {
       {/* Header */}
       <div className="space-y-4">
         {brief.cover_image_url && (
-          <div className="aspect-[4/1] overflow-hidden rounded-xl">
-            <img src={brief.cover_image_url} alt={brief.title} className="w-full h-full object-cover" />
+          <div className="aspect-[3/4] w-full max-w-[420px] mx-auto overflow-hidden rounded-xl shadow-2xl shadow-black/40">
+            <img src={brief.cover_image_url} alt={brief.title} className="w-full h-full object-cover object-top" />
           </div>
         )}
         <div>

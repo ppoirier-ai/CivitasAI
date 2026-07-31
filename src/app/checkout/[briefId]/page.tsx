@@ -166,8 +166,8 @@ export default function CheckoutPage() {
           <CardContent className="p-5 space-y-3">
             <p className="text-[10px] text-gray-600 uppercase tracking-wider">Order Summary</p>
             {brief?.cover_image_url && (
-              <div className="aspect-[3/1] overflow-hidden rounded-lg">
-                <img src={brief.cover_image_url} alt={brief.title} className="w-full h-full object-cover" />
+              <div className="aspect-[3/4] overflow-hidden rounded-lg">
+                <img src={brief.cover_image_url} alt={brief.title} className="w-full h-full object-cover object-top" />
               </div>
             )}
             <h3 className="text-sm font-semibold text-white leading-snug">{brief?.title}</h3>

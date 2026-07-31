@@ -75,11 +75,11 @@ export default function LibraryPage() {
             <Card key={purchase.id} className="bg-gray-900/40 border-gray-800/40 hover:border-gray-700/50 transition-all group hover:bg-gray-900/60">
               <CardContent className="p-0">
                 {brief.cover_image_url ? (
-                  <div className="aspect-[3/1] overflow-hidden rounded-t-lg">
-                    <img src={brief.cover_image_url} alt={brief.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="aspect-[3/4] overflow-hidden rounded-t-lg">
+                    <img src={brief.cover_image_url} alt={brief.title} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
                   </div>
                 ) : (
-                  <div className="aspect-[3/1] bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-t-lg flex items-center justify-center">
+                  <div className="aspect-[3/4] bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-t-lg flex items-center justify-center">
                     <span className="text-[10px] text-gray-600 uppercase tracking-widest">Spacenomics</span>
                   </div>
                 )}
