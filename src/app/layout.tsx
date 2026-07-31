@@ -1,5 +1,6 @@
 'use client';
 
+import { Playfair_Display } from 'next/font/google';
 import { useSupabase } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -10,6 +11,14 @@ import {
   LayoutDashboard, FilePlus, CalendarDays, LogOut, Store, ShieldCheck, Settings,
 } from 'lucide-react';
 import './globals.css';
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+});
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const supabase = useSupabase();
@@ -43,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en" className="dark">
-      <body className="min-h-screen bg-[#0A1222] text-white antialiased flex flex-col">
+      <body className={`${playfair.variable} min-h-screen bg-[#0A1222] text-white antialiased flex flex-col`}>
         {/* Teal accent bar */}
         <div className="h-0.5 bg-gradient-to-r from-[#2EC4C6] via-[#2EC4C6]/50 to-transparent" />
 
