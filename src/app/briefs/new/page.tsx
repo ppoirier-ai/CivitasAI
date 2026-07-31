@@ -41,6 +41,7 @@ export default function NewBriefPage() {
     cagr: '',
     capital_required: '',
     profit_margin: '',
+    roi: '',
     category: '',
     purchase_url: '',
     video_url: '',
@@ -82,6 +83,7 @@ export default function NewBriefPage() {
         cagr: form.cagr || null,
         capital_required: form.capital_required || null,
         profit_margin: form.profit_margin || null,
+        roi: form.roi || null,
         category: form.category || null,
         purchase_url: form.purchase_url || null,
         video_url: form.video_url || null,
@@ -115,6 +117,7 @@ export default function NewBriefPage() {
       { id: 'cagr', label: 'CAGR (Growth over 5 years)', required: false, placeholder: 'e.g., 45% CAGR over next 5 years' },
       { id: 'capital_required', label: 'Capital Required', required: false, placeholder: 'e.g., $45M for initial manufacturing capacity' },
       { id: 'profit_margin', label: 'Expected Profit Margin', required: false, placeholder: 'e.g., 65-75% gross margin' },
+      { id: 'roi', label: 'ROI (Return on Investment)', required: false, placeholder: 'e.g., 3.2x in 5 years or 220% over 5 years' },
     ]},
     { section: 'Marketplace', fields: [
       { id: 'purchase_url', label: 'Purchase URL', required: false, placeholder: 'https://smooth.fund/venture-briefs/...' },
