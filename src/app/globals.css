@@ -190,6 +190,59 @@
   to { filter: brightness(1.25); }
 }
 
+/* ============ Modern decoration (Aug 2026) ============ */
+
+/* Glass card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 40px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Scroll-reveal (opacity + rise) */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* Subtle blueprint grid for the hero */
+.cosmic-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 35%, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 35%, black 30%, transparent 75%);
+}
+
+/* Bouncing scroll cue */
+.scroll-cue {
+  animation: scroll-bounce 2.2s ease-in-out infinite;
+}
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+/* Pulsing status dot for the hero badge */
+.pulse-dot {
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(46, 196, 198, 0.45); }
+  50% { box-shadow: 0 0 0 6px rgba(46, 196, 198, 0); }
+}
+
 /* CSS planet with orbital ring + moon */
 .planet-scene {
   perspective: 900px;
@@ -256,8 +309,15 @@
   .cosmic-text,
   .planet-scene,
   .planet-ring,
-  .planet-moon {
+  .planet-moon,
+  .scroll-cue,
+  .pulse-dot {
     animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
   html {
     scroll-behavior: auto;
