@@ -101,7 +101,7 @@ export function useRole(): RoleState {
 
 /** Route a freshly signed-in user to the right home. */
 export function homeForRole(role: UserRole): string {
-  return role === 'admin' ? '/' : '/library';
+  return role === 'admin' ? '/' : '/opportunities';
 }
 
 /**
@@ -115,7 +115,7 @@ export function useAdminGuard() {
   useEffect(() => {
     if (loading) return;
     if (role !== 'admin') {
-      router.replace('/library');
+      router.replace('/opportunities');
     }
   }, [role, loading, router]);
 

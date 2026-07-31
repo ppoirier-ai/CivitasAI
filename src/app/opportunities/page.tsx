@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import {
-  Search, ArrowUpRight, Play, TrendingUp, DollarSign, BarChart3, Filter, X, Eye, Download, ShoppingBag, CheckCircle2, Gauge,
+  Search, ArrowUpRight, Play, TrendingUp, DollarSign, BarChart3, Filter, X, Eye, Download, ShoppingBag, CheckCircle2, Gauge, BookOpen,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRole } from '@/lib/auth';
@@ -146,6 +146,14 @@ export default function OpportunitiesPage() {
         <p className="text-[11px] text-[#2EC4C6] mt-3 inline-flex items-center gap-1.5 bg-[#2EC4C6]/10 px-3 py-1 rounded-full">
           <ShoppingBag className="w-3 h-3" /> {BRIEF_PRICE} per brief · lifetime access
         </p>
+        {role !== 'none' && role !== 'admin' && (
+          <Link
+            href="/library"
+            className="inline-flex items-center gap-1.5 text-[11px] text-gray-400 hover:text-white mt-3 bg-gray-900/60 border border-gray-800/50 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <BookOpen className="w-3.5 h-3.5" /> My Library
+          </Link>
+        )}
       </div>
 
       {/* Search & Filters */}
