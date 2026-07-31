@@ -40,3 +40,20 @@ export function parseCapitalMillions(
   if (values.length === 0) return null;
   return { min: Math.min(...values), max: Math.max(...values) };
 }
+
+/**
+ * First money token for display: "$45M", "$10M–$50M", "$1.2B".
+ * Falls back to null when nothing parseable is present.
+ */
+export function firstMoneyToken(text: string | null | undefined): string | null {
+  if (!text) return null;
+  const range = text.match(/\$?\d+(?:\.\d+)?[KMBT]\s*[-–—]\s*\$?\d+(?:\.\d+)?[KMBT]/i);
+  if (range) return range[0];
+  return text.match(/\$?\d+(?:\.\d+)?[KMBT]/i)?.[0] ?? null;
+}
+
+/** First percentage token for display: "45% CAGR over 5 years" -> "45%". */
+export function firstPercent(text: string | null | undefined): string | null {
+  if (!text) return null;
+  return text.match(/\d+(?:\.\d+)?%/)?.[0] ?? null;
+}

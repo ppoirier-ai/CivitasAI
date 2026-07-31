@@ -37,21 +37,22 @@ export default function CheckoutPage() {
     if (!briefId) return;
     (async () => {
       try {
-        const [briefRes, libRes] = await Promise.all([
-          fetch(`/api/public-briefs?id=${briefId}`),
-          fetch('/api/my-library'),
-        ]);
-        const briefData = await briefRes.json();
+        const briefRes = await fetch(`/api/public-briefs?id=${briefId}`);
+        const briefData = await briefRes.json().catch(() => null);
         if (briefRes.ok && briefData?.id) {
           setBrief(briefData);
         } else {
           setError('This venture brief is not available for purchase.');
         }
-        const libData = await libRes.json();
-        const ownedEntry = (libData?.purchases ?? []).find(
-          (p: PurchaseWithBrief) => p.brief?.id === briefId
-        );
-        if (ownedEntry) setOwned(ownedEntry);
+        // my-library is session-protected — tolerate redirect/HTML as "not owned"
+        const libRes = await fetch('/api/my-library').catch(() => null);
+        if (libRes && libRes.ok) {
+          const libData = await libRes.json().catch(() => ({ purchases: [] }));
+          const ownedEntry = (libData?.purchases ?? []).find(
+            (p: PurchaseWithBrief) => p.brief?.id === briefId
+          );
+          if (ownedEntry) setOwned(ownedEntry);
+        }
       } catch {
         setError('Could not load this brief. Please try again.');
       } finally {
