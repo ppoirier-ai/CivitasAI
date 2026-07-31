@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import type { VentureBrief } from '@/lib/types';
+import { useAdminGuard } from '@/lib/auth';
 import {
   format,
   startOfMonth,
@@ -22,11 +23,13 @@ import {
 
 export default function CalendarPage() {
   const supabase = useSupabase();
+  const { allowed, loading: guardLoading } = useAdminGuard();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [briefs, setBriefs] = useState<VentureBrief[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!allowed) return;
     (async () => {
       const { data } = await supabase.from('venture_briefs').select('*').not('scheduled_date', 'is', null).order('scheduled_date', { ascending: true });
       if (data) setBriefs(data as VentureBrief[]);
@@ -47,7 +50,7 @@ export default function CalendarPage() {
     if (data) setBriefs(data as VentureBrief[]);
   }
 
-  if (loading) return <div className="flex items-center justify-center py-32"><div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" /></div>;
+  if (loading || guardLoading) return <div className="flex items-center justify-center py-32"><div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" /></div>;
 
   return (
     <div className="space-y-6">

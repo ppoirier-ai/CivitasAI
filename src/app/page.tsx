@@ -10,20 +10,23 @@ import { Plus, Calendar, FileText, TrendingUp, CircleDot, CheckCircle2, ArrowUpR
 import type { VentureBrief } from '@/lib/types';
 import { STATUS_LABELS, STATUS_COLORS } from '@/lib/types';
 import { formatDateShort } from '@/lib/utils';
+import { useAdminGuard } from '@/lib/auth';
 
 export default function DashboardPage() {
   const supabase = useSupabase();
+  const { allowed, loading: guardLoading } = useAdminGuard();
   const [briefs, setBriefs] = useState<VentureBrief[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!allowed) return;
     loadBriefs();
     const sub = supabase
       .channel('briefs_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'venture_briefs' }, () => loadBriefs())
       .subscribe();
     return () => { void sub.unsubscribe(); };
-  }, [supabase]);
+  }, [supabase, allowed]);
 
   async function loadBriefs() {
     const { data } = await supabase
@@ -64,7 +67,7 @@ export default function DashboardPage() {
     },
   ];
 
-  if (loading) {
+  if (loading || guardLoading) {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" />
