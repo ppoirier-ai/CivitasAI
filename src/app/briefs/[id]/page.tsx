@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, ExternalLink, CheckCircle, XCircle, Loader2, Eye, FileText, Calendar, Tag, Users, Clock, ShoppingCart, Video, TrendingUp, DollarSign, BarChart3, Target } from 'lucide-react';
+import { ArrowLeft, ExternalLink, CheckCircle, XCircle, Loader2, Eye, FileText, Calendar, Tag, Users, Clock, ShoppingCart, Video, TrendingUp, DollarSign, BarChart3, Target, Gauge } from 'lucide-react';
 import Link from 'next/link';
 import type { VentureBrief, Approval } from '@/lib/types';
 import { STATUS_LABELS, STATUS_COLORS, STATUS_ORDER } from '@/lib/types';
@@ -314,6 +314,13 @@ export default function BriefDetailPage() {
                       <DollarSign className="w-4 h-4 text-amber-400/60 mb-1" />
                       <p className="text-[9px] text-gray-600 uppercase tracking-wider">Capital Required</p>
                       <p className="text-xs text-amber-300 font-medium">{brief.capital_required}</p>
+                    </div>
+                  )}
+                  {brief.roi && (
+                    <div className="bg-gray-800/30 rounded-lg p-3">
+                      <Gauge className="w-4 h-4 text-blue-400/60 mb-1" />
+                      <p className="text-[9px] text-gray-600 uppercase tracking-wider">ROI</p>
+                      <p className="text-xs text-blue-300 font-medium">{brief.roi}</p>
                     </div>
                   )}
                   {brief.profit_margin && (

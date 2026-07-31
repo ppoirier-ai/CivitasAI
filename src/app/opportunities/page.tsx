@@ -7,28 +7,31 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import {
-  Search, ArrowUpRight, Play, TrendingUp, DollarSign, BarChart3, Filter, X, Eye, Download, ShoppingBag, CheckCircle2,
+  Search, ArrowUpRight, Play, TrendingUp, DollarSign, BarChart3, Filter, X, Eye, Download, ShoppingBag, CheckCircle2, Gauge,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRole } from '@/lib/auth';
 import { BRIEF_PRICE } from '@/lib/types';
-import type { VentureBrief } from '@/lib/types';
+import type { MarketplaceBrief } from '@/lib/types';
 
 export default function OpportunitiesPage() {
   const router = useRouter();
   const { role, loading: roleLoading } = useRole();
-  const [briefs, setBriefs] = useState<VentureBrief[]>([]);
+  const [briefs, setBriefs] = useState<MarketplaceBrief[]>([]);
   const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('newest');
+  // Capital range filter — optional, in $M. Empty = unbounded.
+  const [capitalMin, setCapitalMin] = useState('');
+  const [capitalMax, setCapitalMax] = useState('');
 
   useEffect(() => {
     fetch('/api/public-briefs')
       .then((r) => r.json())
       .then((data) => {
-        if (Array.isArray(data)) setBriefs(data as VentureBrief[]);
+        if (Array.isArray(data)) setBriefs(data as MarketplaceBrief[]);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -42,7 +45,7 @@ export default function OpportunitiesPage() {
       .then((r) => r.json())
       .then((d) => {
         if (Array.isArray(d?.purchases)) {
-          setOwnedIds(new Set(d.purchases.map((p: { brief?: VentureBrief }) => p.brief?.id)));
+          setOwnedIds(new Set(d.purchases.map((p: { brief?: MarketplaceBrief }) => p.brief?.id)));
         }
       })
       .catch(() => {});
@@ -55,6 +58,8 @@ export default function OpportunitiesPage() {
     briefs.forEach((b) => { if (b.category) cats.add(b.category); });
     return ['all', ...Array.from(cats).sort()];
   }, [briefs]);
+
+  const capitalRangeActive = capitalMin !== '' || capitalMax !== '';
 
   const filtered = useMemo(() => {
     let result = [...briefs];
@@ -77,6 +82,23 @@ export default function OpportunitiesPage() {
       result = result.filter((b) => b.category === categoryFilter);
     }
 
+    // Capital range (optional) — keep briefs whose capital requirement
+    // overlaps the budget band. Briefs without parseable capital are hidden
+    // when a range is active (can't confirm they fit).
+    const capMin = capitalMin === '' ? null : parseFloat(capitalMin);
+    const capMax = capitalMax === '' ? null : parseFloat(capitalMax);
+    if (capMin !== null || capMax !== null) {
+      const lo = capMin ?? -Infinity;
+      const hi = capMax ?? Infinity;
+      result = result.filter(
+        (b) =>
+          b.capital_min_m !== null &&
+          b.capital_max_m !== null &&
+          b.capital_min_m <= hi &&
+          b.capital_max_m >= lo
+      );
+    }
+
     // Sort
     switch (sortBy) {
       case 'newest': result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()); break;
@@ -87,10 +109,13 @@ export default function OpportunitiesPage() {
         const bCagr = parseFloat(b.cagr || '0');
         return bCagr - aCagr;
       }); break;
+      case 'roi': result.sort((a, b) =>
+        (b.roi_value ?? -Infinity) - (a.roi_value ?? -Infinity)
+      ); break;
     }
 
     return result;
-  }, [briefs, search, categoryFilter, sortBy]);
+  }, [briefs, search, categoryFilter, sortBy, capitalMin, capitalMax]);
 
   const handlePurchase = (briefId: string) => {
     if (role === 'none') {
@@ -99,6 +124,8 @@ export default function OpportunitiesPage() {
     }
     router.push(`/checkout/${briefId}`);
   };
+
+  const clearCapital = () => { setCapitalMin(''); setCapitalMax(''); };
 
   if (loading) {
     return (
@@ -154,7 +181,36 @@ export default function OpportunitiesPage() {
             </button>
           ))}
 
-          <div className="ml-auto flex items-center gap-2">
+          {/* Capital range filter (optional) */}
+          <div className={`flex items-center gap-1.5 ml-auto rounded-lg border px-2 py-1 transition-all ${
+            capitalRangeActive ? 'border-[#2EC4C6]/40 bg-[#2EC4C6]/5' : 'border-gray-800/50 bg-gray-900/60'
+          }`}>
+            <DollarSign className="w-3 h-3 text-gray-500" />
+            <span className="text-[10px] text-gray-600 uppercase tracking-wider">Capital</span>
+            <input
+              type="number" min="0" value={capitalMin}
+              onChange={(e) => setCapitalMin(e.target.value)}
+              placeholder="5" inputMode="numeric"
+              className="w-14 bg-transparent border border-gray-800/50 rounded-md px-1.5 py-0.5 text-xs text-white placeholder:text-gray-600 focus:outline-none focus:border-[#2EC4C6]/50"
+              title="Minimum capital in $M (optional)"
+            />
+            <span className="text-[10px] text-gray-600">–</span>
+            <input
+              type="number" min="0" value={capitalMax}
+              onChange={(e) => setCapitalMax(e.target.value)}
+              placeholder="25" inputMode="numeric"
+              className="w-14 bg-transparent border border-gray-800/50 rounded-md px-1.5 py-0.5 text-xs text-white placeholder:text-gray-600 focus:outline-none focus:border-[#2EC4C6]/50"
+              title="Maximum capital in $M (optional)"
+            />
+            <span className="text-[10px] text-gray-600">$M</span>
+            {capitalRangeActive && (
+              <button onClick={clearCapital} className="text-gray-500 hover:text-white" title="Clear capital range">
+                <X className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2">
             <span className="text-[10px] text-gray-600 uppercase tracking-wider">Sort</span>
             <select
               value={sortBy}
@@ -165,6 +221,7 @@ export default function OpportunitiesPage() {
               <option value="oldest">Oldest</option>
               <option value="title">Title A-Z</option>
               <option value="cagr">Highest CAGR</option>
+              <option value="roi">Highest ROI</option>
             </select>
           </div>
         </div>
@@ -178,7 +235,7 @@ export default function OpportunitiesPage() {
         <Card className="bg-gray-900/40 border-gray-800/40 border-dashed">
           <CardContent className="flex flex-col items-center justify-center py-20">
             <p className="text-sm text-gray-500">No opportunities match your search</p>
-            <Button variant="ghost" size="sm" onClick={() => { setSearch(''); setCategoryFilter('all'); }} className="text-[#2EC4C6] mt-2 text-xs">
+            <Button variant="ghost" size="sm" onClick={() => { setSearch(''); setCategoryFilter('all'); clearCapital(); }} className="text-[#2EC4C6] mt-2 text-xs">
               Clear filters
             </Button>
           </CardContent>
@@ -235,7 +292,7 @@ export default function OpportunitiesPage() {
                     )}
 
                     {/* Key metrics */}
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-4 gap-2">
                       {brief.tam && (
                         <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
                           <BarChart3 className="w-3 h-3 text-[#2EC4C6]/60 mx-auto mb-0.5" />
@@ -248,6 +305,13 @@ export default function OpportunitiesPage() {
                           <TrendingUp className="w-3 h-3 text-emerald-400/60 mx-auto mb-0.5" />
                           <p className="text-[9px] text-gray-600 uppercase tracking-wider">CAGR</p>
                           <p className="text-[10px] text-emerald-300 font-medium">{brief.cagr.replace(/[^0-9.%]/g, '')}</p>
+                        </div>
+                      )}
+                      {brief.roi && (
+                        <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
+                          <Gauge className="w-3 h-3 text-blue-400/60 mx-auto mb-0.5" />
+                          <p className="text-[9px] text-gray-600 uppercase tracking-wider">ROI</p>
+                          <p className="text-[10px] text-blue-300 font-medium">{brief.roi_value ? `${brief.roi_value}x` : brief.roi}</p>
                         </div>
                       )}
                       {brief.capital_required && (
