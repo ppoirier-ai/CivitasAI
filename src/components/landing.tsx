@@ -83,7 +83,7 @@ export default function LandingPage() {
   const featured = briefs.slice(0, 3);
 
   return (
-    <div className="-mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden">
+    <div className="relative grain -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden">
       {/* ============ HERO ============ */}
       <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
         {/* Cosmic background */}
@@ -103,29 +103,29 @@ export default function LandingPage() {
         </div>
 
         <div className="relative max-w-3xl mx-auto text-center px-6 py-24">
-          <Badge className="mx-auto mb-6 text-[10px] h-6 px-4 bg-white/5 border border-white/10 text-[#2EC4C6] rounded-full uppercase tracking-[0.2em] backdrop-blur">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#2EC4C6] pulse-dot mr-2" />
+          <Badge className="mx-auto mb-8 text-[10px] h-6 px-4 bg-white/[0.03] border border-white/15 text-[#2EC4C6] rounded-full uppercase tracking-[0.28em] backdrop-blur">
+            <span className="w-1 h-1 rounded-full bg-[#2EC4C6] pulse-dot mr-2.5" />
             Institutional Space Market Intelligence
           </Badge>
 
-          <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.05]">
+          <h1 className="font-display text-4xl sm:text-6xl lg:text-[64px] text-white tracking-tight leading-[1.1]">
             The Commercial Space Economy,
-            <span className="cosmic-text block mt-2">Decoded.</span>
+            <span className="block mt-3 font-display italic font-medium text-[#2EC4C6]">Decoded.</span>
           </h1>
 
-          <p className="text-sm sm:text-base text-gray-400 mt-6 leading-relaxed max-w-xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-400 mt-7 leading-relaxed max-w-xl mx-auto">
             Institutional-grade venture briefs on the most compelling opportunities in orbit —
             market sizing, capital requirements, and ROI analysis for founders and investors.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-9">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10">
             <Link href="/opportunities">
-              <Button className="w-full sm:w-auto bg-[#2EC4C6] hover:bg-[#28B0B2] text-black font-semibold h-12 px-8 rounded-xl text-sm shadow-[0_8px_30px_rgba(46,196,198,0.25)] transition-all active:scale-[0.98]">
+              <Button className="w-full sm:w-auto bg-[#2EC4C6] hover:bg-[#35D0D2] text-[#04222A] font-semibold h-12 px-9 rounded-lg text-sm transition-all duration-300 hover:shadow-[0_0_28px_rgba(46,196,198,0.28)] active:scale-[0.98]">
                 <Rocket className="w-4 h-4 mr-2" /> Explore Opportunities
               </Button>
             </Link>
             <Link href="#inside">
-              <Button variant="outline" className="w-full sm:w-auto border-white/10 bg-white/5 text-gray-200 hover:text-white hover:border-[#2EC4C6]/40 h-12 px-8 rounded-xl text-sm backdrop-blur">
+              <Button variant="outline" className="w-full sm:w-auto border-white/15 bg-white/[0.03] text-gray-200 hover:text-white hover:border-[#2EC4C6]/50 hover:bg-white/[0.05] h-12 px-9 rounded-lg text-sm backdrop-blur transition-all duration-300">
                 <BookOpen className="w-4 h-4 mr-2" /> See What&apos;s Inside
               </Button>
             </Link>
@@ -146,8 +146,8 @@ export default function LandingPage() {
       </section>
 
       {/* ============ STAT BAND ============ */}
-      <section className="border-y border-white/5 bg-white/[0.02]">
-        <div className="max-w-6xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+      <section className="border-y border-white/5 bg-white/[0.015]">
+        <div className="max-w-6xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 md:divide-x md:divide-white/5">
           {[
             { value: '$1.2T+', label: 'Markets analyzed' },
             { value: '7', label: 'Analysis sections per brief' },
@@ -155,8 +155,8 @@ export default function LandingPage() {
             { value: BRIEF_PRICE, label: 'One-time, lifetime access' },
           ].map((s) => (
             <div key={s.label} className="text-center">
-              <p className="text-2xl font-bold text-white tracking-tight cosmic-text">{s.value}</p>
-              <p className="text-[10px] text-gray-600 uppercase tracking-wider mt-1">{s.label}</p>
+              <p className="font-display text-2xl md:text-[28px] font-medium text-[#2EC4C6] cosmic-text tracking-tight">{s.value}</p>
+              <p className="text-[10px] text-gray-500 uppercase tracking-[0.25em] mt-2">{s.label}</p>
             </div>
           ))}
         </div>
@@ -167,8 +167,8 @@ export default function LandingPage() {
         <Reveal>
           <div className="text-center mb-14">
             <Eyebrow>Featured Briefs</Eyebrow>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mt-3">Opportunities in orbit, on the ground</h2>
-            <p className="text-sm text-gray-500 mt-3 max-w-xl mx-auto">
+            <h2 className="font-display text-3xl sm:text-[40px] font-medium text-white tracking-tight mt-4">Opportunities in orbit, on the ground</h2>
+            <p className="text-sm text-gray-500 mt-4 max-w-xl mx-auto">
               Every brief is a complete teardown of one commercial space opportunity — the same format we use internally.
             </p>
           </div>
@@ -186,7 +186,7 @@ export default function LandingPage() {
               <Reveal key={brief.id} delay={i * 120}>
                 <Link
                   href={`/preview/${brief.id}`}
-                  className="group block rounded-xl overflow-hidden glass-card hover:border-[#2EC4C6]/30 transition-all hover:-translate-y-1.5"
+                  className="group block rounded-lg overflow-hidden glass-card hover:border-[#2EC4C6]/40 transition-all duration-500 hover:bg-white/[0.04]"
                 >
                   <div className="aspect-[3/4] overflow-hidden">
                     {brief.cover_image_url ? (
@@ -203,8 +203,8 @@ export default function LandingPage() {
                   </div>
                   <div className="p-4 space-y-2">
                     <div className="flex items-center justify-between gap-2">
-                      <h3 className="text-sm font-semibold text-white truncate">{brief.title}</h3>
-                      <Badge className="text-[9px] h-4 px-1.5 bg-[#2EC4C6]/10 text-[#2EC4C6] border-0 rounded-full shrink-0">
+                      <h3 className="font-display text-[15px] font-semibold text-white truncate group-hover:text-[#2EC4C6] transition-colors duration-300">{brief.title}</h3>
+                      <Badge className="text-[9px] h-4 px-1.5 bg-[#2EC4C6]/10 text-[#2EC4C6] border border-[#2EC4C6]/20 rounded-full shrink-0">
                         {BRIEF_PRICE}
                       </Badge>
                     </div>
@@ -225,7 +225,7 @@ export default function LandingPage() {
         <Reveal delay={150}>
           <div className="text-center mt-12">
             <Link href="/opportunities">
-              <Button variant="outline" className="border-white/10 bg-white/5 text-gray-200 hover:text-white hover:border-[#2EC4C6]/40 h-11 px-6 rounded-xl text-sm backdrop-blur">
+              <Button variant="outline" className="border-white/15 bg-white/[0.03] text-gray-200 hover:text-white hover:border-[#2EC4C6]/50 hover:bg-white/[0.05] h-11 px-6 rounded-lg text-sm backdrop-blur transition-all duration-300">
                 Browse all opportunities <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
@@ -240,8 +240,8 @@ export default function LandingPage() {
           <Reveal>
             <div className="text-center mb-14">
               <Eyebrow>Inside Every Brief</Eyebrow>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mt-3">Seven sections. Zero fluff.</h2>
-              <p className="text-sm text-gray-500 mt-3 max-w-xl mx-auto">
+              <h2 className="font-display text-3xl sm:text-[40px] font-medium text-white tracking-tight mt-4">Seven sections. Zero fluff.</h2>
+              <p className="text-sm text-gray-500 mt-4 max-w-xl mx-auto">
                 The same analytical framework a PE deal team would use, distilled into a readable brief.
               </p>
             </div>
@@ -250,12 +250,12 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {SECTIONS.map(({ icon: Icon, title, desc }, i) => (
               <Reveal key={title} delay={(i % 3) * 100}>
-                <div className="h-full rounded-xl glass-card p-5 hover:border-[#2EC4C6]/25 hover:bg-white/[0.06] transition-all">
-                  <div className="w-9 h-9 rounded-lg bg-[#2EC4C6]/10 flex items-center justify-center mb-3">
+                <div className="h-full rounded-lg glass-card p-6 hover:border-[#2EC4C6]/30 hover:bg-white/[0.05] transition-all duration-500">
+                  <div className="w-9 h-9 rounded-md bg-[#2EC4C6]/10 border border-[#2EC4C6]/15 flex items-center justify-center mb-4">
                     <Icon className="w-4 h-4 text-[#2EC4C6]" />
                   </div>
-                  <h3 className="text-sm font-semibold text-white">{title}</h3>
-                  <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">{desc}</p>
+                  <h3 className="font-display text-[15px] font-semibold text-white">{title}</h3>
+                  <p className="text-[11px] text-gray-500 mt-1.5 leading-relaxed">{desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -268,18 +268,18 @@ export default function LandingPage() {
         <Reveal>
           <div className="text-center mb-14">
             <Eyebrow>How It Works</Eyebrow>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mt-3">From orbit to your inbox in three steps</h2>
+            <h2 className="font-display text-3xl sm:text-[40px] font-medium text-white tracking-tight mt-4">From orbit to your inbox in three steps</h2>
           </div>
         </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {STEPS.map(({ icon: Icon, title, desc }, i) => (
             <Reveal key={title} delay={i * 120}>
-              <div className="relative h-full rounded-xl glass-card p-6">
-                <span className="absolute top-4 right-5 text-4xl font-black text-white/5">{i + 1}</span>
-                <div className="w-10 h-10 rounded-lg bg-[#2EC4C6]/10 flex items-center justify-center mb-4">
+              <div className="relative h-full rounded-lg glass-card p-7">
+                <span className="absolute top-5 right-6 font-display text-5xl font-medium text-white/[0.04]">{i + 1}</span>
+                <div className="w-10 h-10 rounded-md bg-[#2EC4C6]/10 border border-[#2EC4C6]/15 flex items-center justify-center mb-5">
                   <Icon className="w-5 h-5 text-[#2EC4C6]" />
                 </div>
-                <h3 className="text-sm font-semibold text-white">{title}</h3>
+                <h3 className="font-display text-base font-semibold text-white">{title}</h3>
                 <p className="text-[11px] text-gray-500 mt-1.5 leading-relaxed">{desc}</p>
               </div>
             </Reveal>
@@ -293,20 +293,20 @@ export default function LandingPage() {
         <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full nebula nebula-teal" />
         <Reveal>
           <div className="relative max-w-2xl mx-auto text-center px-6">
-            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-              Your next venture is <span className="cosmic-text">in orbit.</span>
+            <h2 className="font-display text-3xl sm:text-[44px] font-medium text-white tracking-tight">
+              Your next venture is <span className="font-display italic text-[#2EC4C6]">in orbit.</span>
             </h2>
-            <p className="text-sm text-gray-400 mt-4">
+            <p className="text-sm text-gray-400 mt-5">
               Stop reading headlines. Start reading the numbers — {BRIEF_PRICE} per brief, yours forever.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-9">
               <Link href="/opportunities">
-                <Button className="bg-[#2EC4C6] hover:bg-[#28B0B2] text-black font-semibold h-12 px-8 rounded-xl text-sm shadow-[0_8px_30px_rgba(46,196,198,0.25)] transition-all active:scale-[0.98]">
+                <Button className="bg-[#2EC4C6] hover:bg-[#35D0D2] text-[#04222A] font-semibold h-12 px-9 rounded-lg text-sm transition-all duration-300 hover:shadow-[0_0_28px_rgba(46,196,198,0.28)] active:scale-[0.98]">
                   <Rocket className="w-4 h-4 mr-2" /> Explore the Marketplace
                 </Button>
               </Link>
               <Link href="/auth/login">
-                <Button variant="outline" className="border-white/10 bg-white/5 text-gray-200 hover:text-white hover:border-[#2EC4C6]/40 h-12 px-8 rounded-xl text-sm backdrop-blur">
+                <Button variant="outline" className="border-white/15 bg-white/[0.03] text-gray-200 hover:text-white hover:border-[#2EC4C6]/50 hover:bg-white/[0.05] h-12 px-9 rounded-lg text-sm backdrop-blur transition-all duration-300">
                   <ShieldCheck className="w-4 h-4 mr-2" /> Sign In
                 </Button>
               </Link>
