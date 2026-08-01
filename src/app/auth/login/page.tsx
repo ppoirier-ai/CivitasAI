@@ -134,16 +134,16 @@ function LoginForm() {
             <img
               src="/brand/logo-white.webp"
               alt="SPACENOMICS"
-              width={640}
-              height={357}
-              className="hidden dark:block h-9 w-auto mx-auto mb-4"
+              width={800}
+              height={446}
+              className="hidden dark:block h-12 sm:h-14 w-auto mx-auto mb-4"
             />
             <img
               src="/brand/logo-navy.webp"
               alt="SPACENOMICS"
-              width={640}
-              height={357}
-              className="block dark:hidden h-9 w-auto mx-auto mb-4"
+              width={800}
+              height={446}
+              className="block dark:hidden h-12 sm:h-14 w-auto mx-auto mb-4"
             />
             <p className="text-[11px] text-[#2EC4C6] tracking-[0.2em] uppercase font-medium">
               Venture Brief Marketplace

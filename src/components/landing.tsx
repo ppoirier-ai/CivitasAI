@@ -204,8 +204,8 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-gray-800/50 to-gray-900/50 flex items-center justify-center">
-                        <img src="/brand/logo-white.webp" alt="Spacenomics" className="hidden dark:block w-24 opacity-40" width={640} height={357} loading="lazy" />
-                        <img src="/brand/logo-navy.webp" alt="Spacenomics" className="block dark:hidden w-24 opacity-40" width={640} height={357} loading="lazy" />
+                        <img src="/brand/logo-white.webp" alt="Spacenomics" className="hidden dark:block h-10 opacity-40" width={800} height={446} loading="lazy" />
+                        <img src="/brand/logo-navy.webp" alt="Spacenomics" className="block dark:hidden h-10 opacity-40" width={800} height={446} loading="lazy" />
                       </div>
                     )}
                   </div>

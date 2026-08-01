@@ -115,17 +115,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <img
                     src="/brand/logo-white.webp"
                     alt="SPACENOMICS"
-                    className="hidden dark:block h-5 w-auto transition-opacity duration-300 group-hover:opacity-80"
-                    width={640}
-                    height={357}
+                    className="hidden dark:block h-10 sm:h-12 w-auto transition-opacity duration-300 group-hover:opacity-80"
+                    width={800}
+                    height={446}
                     loading="eager"
                   />
                   <img
                     src="/brand/logo-navy.webp"
                     alt="SPACENOMICS"
-                    className="block dark:hidden h-5 w-auto transition-opacity duration-300 group-hover:opacity-80"
-                    width={640}
-                    height={357}
+                    className="block dark:hidden h-10 sm:h-12 w-auto transition-opacity duration-300 group-hover:opacity-80"
+                    width={800}
+                    height={446}
                     loading="eager"
                   />
                   <span className="hidden sm:block text-[9px] text-[#2EC4C6] tracking-[0.3em] uppercase font-medium">
