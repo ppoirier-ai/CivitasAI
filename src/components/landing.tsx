@@ -6,10 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { BRIEF_PRICE } from '@/lib/types';
 import type { MarketplaceBrief } from '@/lib/types';
+import { ArrowRight, ChevronDown, ShieldCheck } from 'lucide-react';
 import {
-  Rocket, Telescope, TrendingUp, DollarSign, Gauge, BarChart3,
-  FileText, ShieldCheck, ShoppingBag, ArrowRight, BookOpen, Infinity as InfinityIcon, Target, ChevronDown,
-} from 'lucide-react';
+  IconExecutive, IconProblem, IconMarket, IconGrowth, IconCapital, IconRoi, IconLifetime,
+  IconBrowse, IconPreview, IconPurchase, IconRocket, IconBook,
+} from '@/components/landing-icons';
 import SatelliteScene from '@/components/satellite-scene';
 
 /** Fade-up on scroll into view (modern micro-interaction). */
@@ -52,26 +53,27 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 }
 
 const SECTIONS = [
-  { icon: FileText, title: 'Executive Summary', desc: 'The opportunity in one page — thesis, timing, and why now.' },
-  { icon: Target, title: 'Problem & Solution', desc: 'The market gap and the wedge that captures it.' },
-  { icon: BarChart3, title: 'Market Sizing', desc: 'TAM, SAM, and SOM with defensible bottom-up math.' },
-  { icon: TrendingUp, title: 'Growth Outlook', desc: 'CAGR and the 5-year trajectory of the category.' },
-  { icon: DollarSign, title: 'Capital Requirements', desc: 'What it really costs to enter the market.' },
-  { icon: Gauge, title: 'ROI Outlook', desc: 'Return profile and profitability expectations.' },
-  { icon: InfinityIcon, title: 'Lifetime Access', desc: 'One purchase, forever — view or download any time.' },
+  { icon: IconExecutive, title: 'Executive Summary', desc: 'The opportunity in one page — thesis, timing, and why now.' },
+  { icon: IconProblem, title: 'Problem & Solution', desc: 'The market gap and the wedge that captures it.' },
+  { icon: IconMarket, title: 'Market Sizing', desc: 'TAM, SAM, and SOM with defensible bottom-up math.' },
+  { icon: IconGrowth, title: 'Growth Outlook', desc: 'CAGR and the 5-year trajectory of the category.' },
+  { icon: IconCapital, title: 'Capital Requirements', desc: 'What it really costs to enter the market.' },
+  { icon: IconRoi, title: 'ROI Outlook', desc: 'Return profile and profitability expectations.' },
+  { icon: IconLifetime, title: 'Lifetime Access', desc: 'One purchase, forever — view or download any time.' },
 ];
 
 const STEPS = [
-  { icon: Telescope, title: 'Browse the marketplace', desc: 'Search by sector, filter by capital you can deploy, sort by ROI.' },
-  { icon: BookOpen, title: 'Preview every brief', desc: 'Read the table of contents and sample sections before you buy.' },
-  { icon: ShoppingBag, title: 'Purchase once, own forever', desc: `${BRIEF_PRICE} — instant PDF access in your library, no subscription.` },
+  { icon: IconBrowse, title: 'Browse the marketplace', desc: 'Search by sector, filter by capital you can deploy, sort by ROI.' },
+  { icon: IconPreview, title: 'Preview every brief', desc: 'Read the table of contents and sample sections before you buy.' },
+  { icon: IconPurchase, title: 'Purchase once, own forever', desc: `${BRIEF_PRICE} — instant PDF access in your library, no subscription.` },
 ];
 
-export default function LandingPage() {
-  const [briefs, setBriefs] = useState<MarketplaceBrief[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function LandingPage({ initialBriefs }: { initialBriefs?: MarketplaceBrief[] }) {
+  const [briefs, setBriefs] = useState<MarketplaceBrief[]>(initialBriefs ?? []);
+  const [loading, setLoading] = useState(!initialBriefs);
 
   useEffect(() => {
+    if (initialBriefs) return;
     fetch('/api/public-briefs')
       .then((r) => r.json())
       .then((d) => {
@@ -79,7 +81,7 @@ export default function LandingPage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [initialBriefs]);
 
   const featured = briefs.slice(0, 3);
 
@@ -95,12 +97,17 @@ export default function LandingPage() {
         <div className="absolute -bottom-52 -right-32 w-[600px] h-[600px] rounded-full nebula nebula-indigo" />
         <div className="absolute top-1/3 right-1/4 w-[380px] h-[380px] rounded-full nebula nebula-purple" />
 
-        {/* Satellite orbiting Earth — the centerpiece */}
-        <div className="absolute right-[4%] top-1/2 -translate-y-1/2 hidden lg:block">
-          <SatelliteScene size={380} />
+        {/* Satellite orbiting Earth — the centered centerpiece */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="scale-[0.5] sm:scale-[0.7] md:scale-[0.88] lg:scale-100">
+            <SatelliteScene size={620} />
+          </div>
         </div>
 
-        <div className="relative max-w-3xl mx-auto text-center px-6 py-24 lg:mr-[38%]">
+        {/* Legibility veil — keeps the headline crisp while the visual shows through */}
+        <div className="absolute inset-0 hero-veil pointer-events-none" />
+
+        <div className="relative max-w-3xl mx-auto text-center px-6 py-24 z-10">
           <Badge className="mx-auto mb-8 text-[10px] h-6 px-4 bg-white/[0.03] border border-white/15 text-[#2EC4C6] rounded-full uppercase tracking-[0.28em] backdrop-blur">
             <span className="w-1 h-1 rounded-full bg-[#2EC4C6] pulse-dot mr-2.5" />
             Institutional Space Market Intelligence
@@ -119,12 +126,12 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10">
             <Link href="/opportunities">
               <Button className="w-full sm:w-auto bg-[#2EC4C6] hover:bg-[#35D0D2] text-[#04222A] font-semibold h-12 px-9 rounded-lg text-sm transition-all duration-300 hover:shadow-[0_0_28px_rgba(46,196,198,0.28)] active:scale-[0.98]">
-                <Rocket className="w-4 h-4 mr-2" /> Explore Opportunities
+                <IconRocket className="w-4 h-4 mr-2" /> Explore Opportunities
               </Button>
             </Link>
             <Link href="#inside">
               <Button variant="outline" className="w-full sm:w-auto border-white/15 bg-white/[0.03] text-gray-200 hover:text-white hover:border-[#2EC4C6]/50 hover:bg-white/[0.05] h-12 px-9 rounded-lg text-sm backdrop-blur transition-all duration-300">
-                <BookOpen className="w-4 h-4 mr-2" /> See What&apos;s Inside
+                <IconBook className="w-4 h-4 mr-2" /> See What&apos;s Inside
               </Button>
             </Link>
           </div>
@@ -140,7 +147,7 @@ export default function LandingPage() {
         </div>
 
         {/* bottom fade into page bg */}
-        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-b from-transparent to-[#05070F]" />
+        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-b from-transparent to-[var(--background)]" />
       </section>
 
       {/* ============ STAT BAND ============ */}
@@ -191,11 +198,14 @@ export default function LandingPage() {
                       <img
                         src={brief.cover_image_url}
                         alt={`${brief.title} cover`}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-gray-800/50 to-gray-900/50 flex items-center justify-center">
-                        <span className="text-[10px] text-gray-600 uppercase tracking-widest">Spacenomics</span>
+                        <img src="/brand/logo-white.webp" alt="Spacenomics" className="hidden dark:block w-24 opacity-40" width={640} height={357} loading="lazy" />
+                        <img src="/brand/logo-navy.webp" alt="Spacenomics" className="block dark:hidden w-24 opacity-40" width={640} height={357} loading="lazy" />
                       </div>
                     )}
                   </div>
@@ -248,9 +258,9 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {SECTIONS.map(({ icon: Icon, title, desc }, i) => (
               <Reveal key={title} delay={(i % 3) * 100}>
-                <div className="h-full rounded-lg glass-card p-6 hover:border-[#2EC4C6]/30 hover:bg-white/[0.05] transition-all duration-500">
-                  <div className="w-9 h-9 rounded-md bg-[#2EC4C6]/10 border border-[#2EC4C6]/15 flex items-center justify-center mb-4">
-                    <Icon className="w-4 h-4 text-[#2EC4C6]" />
+                <div className="h-full rounded-lg glass-card p-6 hover:border-[#2EC4C6]/30 hover:bg-white/[0.05] transition-all duration-500 group">
+                  <div className="w-9 h-9 rounded-md bg-[#2EC4C6]/10 border border-[#2EC4C6]/15 flex items-center justify-center mb-4 group-hover:shadow-[0_0_16px_rgba(46,196,198,0.25)] transition-shadow duration-500">
+                    <Icon className="w-5 h-5" />
                   </div>
                   <h3 className="text-[15px] font-semibold text-white">{title}</h3>
                   <p className="text-[11px] text-gray-500 mt-1.5 leading-relaxed">{desc}</p>
@@ -272,10 +282,10 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {STEPS.map(({ icon: Icon, title, desc }, i) => (
             <Reveal key={title} delay={i * 120}>
-              <div className="relative h-full rounded-lg glass-card p-7">
+              <div className="relative h-full rounded-lg glass-card p-7 group">
                 <span className="absolute top-5 right-6 text-5xl font-semibold text-white/[0.04]">{i + 1}</span>
-                <div className="w-10 h-10 rounded-md bg-[#2EC4C6]/10 border border-[#2EC4C6]/15 flex items-center justify-center mb-5">
-                  <Icon className="w-5 h-5 text-[#2EC4C6]" />
+                <div className="w-10 h-10 rounded-md bg-[#2EC4C6]/10 border border-[#2EC4C6]/15 flex items-center justify-center mb-5 group-hover:shadow-[0_0_16px_rgba(46,196,198,0.25)] transition-shadow duration-500">
+                  <Icon className="w-5 h-5" />
                 </div>
                 <h3 className="text-base font-semibold text-white">{title}</h3>
                 <p className="text-[11px] text-gray-500 mt-1.5 leading-relaxed">{desc}</p>
@@ -300,7 +310,7 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-9">
               <Link href="/opportunities">
                 <Button className="bg-[#2EC4C6] hover:bg-[#35D0D2] text-[#04222A] font-semibold h-12 px-9 rounded-lg text-sm transition-all duration-300 hover:shadow-[0_0_28px_rgba(46,196,198,0.28)] active:scale-[0.98]">
-                  <Rocket className="w-4 h-4 mr-2" /> Explore the Marketplace
+                  <IconRocket className="w-4 h-4 mr-2" /> Explore the Marketplace
                 </Button>
               </Link>
               <Link href="/auth/login">

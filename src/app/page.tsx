@@ -1,7 +1,13 @@
 import type { Metadata } from 'next';
+import { createClient } from '@supabase/supabase-js';
 import LandingPage from '@/components/landing';
+import type { MarketplaceBrief } from '@/lib/types';
+import { parseRoiMultiplier, parseCapitalMillions } from '@/lib/metrics';
 
 const SITE_URL = 'https://civitas-ai-one.vercel.app';
+
+/** Revalidate the landing data every hour (ISR) — new briefs appear without a deploy. */
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -59,14 +65,41 @@ const jsonLd = {
   ],
 };
 
-export default function HomePage() {
+/** Server-side brief fetch — rendered into the HTML at build/ISR time (instant first paint). */
+async function getBriefs(): Promise<MarketplaceBrief[]> {
+  try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    );
+    const { data, error } = await supabase
+      .from('venture_briefs')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) return [];
+    return (data ?? [])
+      .filter((b) => b.status === 'published' && b.is_public !== false)
+      .map((b) => ({
+        ...b,
+        roi_value: parseRoiMultiplier(b.roi),
+        capital_min_m: parseCapitalMillions(b.capital_required)?.min ?? null,
+        capital_max_m: parseCapitalMillions(b.capital_required)?.max ?? null,
+      }));
+  } catch {
+    return [];
+  }
+}
+
+export default async function HomePage() {
+  const briefs = await getBriefs();
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <LandingPage />
+      <LandingPage initialBriefs={briefs} />
     </>
   );
 }
