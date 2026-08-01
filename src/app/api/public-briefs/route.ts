@@ -2,7 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { parseRoiMultiplier, parseCapitalMillions } from '@/lib/metrics';
 
-export const dynamic = 'force-dynamic';
+/** ISR — cache the public marketplace response for up to 1 hour (fast repeat loads). */
+export const revalidate = 3600;
 
 /**
  * Public marketplace data (service role → bypasses RLS).
@@ -39,13 +40,15 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
+  // CDN-cache the public marketplace payload for 1 hour (fast repeat loads).
+  const headers = { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=60' };
   if (id) {
     const brief = publicBriefs.find((b) => b.id === id);
     if (!brief) {
-      return NextResponse.json({ error: 'Brief not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Brief not found' }, { status: 404, headers });
     }
-    return NextResponse.json(brief);
+    return NextResponse.json(brief, { headers });
   }
 
-  return NextResponse.json(publicBriefs);
+  return NextResponse.json(publicBriefs, { headers });
 }

@@ -1,6 +1,7 @@
 'use client';
 
-import { Inter } from 'next/font/google';
+import { useEffect, useState } from 'react';
+import { Inter, Space_Grotesk } from 'next/font/google';
 import { useSupabase } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -9,21 +10,61 @@ import { useRole } from '@/lib/auth';
 import { Badge } from '@/components/ui/badge';
 import PageTransition from '@/components/page-transition';
 import {
-  LayoutDashboard, FilePlus, CalendarDays, LogOut, Store, ShieldCheck, Settings, Satellite,
+  LayoutDashboard, FilePlus, CalendarDays, LogOut, Store, ShieldCheck, Settings,
+  Sun, Moon,
 } from 'lucide-react';
 import './globals.css';
 
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-sans-var',
   display: 'swap',
 });
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-display-var',
+  display: 'swap',
+});
+
+/** Apply the saved theme before first paint (defaults to dark). */
+const themeScript = `
+try {
+  var t = localStorage.getItem('theme');
+  if (t === 'light') { document.documentElement.classList.remove('dark'); }
+  else { document.documentElement.classList.add('dark'); }
+} catch (e) { document.documentElement.classList.add('dark'); }
+`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const supabase = useSupabase();
   const router = useRouter();
   const { user, role, loading } = useRole();
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  useEffect(() => {
+    let active = true;
+    try {
+      const t = localStorage.getItem('theme');
+      if (active) setTheme(t === 'light' ? 'light' : 'dark');
+    } catch {
+      /* keep dark */
+    }
+    return () => { active = false; };
+  }, []);
+
+  const toggleTheme = () => {
+    const next: 'dark' | 'light' = theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.classList.toggle('dark', next === 'dark');
+    setTheme(next);
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      /* noop */
+    }
+  };
 
   const handleSignOut = async () => {
     try {
@@ -51,8 +92,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         ];
 
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} font-sans min-h-screen bg-[#05070F] text-white antialiased flex flex-col`}>
+    <html lang="en" className="dark" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} font-sans min-h-screen bg-background text-foreground antialiased flex flex-col`}
+      >
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         {/* Ambient deep-space backdrop (fixed, behind everything) */}
         <div className="fixed inset-0 -z-10 pointer-events-none">
           <div className="absolute inset-0 cosmic-stars opacity-40" />
@@ -63,23 +107,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Orbital accent bar */}
         <div className="h-px bg-gradient-to-r from-transparent via-[#2EC4C6]/70 to-transparent" />
 
-        <header className="border-b border-white/5 bg-[#05070F]/80 backdrop-blur-md sticky top-0 z-50">
+        <header className="border-b border-[var(--hairline)] bg-[var(--header-bg)] backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-14">
               <div className="flex items-center gap-8">
-                <Link href={signedIn ? (isAdmin ? '/dashboard' : '/opportunities') : '/opportunities'} className="flex items-center gap-3 group">
-                  <div className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-[#0A1222] to-[#101E3A] ring-1 ring-[#2EC4C6]/30 flex items-center justify-center shadow-[0_0_18px_rgba(46,196,198,0.25)]">
-                    <Satellite className="w-4 h-4 text-[#2EC4C6]" />
-                    <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-[#2EC4C6] pulse-dot" />
-                  </div>
-                  <div className="hidden sm:block">
-                    <span className="text-sm font-semibold tracking-[0.22em] text-white group-hover:text-[#2EC4C6] transition-colors duration-300">
-                      SPACENOMICS
-                    </span>
-                    <span className="text-[9px] text-[#2EC4C6] tracking-[0.3em] uppercase ml-3 font-medium">
-                      Venture Briefs
-                    </span>
-                  </div>
+                <Link href="/" className="flex items-center gap-3 group" aria-label="Spacenomics — Home">
+                  <img
+                    src="/brand/logo-white.webp"
+                    alt="SPACENOMICS"
+                    className="hidden dark:block h-5 w-auto transition-opacity duration-300 group-hover:opacity-80"
+                    width={640}
+                    height={357}
+                    loading="eager"
+                  />
+                  <img
+                    src="/brand/logo-navy.webp"
+                    alt="SPACENOMICS"
+                    className="block dark:hidden h-5 w-auto transition-opacity duration-300 group-hover:opacity-80"
+                    width={640}
+                    height={357}
+                    loading="eager"
+                  />
+                  <span className="hidden sm:block text-[9px] text-[#2EC4C6] tracking-[0.3em] uppercase font-medium">
+                    Venture Briefs
+                  </span>
                 </Link>
                 <nav className="hidden md:flex items-center gap-1">
                   {navLinks.map(({ href, label, icon: Icon }) => (
@@ -95,6 +146,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </nav>
               </div>
               <div className="flex items-center gap-3">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleTheme}
+                  className="text-gray-500 hover:text-[#2EC4C6] hover:bg-white/5 h-8 w-8 p-0 rounded-lg"
+                  aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                  title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                >
+                  {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </Button>
                 {!loading && !signedIn && (
                   <Link href="/auth/login">
                     <Button className="bg-[#2EC4C6] hover:bg-[#28B0B2] text-black font-medium h-8 px-3.5 text-xs rounded-lg">
@@ -148,7 +209,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <PageTransition>{children}</PageTransition>
         </main>
 
-        <footer className="border-t border-white/5 mt-auto py-6">
+        <footer className="border-t border-[var(--hairline)] mt-auto py-6">
           <div className="max-w-7xl mx-auto px-4 text-center">
             <p className="text-[11px] text-gray-500 tracking-wide">
               Prepared by Smooth Capital LLC &bull; Spacenomics Venture Briefs

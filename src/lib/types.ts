@@ -84,6 +84,18 @@ export interface Approval {
   created_at: string;
 }
 
+/** Standalone calendar event (admin-managed, not tied to a brief). */
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  /** ISO date (yyyy-MM-dd). */
+  event_date: string;
+  time: string | null;
+  description: string | null;
+  color: string | null;
+  created_at: string;
+}
+
 export interface Profile {
   id: string;
   display_name: string | null;
