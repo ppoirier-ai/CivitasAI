@@ -109,23 +109,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <header className="border-b border-[var(--hairline)] bg-[var(--header-bg)] backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
+            <div className="flex items-center justify-between h-[124px]">
               <div className="flex items-center gap-8">
                 <Link href="/" className="flex items-center group" aria-label="Spacenomics — Home">
                   <img
                     src="/brand/logo-white.webp"
                     alt="SPACENOMICS"
-                    className="hidden dark:block h-11 sm:h-14 w-auto transition-opacity duration-300 group-hover:opacity-80"
-                    width={800}
-                    height={446}
+                    className="hidden dark:block w-[200px] h-[112px] object-contain transition-opacity duration-300 group-hover:opacity-80"
+                    width={200}
+                    height={112}
                     loading="eager"
                   />
                   <img
                     src="/brand/logo-navy.webp"
                     alt="SPACENOMICS"
-                    className="block dark:hidden h-11 sm:h-14 w-auto transition-opacity duration-300 group-hover:opacity-80"
-                    width={800}
-                    height={446}
+                    className="block dark:hidden w-[200px] h-[112px] object-contain transition-opacity duration-300 group-hover:opacity-80"
+                    width={200}
+                    height={112}
                     loading="eager"
                   />
                 </Link>
