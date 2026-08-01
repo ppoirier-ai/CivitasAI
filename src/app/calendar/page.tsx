@@ -35,7 +35,7 @@ export default function CalendarPage() {
       if (data) setBriefs(data as VentureBrief[]);
       setLoading(false);
     })();
-  }, [supabase]);
+  }, [supabase, allowed]);
 
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(currentMonth);
@@ -50,7 +50,8 @@ export default function CalendarPage() {
     if (data) setBriefs(data as VentureBrief[]);
   }
 
-  if (loading || guardLoading) return <div className="flex items-center justify-center py-32"><div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" /></div>;
+  if (guardLoading || (allowed && loading)) return <div className="flex items-center justify-center py-32"><div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" /></div>;
+  if (!allowed) return null;
 
   return (
     <div className="space-y-6">
