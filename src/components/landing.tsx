@@ -98,7 +98,7 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
         <div className="absolute top-1/3 right-1/4 w-[380px] h-[380px] rounded-full nebula nebula-purple" />
 
         {/* Satellite orbiting Earth — the centered centerpiece */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1]">
           <div className="scale-[0.5] sm:scale-[0.7] md:scale-[0.88] lg:scale-100">
             <SatelliteScene size={620} />
           </div>
