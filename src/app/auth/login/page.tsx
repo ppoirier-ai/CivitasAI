@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowRight, User, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { ArrowRight, User, ShieldCheck, ArrowLeft, Satellite } from 'lucide-react';
 import { homeForRole } from '@/lib/auth';
 import type { UserRole } from '@/lib/types';
 
@@ -131,10 +131,11 @@ function LoginForm() {
       <Card className="relative w-full max-w-sm bg-gray-900/80 border-gray-800/60 backdrop-blur-sm shadow-2xl shadow-black/30">
         <CardContent className="p-8">
           <div className="text-center mb-6">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#2EC4C6] to-[#1A8A8C] flex items-center justify-center mx-auto mb-4">
-              <span className="text-lg font-black text-black">S</span>
+            <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#0A1222] to-[#101E3A] ring-1 ring-[#2EC4C6]/30 flex items-center justify-center mx-auto mb-4 shadow-[0_0_24px_rgba(46,196,198,0.25)]">
+              <Satellite className="w-5 h-5 text-[#2EC4C6]" />
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#2EC4C6] pulse-dot" />
             </div>
-            <h1 className="text-lg font-bold tracking-[0.25em] text-white">SPACENOMICS</h1>
+            <h1 className="text-lg font-semibold tracking-[0.25em] text-white">SPACENOMICS</h1>
             <p className="text-[11px] text-[#2EC4C6] tracking-[0.2em] mt-1 uppercase font-medium">
               Venture Brief Marketplace
             </p>

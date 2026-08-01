@@ -7,9 +7,10 @@ import { Badge } from '@/components/ui/badge';
 import { BRIEF_PRICE } from '@/lib/types';
 import type { MarketplaceBrief } from '@/lib/types';
 import {
-  Sparkles, Rocket, Telescope, TrendingUp, DollarSign, Gauge, BarChart3,
+  Rocket, Telescope, TrendingUp, DollarSign, Gauge, BarChart3,
   FileText, ShieldCheck, ShoppingBag, ArrowRight, BookOpen, Infinity as InfinityIcon, Target, ChevronDown,
 } from 'lucide-react';
+import SatelliteScene from '@/components/satellite-scene';
 
 /** Fade-up on scroll into view (modern micro-interaction). */
 function Reveal({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -94,23 +95,20 @@ export default function LandingPage() {
         <div className="absolute -bottom-52 -right-32 w-[600px] h-[600px] rounded-full nebula nebula-indigo" />
         <div className="absolute top-1/3 right-1/4 w-[380px] h-[380px] rounded-full nebula nebula-purple" />
 
-        {/* CSS planet */}
-        <div className="absolute right-[8%] top-[18%] hidden lg:block planet-scene">
-          <div className="planet">
-            <div className="planet-ring" />
-            <div className="planet-moon" />
-          </div>
+        {/* Satellite orbiting Earth — the centerpiece */}
+        <div className="absolute right-[4%] top-1/2 -translate-y-1/2 hidden lg:block">
+          <SatelliteScene size={380} />
         </div>
 
-        <div className="relative max-w-3xl mx-auto text-center px-6 py-24">
+        <div className="relative max-w-3xl mx-auto text-center px-6 py-24 lg:mr-[38%]">
           <Badge className="mx-auto mb-8 text-[10px] h-6 px-4 bg-white/[0.03] border border-white/15 text-[#2EC4C6] rounded-full uppercase tracking-[0.28em] backdrop-blur">
             <span className="w-1 h-1 rounded-full bg-[#2EC4C6] pulse-dot mr-2.5" />
             Institutional Space Market Intelligence
           </Badge>
 
-          <h1 className="font-display text-4xl sm:text-6xl lg:text-[64px] text-white tracking-tight leading-[1.1]">
+          <h1 className="text-4xl sm:text-6xl lg:text-[68px] font-light text-white tracking-[-0.03em] leading-[1.05]">
             The Commercial Space Economy,
-            <span className="block mt-3 font-display italic font-medium text-[#2EC4C6]">Decoded.</span>
+            <span className="block mt-3 font-semibold cosmic-text tracking-[-0.02em]">Decoded.</span>
           </h1>
 
           <p className="text-sm sm:text-base text-gray-400 mt-7 leading-relaxed max-w-xl mx-auto">
@@ -142,7 +140,7 @@ export default function LandingPage() {
         </div>
 
         {/* bottom fade into page bg */}
-        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-b from-transparent to-[#0A1222]" />
+        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-b from-transparent to-[#05070F]" />
       </section>
 
       {/* ============ STAT BAND ============ */}
@@ -155,7 +153,7 @@ export default function LandingPage() {
             { value: BRIEF_PRICE, label: 'One-time, lifetime access' },
           ].map((s) => (
             <div key={s.label} className="text-center">
-              <p className="font-display text-2xl md:text-[28px] font-medium text-[#2EC4C6] cosmic-text tracking-tight">{s.value}</p>
+              <p className="text-2xl md:text-[28px] font-semibold text-[#2EC4C6] cosmic-text tracking-tight">{s.value}</p>
               <p className="text-[10px] text-gray-500 uppercase tracking-[0.25em] mt-2">{s.label}</p>
             </div>
           ))}
@@ -167,7 +165,7 @@ export default function LandingPage() {
         <Reveal>
           <div className="text-center mb-14">
             <Eyebrow>Featured Briefs</Eyebrow>
-            <h2 className="font-display text-3xl sm:text-[40px] font-medium text-white tracking-tight mt-4">Opportunities in orbit, on the ground</h2>
+            <h2 className="text-3xl sm:text-[40px] font-semibold tracking-[-0.02em] text-white tracking-tight mt-4">Opportunities in orbit, on the ground</h2>
             <p className="text-sm text-gray-500 mt-4 max-w-xl mx-auto">
               Every brief is a complete teardown of one commercial space opportunity — the same format we use internally.
             </p>
@@ -203,7 +201,7 @@ export default function LandingPage() {
                   </div>
                   <div className="p-4 space-y-2">
                     <div className="flex items-center justify-between gap-2">
-                      <h3 className="font-display text-[15px] font-semibold text-white truncate group-hover:text-[#2EC4C6] transition-colors duration-300">{brief.title}</h3>
+                      <h3 className="text-[15px] font-semibold text-white truncate group-hover:text-[#2EC4C6] transition-colors duration-300">{brief.title}</h3>
                       <Badge className="text-[9px] h-4 px-1.5 bg-[#2EC4C6]/10 text-[#2EC4C6] border border-[#2EC4C6]/20 rounded-full shrink-0">
                         {BRIEF_PRICE}
                       </Badge>
@@ -240,7 +238,7 @@ export default function LandingPage() {
           <Reveal>
             <div className="text-center mb-14">
               <Eyebrow>Inside Every Brief</Eyebrow>
-              <h2 className="font-display text-3xl sm:text-[40px] font-medium text-white tracking-tight mt-4">Seven sections. Zero fluff.</h2>
+              <h2 className="text-3xl sm:text-[40px] font-semibold tracking-[-0.02em] text-white tracking-tight mt-4">Seven sections. Zero fluff.</h2>
               <p className="text-sm text-gray-500 mt-4 max-w-xl mx-auto">
                 The same analytical framework a PE deal team would use, distilled into a readable brief.
               </p>
@@ -254,7 +252,7 @@ export default function LandingPage() {
                   <div className="w-9 h-9 rounded-md bg-[#2EC4C6]/10 border border-[#2EC4C6]/15 flex items-center justify-center mb-4">
                     <Icon className="w-4 h-4 text-[#2EC4C6]" />
                   </div>
-                  <h3 className="font-display text-[15px] font-semibold text-white">{title}</h3>
+                  <h3 className="text-[15px] font-semibold text-white">{title}</h3>
                   <p className="text-[11px] text-gray-500 mt-1.5 leading-relaxed">{desc}</p>
                 </div>
               </Reveal>
@@ -268,18 +266,18 @@ export default function LandingPage() {
         <Reveal>
           <div className="text-center mb-14">
             <Eyebrow>How It Works</Eyebrow>
-            <h2 className="font-display text-3xl sm:text-[40px] font-medium text-white tracking-tight mt-4">From orbit to your inbox in three steps</h2>
+            <h2 className="text-3xl sm:text-[40px] font-semibold tracking-[-0.02em] text-white tracking-tight mt-4">From orbit to your inbox in three steps</h2>
           </div>
         </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {STEPS.map(({ icon: Icon, title, desc }, i) => (
             <Reveal key={title} delay={i * 120}>
               <div className="relative h-full rounded-lg glass-card p-7">
-                <span className="absolute top-5 right-6 font-display text-5xl font-medium text-white/[0.04]">{i + 1}</span>
+                <span className="absolute top-5 right-6 text-5xl font-semibold text-white/[0.04]">{i + 1}</span>
                 <div className="w-10 h-10 rounded-md bg-[#2EC4C6]/10 border border-[#2EC4C6]/15 flex items-center justify-center mb-5">
                   <Icon className="w-5 h-5 text-[#2EC4C6]" />
                 </div>
-                <h3 className="font-display text-base font-semibold text-white">{title}</h3>
+                <h3 className="text-base font-semibold text-white">{title}</h3>
                 <p className="text-[11px] text-gray-500 mt-1.5 leading-relaxed">{desc}</p>
               </div>
             </Reveal>
@@ -293,8 +291,8 @@ export default function LandingPage() {
         <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full nebula nebula-teal" />
         <Reveal>
           <div className="relative max-w-2xl mx-auto text-center px-6">
-            <h2 className="font-display text-3xl sm:text-[44px] font-medium text-white tracking-tight">
-              Your next venture is <span className="font-display italic text-[#2EC4C6]">in orbit.</span>
+            <h2 className="text-3xl sm:text-[44px] font-semibold tracking-[-0.02em] text-white tracking-tight">
+              Your next venture is <span className="cosmic-text">in orbit.</span>
             </h2>
             <p className="text-sm text-gray-400 mt-5">
               Stop reading headlines. Start reading the numbers — {BRIEF_PRICE} per brief, yours forever.

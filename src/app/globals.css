@@ -162,33 +162,35 @@
   to { opacity: 1; }
 }
 
-/* Drifting nebula glows */
-.nebula {
-  filter: blur(90px);
-  pointer-events: none;
-  animation: nebula-drift 22s ease-in-out infinite alternate;
-}
-.nebula-teal { background: rgba(46, 196, 198, 0.10); }
-.nebula-indigo { background: rgba(99, 102, 241, 0.08); animation-delay: -8s; }
-.nebula-purple { background: rgba(168, 85, 247, 0.06); animation-delay: -14s; }
+/* ============ Page transitions (smooth, fluid) ============ */
 
-@keyframes nebula-drift {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to { transform: translate3d(40px, -30px, 0) scale(1.12); }
+/* Fade + slight rise for route changes (wrapped by PageTransition) */
+.page-enter {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.page-exit-active {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.28s cubic-bezier(0.64, 0, 0.78, 0),
+    transform 0.28s cubic-bezier(0.64, 0, 0.78, 0);
 }
 
-/* Gradient headline text — restrained institutional shimmer */
-.cosmic-text {
-  background: linear-gradient(120deg, #2EC4C6 0%, #5EEAD4 55%, #A5F3FC 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: cosmic-shimmer 6s ease-in-out infinite alternate;
-}
-
-@keyframes cosmic-shimmer {
-  from { filter: brightness(1); }
-  to { filter: brightness(1.25); }
+/* Global smooth easing for interactive elements */
+.smooth-ease {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ============ Modern decoration (Aug 2026) ============ */
@@ -200,6 +202,19 @@
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 18px 50px -24px rgba(0, 0, 0, 0.55);
+}
+
+/* Deep-space glass panel with subtle inner glow */
+.space-panel {
+  background:
+    radial-gradient(120% 120% at 20% 0%, rgba(46, 196, 198, 0.05) 0%, transparent 55%),
+    rgba(10, 18, 34, 0.55);
+  border: 1px solid rgba(148, 197, 255, 0.09);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 24px 60px -30px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 /* Fine film grain for tactile, printed-institutional texture */
@@ -258,62 +273,162 @@
   50% { box-shadow: 0 0 0 6px rgba(46, 196, 198, 0); }
 }
 
-/* CSS planet with orbital ring + moon */
-.planet-scene {
-  perspective: 900px;
-  animation: planet-float 14s ease-in-out infinite alternate;
+/* ============ Satellite / orbital system ============ */
+
+/* Slow-drifting nebula glows */
+.nebula {
+  filter: blur(90px);
+  pointer-events: none;
+  animation: nebula-drift 22s ease-in-out infinite alternate;
 }
-@keyframes planet-float {
-  from { transform: translateY(0); }
-  to { transform: translateY(-18px); }
+.nebula-teal { background: rgba(46, 196, 198, 0.10); }
+.nebula-indigo { background: rgba(99, 102, 241, 0.08); animation-delay: -8s; }
+.nebula-purple { background: rgba(168, 85, 247, 0.06); animation-delay: -14s; }
+
+@keyframes nebula-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(40px, -30px, 0) scale(1.12); }
 }
 
-.planet {
+/* Gradient headline text — clean aurora shimmer */
+.cosmic-text {
+  background: linear-gradient(120deg, #2EC4C6 0%, #5EEAD4 55%, #A5F3FC 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: cosmic-shimmer 6s ease-in-out infinite alternate;
+}
+
+@keyframes cosmic-shimmer {
+  from { filter: brightness(1); }
+  to { filter: brightness(1.25); }
+}
+
+/* Earth (CSS) — deep blue marble with terminator */
+.earth {
   position: relative;
-  width: 210px;
-  height: 210px;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 32% 28%, #93c5fd 0%, #2563eb 32%, #1e3a8a 62%, #0b1530 88%);
+    radial-gradient(circle at 30% 26%, #7dd3fc 0%, #2563eb 30%, #1e3a8a 60%, #070d1f 92%);
   box-shadow:
-    inset -24px -24px 70px rgba(0, 0, 0, 0.75),
-    0 0 70px rgba(46, 196, 198, 0.35);
+    inset -30px -28px 80px rgba(0, 0, 0, 0.8),
+    inset 10px 8px 40px rgba(125, 211, 252, 0.12),
+    0 0 90px rgba(46, 196, 198, 0.28);
+}
+.earth::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 68% 62%, transparent 40%, rgba(3, 7, 18, 0.55) 82%);
 }
 
-.planet-ring {
+/* Orbital ring (elliptical path) */
+.orbit-ring {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 330px;
-  height: 100px;
-  border: 2px solid rgba(46, 196, 198, 0.45);
+  border: 1px solid rgba(148, 197, 255, 0.16);
   border-radius: 50%;
-  transform: translate(-50%, -50%) rotateX(72deg) rotateZ(-14deg);
-  box-shadow: 0 0 24px rgba(46, 196, 198, 0.25);
-  animation: ring-spin 26s linear infinite;
+  transform: translate(-50%, -50%) rotateX(68deg);
+  transform-style: preserve-3d;
+}
+.orbit-ring.orbit-dashed {
+  border-style: dashed;
+  border-color: rgba(46, 196, 198, 0.22);
 }
 
-@keyframes ring-spin {
-  from { transform: translate(-50%, -50%) rotateX(72deg) rotateZ(-14deg) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotateX(72deg) rotateZ(-14deg) rotate(360deg); }
-}
-
-.planet-moon {
+/* Satellite node riding an orbit ring */
+.satellite {
   position: absolute;
-  top: -14px;
+  top: 50%;
   left: 50%;
-  width: 14px;
+  transform-style: preserve-3d;
+  animation: satellite-orbit var(--orbit-duration, 18s) linear infinite;
+}
+.satellite-body {
+  position: relative;
+  width: 22px;
   height: 14px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 45%, #475569 100%);
+  box-shadow: 0 0 14px rgba(148, 197, 255, 0.55), 0 0 4px rgba(255, 255, 255, 0.8);
+}
+.satellite-body::before,
+.satellite-body::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 8px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, rgba(46, 196, 198, 0.9), rgba(37, 99, 235, 0.9));
+  border: 1px solid rgba(165, 243, 252, 0.5);
+  border-radius: 1.5px;
+  box-shadow: 0 0 8px rgba(46, 196, 198, 0.4);
+}
+.satellite-body::before { right: 100%; margin-right: 2px; }
+.satellite-body::after { left: 100%; margin-left: 2px; }
+.satellite-beacon {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #e2e8f0, #94a3b8 60%, #475569);
-  box-shadow: 0 0 12px rgba(226, 232, 240, 0.5);
-  transform-origin: 0 120px;
-  animation: moon-orbit 12s linear infinite;
+  background: #5eead4;
+  box-shadow: 0 0 8px #2EC4C6, 0 0 2px #fff;
+  animation: beacon-blink 1.6s ease-in-out infinite;
+}
+@keyframes beacon-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+@keyframes satellite-orbit {
+  from { transform: rotate(0deg) translateX(var(--orbit-radius, 160px)) rotate(0deg) rotateX(-68deg); }
+  to { transform: rotate(360deg) translateX(var(--orbit-radius, 160px)) rotate(-360deg) rotateX(-68deg); }
 }
 
-@keyframes moon-orbit {
-  from { transform: rotate(0deg) translateX(105px); }
-  to { transform: rotate(360deg) translateX(105px); }
+/* Floating satellite scene (gentle hover drift) */
+.satellite-scene {
+  perspective: 1000px;
+  animation: scene-float 16s ease-in-out infinite alternate;
+}
+@keyframes scene-float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-16px); }
+}
+
+/* Signal arc (transmission sweep) */
+.signal-arc {
+  position: absolute;
+  border: 1px solid rgba(46, 196, 198, 0.25);
+  border-radius: 50%;
+  animation: signal-ping 3.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes signal-ping {
+  0% { transform: scale(0.4); opacity: 0.9; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Hairline divider with center node (orbital motif) */
+.orbit-divider {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(148, 197, 255, 0.25), transparent);
+}
+.orbit-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #2EC4C6;
+  box-shadow: 0 0 10px rgba(46, 196, 198, 0.8);
+  transform: translate(-50%, -50%);
 }
 
 /* Reduce motion for accessibility */
@@ -322,9 +437,10 @@
   .cosmic-stars-2,
   .nebula,
   .cosmic-text,
-  .planet-scene,
-  .planet-ring,
-  .planet-moon,
+  .satellite-scene,
+  .satellite,
+  .satellite-beacon,
+  .signal-arc,
   .scroll-cue,
   .pulse-dot {
     animation: none;
@@ -333,6 +449,14 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+  .page-enter,
+  .page-exit,
+  .page-enter-active,
+  .page-exit-active {
+    transition: none;
+    transform: none;
+    opacity: 1;
   }
   html {
     scroll-behavior: auto;

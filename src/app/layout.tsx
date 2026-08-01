@@ -1,22 +1,22 @@
 'use client';
 
-import { Playfair_Display } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { useSupabase } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useRole } from '@/lib/auth';
 import { Badge } from '@/components/ui/badge';
+import PageTransition from '@/components/page-transition';
 import {
-  LayoutDashboard, FilePlus, CalendarDays, LogOut, Store, ShieldCheck, Settings,
+  LayoutDashboard, FilePlus, CalendarDays, LogOut, Store, ShieldCheck, Settings, Satellite,
 } from 'lucide-react';
 import './globals.css';
 
-const playfair = Playfair_Display({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
-  style: ['normal', 'italic'],
-  variable: '--font-display',
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-sans-var',
   display: 'swap',
 });
 
@@ -52,20 +52,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en" className="dark">
-      <body className={`${playfair.variable} min-h-screen bg-[#0A1222] text-white antialiased flex flex-col`}>
-        {/* Teal accent bar */}
-        <div className="h-0.5 bg-gradient-to-r from-[#2EC4C6] via-[#2EC4C6]/50 to-transparent" />
+      <body className={`${inter.variable} font-sans min-h-screen bg-[#05070F] text-white antialiased flex flex-col`}>
+        {/* Ambient deep-space backdrop (fixed, behind everything) */}
+        <div className="fixed inset-0 -z-10 pointer-events-none">
+          <div className="absolute inset-0 cosmic-stars opacity-40" />
+          <div className="absolute -top-48 -right-48 w-[560px] h-[560px] rounded-full nebula nebula-indigo opacity-70" />
+          <div className="absolute bottom-0 -left-56 w-[640px] h-[640px] rounded-full nebula nebula-teal opacity-60" />
+        </div>
 
-        <header className="border-b border-white/5 bg-[#0D1529]/95 backdrop-blur-sm sticky top-0 z-50">
+        {/* Orbital accent bar */}
+        <div className="h-px bg-gradient-to-r from-transparent via-[#2EC4C6]/70 to-transparent" />
+
+        <header className="border-b border-white/5 bg-[#05070F]/80 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-14">
               <div className="flex items-center gap-8">
                 <Link href={signedIn ? (isAdmin ? '/dashboard' : '/opportunities') : '/opportunities'} className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#2EC4C6] to-[#1A8A8C] ring-1 ring-white/10 flex items-center justify-center shadow-[0_2px_12px_rgba(46,196,198,0.25)]">
-                    <span className="text-xs font-black text-black">S</span>
+                  <div className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-[#0A1222] to-[#101E3A] ring-1 ring-[#2EC4C6]/30 flex items-center justify-center shadow-[0_0_18px_rgba(46,196,198,0.25)]">
+                    <Satellite className="w-4 h-4 text-[#2EC4C6]" />
+                    <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-[#2EC4C6] pulse-dot" />
                   </div>
                   <div className="hidden sm:block">
-                    <span className="text-sm font-bold tracking-[0.2em] text-white group-hover:text-[#2EC4C6] transition-colors">
+                    <span className="text-sm font-semibold tracking-[0.22em] text-white group-hover:text-[#2EC4C6] transition-colors duration-300">
                       SPACENOMICS
                     </span>
                     <span className="text-[9px] text-[#2EC4C6] tracking-[0.3em] uppercase ml-3 font-medium">
@@ -78,7 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <Link
                       key={href}
                       href={href}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-gray-400 hover:text-white hover:bg-white/5 rounded-md transition-all"
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-gray-400 hover:text-white hover:bg-white/5 rounded-md transition-all duration-300 smooth-ease"
                     >
                       <Icon className="w-3.5 h-3.5" />
                       {label}
@@ -137,7 +145,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </header>
 
         <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-          {children}
+          <PageTransition>{children}</PageTransition>
         </main>
 
         <footer className="border-t border-white/5 mt-auto py-6">
