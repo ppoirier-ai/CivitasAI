@@ -56,11 +56,13 @@ export async function GET() {
     };
   });
 
+  const briefById = new Map(briefs.map((b) => [b.id, b]));
+
   const recentOrders = purchases.slice(0, 12).map((p) => ({
     id: p.id,
     customer_email: emailById[p.user_id] ?? 'unknown',
     brief_id: p.brief_id,
-    brief_title: briefs.find((b) => b.id === p.brief_id)?.title ?? 'Unknown brief',
+    brief_title: briefById.get(p.brief_id)?.title ?? 'Unknown brief',
     amount_cents: p.amount_cents ?? 0,
     created_at: p.created_at,
   }));

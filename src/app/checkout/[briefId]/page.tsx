@@ -8,11 +8,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useRole } from '@/lib/auth';
-import { BRIEF_PRICE, BRIEF_PRICE_CENTS } from '@/lib/types';
-import type { VentureBrief, PurchaseWithBrief } from '@/lib/types';
+import { BRIEF_PRICE } from '@/lib/types';
 import {
-  ArrowLeft, Lock, ShieldCheck, CheckCircle2, Eye, Download, BookOpen,
+  ArrowLeft, Lock, ShieldCheck, CheckCircle2, Eye, BookOpen,
 } from 'lucide-react';
+import { useBriefWithOwnership } from '@/lib/use-brief-ownership';
+import { Spinner } from '@/components/spinner';
 
 export default function CheckoutPage() {
   const params = useParams<{ briefId: string }>();
@@ -20,10 +21,12 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { user, loading: roleLoading } = useRole();
 
-  const [brief, setBrief] = useState<VentureBrief | null>(null);
-  const [owned, setOwned] = useState<PurchaseWithBrief | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { brief, owned, loading, error } = useBriefWithOwnership(
+    briefId,
+    'This venture brief is not available for purchase.'
+  );
+  const [alreadyOwned, setAlreadyOwned] = useState(false);
+  const [formError, setFormError] = useState('');
 
   const [cardName, setCardName] = useState('');
   const [cardNumber, setCardNumber] = useState('4242 4242 4242 4242');
@@ -31,35 +34,6 @@ export default function CheckoutPage() {
   const [cvc, setCvc] = useState('424');
   const [paying, setPaying] = useState(false);
   const [done, setDone] = useState(false);
-
-  // Load brief + ownership state
-  useEffect(() => {
-    if (!briefId) return;
-    (async () => {
-      try {
-        const briefRes = await fetch(`/api/public-briefs?id=${briefId}`);
-        const briefData = await briefRes.json().catch(() => null);
-        if (briefRes.ok && briefData?.id) {
-          setBrief(briefData);
-        } else {
-          setError('This venture brief is not available for purchase.');
-        }
-        // my-library is session-protected — tolerate redirect/HTML as "not owned"
-        const libRes = await fetch('/api/my-library').catch(() => null);
-        if (libRes && libRes.ok) {
-          const libData = await libRes.json().catch(() => ({ purchases: [] }));
-          const ownedEntry = (libData?.purchases ?? []).find(
-            (p: PurchaseWithBrief) => p.brief?.id === briefId
-          );
-          if (ownedEntry) setOwned(ownedEntry);
-        }
-      } catch {
-        setError('Could not load this brief. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [briefId]);
 
   // Signed-out users → login first, then come back here
   useEffect(() => {
@@ -70,7 +44,7 @@ export default function CheckoutPage() {
 
   const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setFormError('');
     setPaying(true);
     try {
       const res = await fetch('/api/checkout', {
@@ -80,29 +54,23 @@ export default function CheckoutPage() {
       });
       const data = await res.json();
       if (data.alreadyOwned) {
-        setOwned({ purchase: data, brief: brief! } as unknown as PurchaseWithBrief);
+        setAlreadyOwned(true);
         setDone(true);
         return;
       }
       if (!res.ok) {
-        setError(data.error || 'Checkout failed. Please try again.');
+        setFormError(data.error || 'Checkout failed. Please try again.');
         setPaying(false);
         return;
       }
       setDone(true);
     } catch {
-      setError('Network error: please try again.');
+      setFormError('Network error: please try again.');
       setPaying(false);
     }
   };
 
-  if (loading || roleLoading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" />
-      </div>
-    );
-  }
+  if (loading || roleLoading) return <Spinner />;
 
   if (error && !brief) {
     return (
@@ -127,7 +95,7 @@ export default function CheckoutPage() {
               <CheckCircle2 className="w-7 h-7 text-emerald-400" />
             </div>
             <h1 className="text-lg font-bold text-white tracking-tight">
-              {owned ? 'You already own this brief' : 'Purchase confirmed'}
+              {owned || alreadyOwned ? 'You already own this brief' : 'Purchase confirmed'}
             </h1>
             <p className="text-xs text-gray-500 mt-2 leading-relaxed">
               {brief?.title} is now in your library: view or download it any time, no further payment needed.
@@ -227,7 +195,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {error && <p className="text-[11px] text-red-400">{error}</p>}
+              {formError && <p className="text-[11px] text-red-400">{formError}</p>}
 
               <Button type="submit" disabled={paying}
                 className="w-full bg-[#2EC4C6] hover:bg-[#28B0B2] text-black font-medium h-11 rounded-lg transition-all active:scale-[0.98] disabled:opacity-50">

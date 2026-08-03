@@ -1,18 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useSupabase } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, ExternalLink, CheckCircle, XCircle, Loader2, Eye, FileText, Calendar, Tag, Users, Clock, ShoppingCart, Video, TrendingUp, DollarSign, BarChart3, Target, Gauge } from 'lucide-react';
+import { ArrowLeft, ExternalLink, CheckCircle, XCircle, Loader2, Eye, Calendar, Tag, Users, Clock, ShoppingCart, Video, TrendingUp, DollarSign, BarChart3, Target, Gauge } from 'lucide-react';
 import Link from 'next/link';
 import type { VentureBrief, Approval } from '@/lib/types';
 import { STATUS_LABELS, STATUS_COLORS, STATUS_ORDER } from '@/lib/types';
 import { formatDate } from '@/lib/utils';
 import { useAdminGuard } from '@/lib/auth';
+import { Spinner } from '@/components/spinner';
 
 export default function BriefDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -23,15 +24,21 @@ export default function BriefDetailPage() {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
-  useEffect(() => { if (allowed) loadData(); }, [id, allowed]);
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     const { data: b } = await supabase.from('venture_briefs').select('*').eq('id', id).single();
     if (b) setBrief(b as VentureBrief);
     const { data: a } = await supabase.from('approvals').select('*').eq('brief_id', id).order('created_at', { ascending: true });
     if (a) setApprovals(a as Approval[]);
     setLoading(false);
-  }
+  }, [id, supabase]);
+
+  useEffect(() => {
+    if (!allowed) return;
+    // Async fetch — setState happens after await, never synchronously in the
+    // effect body (the rule's sync-detection is a false positive here).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadData();
+  }, [allowed, loadData]);
 
   const steps = [
     { key: 'draft', label: 'Draft', desc: 'Write content in Google Docs' },
@@ -79,12 +86,12 @@ export default function BriefDetailPage() {
     const notes = prompt('Rejection reason:');
     const { data: { user } } = await supabase.auth.getUser();
     await supabase.from('approvals').insert({ brief_id: id, step, approved: false, approved_by: user?.id ?? null, notes });
-    const revert = { draft_complete: 'draft', cover_ready: 'draft_ready', pdf_ready: 'pdf_ready' };
+    const revert = { draft_complete: 'draft', cover_ready: 'draft_ready', pdf_ready: 'generating_pdf' };
     await supabase.from('venture_briefs').update({ status: revert[step as keyof typeof revert] || 'draft' }).eq('id', id);
     loadData();
   }
 
-  if (loading || guardLoading) return <div className="flex items-center justify-center py-32"><div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" /></div>;
+  if (loading || guardLoading) return <Spinner />;
   if (!brief) return <div className="text-center py-20"><p className="text-gray-500">Brief not found</p><Link href="/dashboard" className="text-[#2EC4C6] text-sm hover:underline mt-2 inline-block">Back to Dashboard</Link></div>;
 
   const detailItems = [

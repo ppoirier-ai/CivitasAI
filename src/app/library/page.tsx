@@ -11,6 +11,7 @@ import { formatDateShort } from '@/lib/utils';
 import {
   BookOpen, Eye, Download, ShoppingBag, CheckCircle2, FileText,
 } from 'lucide-react';
+import { Spinner } from '@/components/spinner';
 
 export default function LibraryPage() {
   const [purchases, setPurchases] = useState<PurchaseWithBrief[]>([]);
@@ -27,11 +28,7 @@ export default function LibraryPage() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" />
-      </div>
-    );
+    return <Spinner />;
   }
 
   return (

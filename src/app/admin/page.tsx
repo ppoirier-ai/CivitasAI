@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useRole } from '@/lib/auth';
+import { Spinner } from '@/components/spinner';
 import { formatDateShort } from '@/lib/utils';
 import { STATUS_LABELS } from '@/lib/types';
 import {
@@ -53,11 +54,7 @@ export default function AdminPage() {
   }, [role, roleLoading]);
 
   if (roleLoading || !data) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" />
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (role !== 'admin') {

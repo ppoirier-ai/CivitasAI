@@ -13,6 +13,7 @@ import {
 import { ChevronLeft, ChevronRight, CalendarPlus, Trash2, GripVertical } from 'lucide-react';
 import type { VentureBrief, CalendarEvent } from '@/lib/types';
 import { useAdminGuard } from '@/lib/auth';
+import { Spinner } from '@/components/spinner';
 import {
   format,
   startOfMonth,
@@ -88,7 +89,10 @@ export default function CalendarPage() {
 
   useEffect(() => {
     if (!allowed) return;
-    load();
+    // Async fetch — setState happens after await, never synchronously in the
+    // effect body (the rule's sync-detection is a false positive here).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void load();
   }, [allowed, load]);
 
   const monthStart = startOfMonth(currentMonth);
@@ -242,7 +246,7 @@ export default function CalendarPage() {
     }
   }
 
-  if (guardLoading || (allowed && loading)) return <div className="flex items-center justify-center py-32"><div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" /></div>;
+  if (guardLoading || (allowed && loading)) return <Spinner />;
   if (!allowed) return null;
 
   const dialogTitle = dialogMode === 'add' ? 'Add Event' : dialogMode === 'edit-event' ? 'Edit Event' : 'Scheduled Brief';

@@ -1,16 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSupabase } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Plus, Calendar, FileText, TrendingUp, CircleDot, CheckCircle2, ArrowUpRight, Trash2 } from 'lucide-react';
+import { Plus, Calendar, FileText, TrendingUp, CircleDot, CheckCircle2, ArrowUpRight } from 'lucide-react';
 import type { VentureBrief } from '@/lib/types';
 import { STATUS_LABELS, STATUS_COLORS } from '@/lib/types';
 import { formatDateShort } from '@/lib/utils';
 import { useAdminGuard } from '@/lib/auth';
+import { Spinner } from '@/components/spinner';
 
 export default function DashboardPage() {
   const supabase = useSupabase();
@@ -18,14 +19,14 @@ export default function DashboardPage() {
   const [briefs, setBriefs] = useState<VentureBrief[]>([]);
   const [loading, setLoading] = useState(true);
 
-  async function loadBriefs() {
+  const loadBriefs = useCallback(async () => {
     const { data } = await supabase
       .from('venture_briefs')
       .select('*')
       .order('updated_at', { ascending: false });
     if (data) setBriefs(data as VentureBrief[]);
     setLoading(false);
-  }
+  }, [supabase]);
 
   useEffect(() => {
     if (!allowed) return;
@@ -34,18 +35,10 @@ export default function DashboardPage() {
     loadBriefs();
     const sub = supabase
       .channel('briefs_changes')
-      // Realtime events fire asynchronously — never synchronously during the effect body
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       .on('postgres_changes', { event: '*', schema: 'public', table: 'venture_briefs' }, () => loadBriefs())
       .subscribe();
     return () => { void sub.unsubscribe(); };
-  }, [supabase, allowed]);
-
-  async function handleDelete(id: string) {
-    if (!confirm('Delete this brief permanently?')) return;
-    await supabase.from('venture_briefs').delete().eq('id', id);
-    loadBriefs();
-  }
+  }, [supabase, allowed, loadBriefs]);
 
   const stats = [
     {
@@ -71,13 +64,7 @@ export default function DashboardPage() {
     },
   ];
 
-  if (loading || guardLoading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" />
-      </div>
-    );
-  }
+  if (loading || guardLoading) return <Spinner />;
 
   return (
     <div className="space-y-8">
