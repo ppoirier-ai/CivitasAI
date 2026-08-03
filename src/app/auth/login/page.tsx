@@ -106,14 +106,14 @@ function LoginForm() {
         password,
       });
       if (signInError) {
-        setError('Account created — please sign in.');
+        setError('Account created: please sign in.');
         setMode('signin');
         setBusy(false);
         return;
       }
       routeByRole('customer');
     } catch {
-      setError('Network error — please try again.');
+      setError('Network error: please try again.');
       setBusy(false);
     }
   };
@@ -286,7 +286,7 @@ function LoginForm() {
           </Button>
 
           <p className="text-[10px] text-gray-700 text-center mt-5">
-            Purchases unlock lifetime access — view or download your briefs any time.
+            Purchases unlock lifetime access: view or download your briefs any time.
           </p>
         </CardContent>
       </Card>

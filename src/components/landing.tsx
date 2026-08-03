@@ -53,19 +53,19 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 }
 
 const SECTIONS = [
-  { icon: IconExecutive, title: 'Executive Summary', desc: 'The opportunity in one page — thesis, timing, and why now.' },
+  { icon: IconExecutive, title: 'Executive Summary', desc: 'The opportunity in one page: thesis, timing, and why now.' },
   { icon: IconProblem, title: 'Problem & Solution', desc: 'The market gap and the wedge that captures it.' },
   { icon: IconMarket, title: 'Market Sizing', desc: 'TAM, SAM, and SOM with defensible bottom-up math.' },
   { icon: IconGrowth, title: 'Growth Outlook', desc: 'CAGR and the 5-year trajectory of the category.' },
   { icon: IconCapital, title: 'Capital Requirements', desc: 'What it really costs to enter the market.' },
   { icon: IconRoi, title: 'ROI Outlook', desc: 'Return profile and profitability expectations.' },
-  { icon: IconLifetime, title: 'Lifetime Access', desc: 'One purchase, forever — view or download any time.' },
+  { icon: IconLifetime, title: 'Lifetime Access', desc: 'One purchase, forever: view or download any time.' },
 ];
 
 const STEPS = [
   { icon: IconBrowse, title: 'Browse the marketplace', desc: 'Search by sector, filter by capital you can deploy, sort by ROI.' },
   { icon: IconPreview, title: 'Preview every brief', desc: 'Read the table of contents and sample sections before you buy.' },
-  { icon: IconPurchase, title: 'Purchase once, own forever', desc: `${BRIEF_PRICE} — instant PDF access in your library, no subscription.` },
+  { icon: IconPurchase, title: 'Purchase once, own forever', desc: `${BRIEF_PRICE}: instant PDF access in your library, no subscription.` },
 ];
 
 export default function LandingPage({ initialBriefs }: { initialBriefs?: MarketplaceBrief[] }) {
@@ -155,7 +155,7 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
           {[
             { value: '$1.2T+', label: 'Markets analyzed' },
             { value: '7', label: 'Analysis sections per brief' },
-            { value: loading ? '—' : String(briefs.length), label: 'Briefs published' },
+            { value: loading ? '-' : String(briefs.length), label: 'Briefs published' },
             { value: BRIEF_PRICE, label: 'One-time, lifetime access' },
           ].map((s) => (
             <div key={s.label} className="text-center">
@@ -173,7 +173,7 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
             <Eyebrow>Featured Briefs</Eyebrow>
             <h2 className="text-3xl sm:text-[40px] font-semibold tracking-[-0.02em] text-white tracking-tight mt-4">Opportunities in orbit, on the ground</h2>
             <p className="text-sm text-gray-500 mt-4 max-w-xl mx-auto">
-              Every brief is a complete teardown of one commercial space opportunity — the same format we use internally.
+              Every brief is a complete teardown of one commercial space opportunity: the same format we use internally.
             </p>
           </div>
         </Reveal>
@@ -335,7 +335,7 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
               Your next venture is <span className="cosmic-text">in orbit.</span>
             </h2>
             <p className="text-sm text-gray-400 mt-5">
-              Stop reading headlines. Start reading the numbers — {BRIEF_PRICE} per brief, yours forever.
+              Stop reading headlines. Start reading the numbers: {BRIEF_PRICE} per brief, yours forever.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-9">
               <Link href="/opportunities">

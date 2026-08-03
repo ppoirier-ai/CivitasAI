@@ -11,7 +11,7 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: 'Spacenomics — Institutional Space Market Intelligence & Venture Briefs',
+  title: 'Spacenomics: Institutional Space Market Intelligence & Venture Briefs',
   description:
     'Institutional-grade commercial space market intelligence, unit economics models, and venture briefs. Sizing TAM, capital requirements, and ROI for space founders, operators, talent, and investors.',
   keywords: [
@@ -23,14 +23,14 @@ export const metadata: Metadata = {
     type: 'website',
     url: '/',
     siteName: 'Spacenomics',
-    title: 'Spacenomics — Commercial Space Market Intelligence & Unit Economics',
+    title: 'Spacenomics: Commercial Space Market Intelligence & Unit Economics',
     description:
       'Institutional-grade commercial space market intelligence, unit economics models, and venture briefs for space founders, operators, talent, and investors.',
     images: [{ url: '/covers/zblan.jpg', width: 900, height: 1165, alt: 'Spacenomics Commercial Space Market Intelligence' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Spacenomics — Commercial Space Market Intelligence & Unit Economics',
+    title: 'Spacenomics: Commercial Space Market Intelligence & Unit Economics',
     description: 'Institutional-grade commercial space market intelligence, unit economics models, and venture briefs for founders, operators, talent, and investors.',
     images: ['/covers/zblan.jpg'],
   },

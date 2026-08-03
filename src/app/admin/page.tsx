@@ -117,7 +117,7 @@ export default function AdminPage() {
           </div>
           {!data?.recentOrders.length ? (
             <div className="py-12 text-center">
-              <p className="text-xs text-gray-600">No purchases yet — new orders will appear here as customers buy briefs.</p>
+              <p className="text-xs text-gray-600">No purchases yet: new orders will appear here as customers buy briefs.</p>
             </div>
           ) : (
             <div className="space-y-1">
