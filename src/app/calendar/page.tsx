@@ -253,7 +253,7 @@ export default function CalendarPage() {
         <div>
           <h1 className="text-xl font-bold text-white tracking-tight">Calendar</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            View and manage scheduled briefs &amp; events — click a day to add, drag to move.
+            View and manage scheduled briefs &amp; events: click a day to add, drag to move.
           </p>
         </div>
         <Button
@@ -339,7 +339,7 @@ export default function CalendarPage() {
                         onClick={(e) => { e.stopPropagation(); openEditEvent(ev); }}
                         className="group/chip flex items-center gap-1 rounded-sm px-1 py-0.5 text-[9px] truncate leading-tight cursor-grab active:cursor-grabbing transition-opacity hover:opacity-90"
                         style={{ backgroundColor: `${ev.color || '#2EC4C6'}26`, color: ev.color || '#2EC4C6' }}
-                        title={`${ev.title}${ev.time ? ` · ${ev.time}` : ''} — click to edit, drag to move`}
+                        title={`${ev.title}${ev.time ? ` · ${ev.time}` : ''}: click to edit, drag to move`}
                       >
                         <GripVertical className="w-2 h-2 shrink-0 opacity-40" />
                         <span className="truncate">{ev.time ? `${ev.time} ` : ''}{ev.title}</span>
@@ -352,7 +352,7 @@ export default function CalendarPage() {
                         onDragStart={(e) => onDragStart(e, { kind: 'brief', id: b.id })}
                         onClick={(e) => { e.stopPropagation(); openEditBrief(b); }}
                         className="flex items-center gap-1 bg-[#2EC4C6]/15 text-[#2EC4C6]/90 rounded-sm px-1 py-0.5 text-[9px] truncate leading-tight cursor-grab active:cursor-grabbing hover:bg-[#2EC4C6]/25 transition-colors"
-                        title={`${b.title} — click to reschedule, drag to move`}
+                        title={`${b.title}: click to reschedule, drag to move`}
                       >
                         <GripVertical className="w-2 h-2 shrink-0 opacity-40" />
                         <span className="truncate">{b.title}</span>
@@ -365,7 +365,7 @@ export default function CalendarPage() {
           </div>
           {!eventsReady && (
             <p className="text-[11px] text-amber-500/80 mt-3">
-              Standalone events are unavailable — run migration_calendar_events.sql in Supabase to enable them.
+              Standalone events are unavailable: run migration_calendar_events.sql in Supabase to enable them.
             </p>
           )}
         </CardContent>

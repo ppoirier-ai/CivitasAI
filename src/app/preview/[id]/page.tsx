@@ -77,7 +77,7 @@ export default function PreviewPage() {
         {
           id: 'opportunity',
           label: 'Opportunity Profile',
-          content: [brief.category, brief.tags?.join(', ')].filter(Boolean).join(' — '),
+          content: [brief.category, brief.tags?.join(', ')].filter(Boolean).join(': '),
         },
       ].filter((e) => e.content)
     : [];
@@ -126,7 +126,7 @@ export default function PreviewPage() {
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Opportunities
         </Link>
         <span className="inline-flex items-center gap-1.5 text-[10px] text-gray-600 uppercase tracking-wider">
-          <Lock className="w-3 h-3" /> Sample preview — full brief delivered as PDF
+          <Lock className="w-3 h-3" /> Sample preview: full brief delivered as PDF
         </span>
       </div>
 
@@ -210,7 +210,7 @@ export default function PreviewPage() {
                     {[['TAM', brief.tam], ['SAM', brief.sam], ['SOM', brief.som]].map(([label, value]) => (
                       <div key={label} className="bg-gray-800/40 rounded-lg p-3">
                         <p className="text-[9px] text-gray-600 uppercase tracking-wider">{label}</p>
-                        <p className="text-xs text-gray-200 font-medium mt-0.5">{value || '—'}</p>
+                        <p className="text-xs text-gray-200 font-medium mt-0.5">{value || '-'}</p>
                       </div>
                     ))}
                   </div>
@@ -274,7 +274,7 @@ export default function PreviewPage() {
                     {[
                       'Full venture brief as PDF',
                       'Market sizing, competitive & capital analysis',
-                      'Lifetime access — view or download anytime',
+                      'Lifetime access: view or download anytime',
                       'Free updates to the brief',
                     ].map((item) => (
                       <li key={item} className="flex items-start gap-2 text-[11px] text-gray-500">

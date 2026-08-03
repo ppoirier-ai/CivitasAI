@@ -52,9 +52,9 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-3.5">
           {[
-            { label: 'Email', value: user?.email || (loading ? 'Loading...' : '—') },
-            { label: 'User ID', value: user?.id ? `${user.id.slice(0, 12)}...` : (loading ? 'Loading...' : '—'), mono: true },
-            { label: 'Role', value: role === 'admin' ? 'Admin' : role === 'customer' ? 'Customer' : '—' },
+            { label: 'Email', value: user?.email || (loading ? 'Loading...' : '-') },
+            { label: 'User ID', value: user?.id ? `${user.id.slice(0, 12)}...` : (loading ? 'Loading...' : '-'), mono: true },
+            { label: 'Role', value: role === 'admin' ? 'Admin' : role === 'customer' ? 'Customer' : '-' },
             { label: 'Project', value: 'Civitas (llfyegbvadfsrrilamgn)', mono: true },
             { label: 'Auth Provider', value: 'Email & password via Supabase' },
           ].map(({ label, value, mono }) => (

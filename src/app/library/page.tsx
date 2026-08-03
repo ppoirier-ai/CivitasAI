@@ -42,7 +42,7 @@ export default function LibraryPage() {
           <p className="text-sm text-gray-500 mt-0.5">
             {purchases.length === 0
               ? 'Your purchased venture briefs will appear here'
-              : `${purchases.length} purchased brief${purchases.length !== 1 ? 's' : ''} — view or download any time`}
+              : `${purchases.length} purchased brief${purchases.length !== 1 ? 's' : ''}: view or download any time`}
           </p>
         </div>
         <Link href="/opportunities">

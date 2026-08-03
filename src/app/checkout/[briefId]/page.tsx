@@ -91,7 +91,7 @@ export default function CheckoutPage() {
       }
       setDone(true);
     } catch {
-      setError('Network error — please try again.');
+      setError('Network error: please try again.');
       setPaying(false);
     }
   };
@@ -130,7 +130,7 @@ export default function CheckoutPage() {
               {owned ? 'You already own this brief' : 'Purchase confirmed'}
             </h1>
             <p className="text-xs text-gray-500 mt-2 leading-relaxed">
-              {brief?.title} is now in your library — view or download it any time, no further payment needed.
+              {brief?.title} is now in your library: view or download it any time, no further payment needed.
             </p>
             <div className="flex flex-col gap-2 mt-6">
               <Link href="/library">
@@ -181,7 +181,7 @@ export default function CheckoutPage() {
               <span className="text-base font-bold text-[#2EC4C6]">{BRIEF_PRICE}</span>
             </div>
             <p className="text-[9px] text-gray-700 leading-relaxed">
-              One-time purchase. Includes lifetime access to the PDF — view and download without limits.
+              One-time purchase. Includes lifetime access to the PDF: view and download without limits.
             </p>
           </CardContent>
         </Card>
@@ -192,7 +192,7 @@ export default function CheckoutPage() {
             <div className="flex items-center justify-between mb-4">
               <p className="text-[10px] text-gray-600 uppercase tracking-wider">Payment</p>
               <span className="flex items-center gap-1 text-[9px] text-amber-400/80">
-                <ShieldCheck className="w-3 h-3" /> Demo checkout — no real charge
+                <ShieldCheck className="w-3 h-3" /> Demo checkout: no real charge
               </span>
             </div>
 
@@ -243,7 +243,7 @@ export default function CheckoutPage() {
                 )}
               </Button>
               <p className="text-[9px] text-gray-700 text-center">
-                Mock payment only — no card is charged and no payment provider is involved.
+                Mock payment only: no card is charged and no payment provider is involved.
               </p>
             </form>
           </CardContent>
