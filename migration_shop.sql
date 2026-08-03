@@ -37,14 +37,25 @@ CREATE INDEX IF NOT EXISTS purchases_user_idx ON purchases (user_id);
 CREATE INDEX IF NOT EXISTS purchases_brief_idx ON purchases (brief_id);
 
 -- 3. RLS policies --------------------------------------------------------------
--- venture_briefs: authenticated users (admins) manage briefs; anon sees public
+-- venture_briefs: only admins manage briefs; anon + customers read published briefs
 ALTER TABLE venture_briefs ENABLE ROW LEVEL SECURITY;
+
+-- VULN-02 fix: the old "briefs authenticated all" policy granted every
+-- authenticated user (including self-registered customers) full read/write
+-- access to drafts. Replaced by published-read + admin-only management.
 DROP POLICY IF EXISTS "briefs authenticated all" ON venture_briefs;
-CREATE POLICY "briefs authenticated all" ON venture_briefs
-  FOR ALL TO authenticated USING (true) WITH CHECK (true);
 DROP POLICY IF EXISTS "briefs public read" ON venture_briefs;
-CREATE POLICY "briefs public read" ON venture_briefs
-  FOR SELECT TO anon USING (is_public = true);
+
+-- 1. Anyone (anon + signed-in customer) can read published, public briefs
+CREATE POLICY "briefs public read published" ON venture_briefs
+  FOR SELECT TO anon, authenticated
+  USING (is_public = true AND status = 'published');
+
+-- 2. Only users with app_metadata role = 'admin' can view/edit drafts and manage briefs
+CREATE POLICY "briefs admin full access" ON venture_briefs
+  FOR ALL TO authenticated
+  USING ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin')
+  WITH CHECK ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 
 -- purchases: owner can read own purchases (writes go through service role API)
 ALTER TABLE purchases ENABLE ROW LEVEL SECURITY;

@@ -84,8 +84,13 @@ function LoginForm() {
     e.preventDefault();
     setError('');
     setBusy(true);
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters.');
+    const strongPassword =
+      password.length >= 10 &&
+      /[a-z]/.test(password) &&
+      /[A-Z]/.test(password) &&
+      /[0-9]/.test(password);
+    if (!strongPassword) {
+      setError('Password must be at least 10 characters with upper and lower case letters and a number.');
       setBusy(false);
       return;
     }
