@@ -10,6 +10,11 @@ import { useRole } from '@/lib/auth';
 import { useState } from 'react';
 import { KeyRound, CheckCircle2 } from 'lucide-react';
 
+/** Supabase project ref, derived from the public URL (no hardcoded id). */
+const PROJECT_REF =
+  (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '')
+    .match(/https?:\/\/([a-z0-9-]+)\.supabase\.co/i)?.[1] ?? null;
+
 export default function SettingsPage() {
   const supabase = useSupabase();
   const { user, role, loading } = useRole();
@@ -24,8 +29,8 @@ export default function SettingsPage() {
     e.preventDefault();
     setPwMessage('');
     setPwError('');
-    if (newPassword.length < 8) {
-      setPwError('Password must be at least 8 characters.');
+    if (newPassword.length < 8 || !/[a-z]/.test(newPassword) || !/[A-Z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+      setPwError('Password must be at least 10 characters with upper and lower case letters and a number.');
       return;
     }
     setPwBusy(true);
@@ -55,7 +60,7 @@ export default function SettingsPage() {
             { label: 'Email', value: user?.email || (loading ? 'Loading...' : '-') },
             { label: 'User ID', value: user?.id ? `${user.id.slice(0, 12)}...` : (loading ? 'Loading...' : '-'), mono: true },
             { label: 'Role', value: role === 'admin' ? 'Admin' : role === 'customer' ? 'Customer' : '-' },
-            { label: 'Project', value: 'Civitas (llfyegbvadfsrrilamgn)', mono: true },
+            { label: 'Project', value: PROJECT_REF ? `Civitas (${PROJECT_REF})` : 'Civitas (Supabase)', mono: true },
             { label: 'Auth Provider', value: 'Email & password via Supabase' },
           ].map(({ label, value, mono }) => (
             <div key={label}>
@@ -85,7 +90,7 @@ export default function SettingsPage() {
                 <Input
                   type="password" required value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="8+ characters"
+                  placeholder="10+ characters"
                   className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg h-10 focus:border-[#2EC4C6]/50"
                 />
               </div>

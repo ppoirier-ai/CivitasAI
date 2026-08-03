@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { useRole } from '@/lib/auth';
 import { BRIEF_PRICE } from '@/lib/types';
 import { firstMoneyToken, firstPercent } from '@/lib/metrics';
-import type { MarketplaceBrief, PurchaseWithBrief } from '@/lib/types';
+import { useBriefWithOwnership } from '@/lib/use-brief-ownership';
+import { Spinner } from '@/components/spinner';
 import {
   ArrowLeft, Lock, Eye, Download, ShoppingBag, CheckCircle2, BookOpen,
   ListOrdered, TrendingUp, DollarSign, BarChart3, Gauge, FileText, Play,
@@ -27,39 +27,7 @@ export default function PreviewPage() {
   const router = useRouter();
   const { role, loading: roleLoading } = useRole();
 
-  const [brief, setBrief] = useState<MarketplaceBrief | null>(null);
-  const [owned, setOwned] = useState<PurchaseWithBrief | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    if (!briefId) return;
-    (async () => {
-      try {
-        const briefRes = await fetch(`/api/public-briefs?id=${briefId}`);
-        const briefData = await briefRes.json().catch(() => null);
-        if (briefRes.ok && briefData?.id) {
-          setBrief(briefData);
-        } else {
-          setError('This venture brief is not available.');
-        }
-        // my-library is session-protected — a signed-out visitor gets a
-        // redirect (HTML), so tolerate non-JSON responses as "not owned".
-        const libRes = await fetch('/api/my-library').catch(() => null);
-        if (libRes && libRes.ok) {
-          const libData = await libRes.json().catch(() => ({ purchases: [] }));
-          const ownedEntry = (libData?.purchases ?? []).find(
-            (p: PurchaseWithBrief) => p.brief?.id === briefId
-          );
-          if (ownedEntry) setOwned(ownedEntry);
-        }
-      } catch {
-        setError('Could not load this brief. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [briefId]);
+  const { brief, owned, loading, error } = useBriefWithOwnership(briefId);
 
   const toc: TocEntry[] = brief
     ? [
@@ -90,13 +58,7 @@ export default function PreviewPage() {
     router.push(`/checkout/${briefId}`);
   };
 
-  if (loading || roleLoading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" />
-      </div>
-    );
-  }
+  if (loading || roleLoading) return <Spinner />;
 
   if (error || !brief) {
     return (

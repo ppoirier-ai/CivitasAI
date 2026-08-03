@@ -1,5 +1,7 @@
 import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { checkRateLimit } from '@/lib/rate-limit';
+import { BRIEF_PRICE_CENTS } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,6 +12,19 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
  * Marks a $99.99 purchase for the signed-in customer (idempotent per brief).
  */
 export async function POST(request: Request) {
+  // B2 fix: throttle checkout attempts per IP (defense against abuse).
+  const ip =
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    request.headers.get('x-real-ip')?.trim() ||
+    'unknown';
+  const rl = checkRateLimit(`checkout:${ip}`);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(rl.retryAfterSeconds) } }
+    );
+  }
+
   let body: { brief_id?: string } = {};
   try {
     body = await request.json();
@@ -59,7 +74,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ alreadyOwned: true, brief_id: briefId });
   }
 
-  const amountCents = 9999; // flat $99.99 price (BRIEF_PRICE_CENTS)
+  const amountCents = BRIEF_PRICE_CENTS; // flat $99.99 price
 
   const { data: purchase, error: insertError } = await service
     .from('purchases')

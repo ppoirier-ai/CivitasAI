@@ -15,10 +15,246 @@ import { useRole } from '@/lib/auth';
 import { BRIEF_PRICE } from '@/lib/types';
 import { firstMoneyToken, firstPercent } from '@/lib/metrics';
 import type { MarketplaceBrief } from '@/lib/types';
+import { Spinner } from '@/components/spinner';
 
 type ViewMode = 'portrait' | 'landscape';
 
 const VIEW_STORAGE_KEY = 'opportunities-view';
+
+/* ————— Card renderers (module scope — stable identities, no remounts on state change) ————— */
+
+function MetricChips({ brief }: { brief: MarketplaceBrief }) {
+  return (
+    <div className="grid grid-cols-4 gap-2">
+      {brief.tam && (
+        <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
+          <BarChart3 className="w-3 h-3 text-[#2EC4C6]/60 mx-auto mb-0.5" />
+          <p className="text-[9px] text-gray-600 uppercase tracking-wider">TAM</p>
+          <p className="text-[10px] text-gray-300 font-medium truncate">{firstMoneyToken(brief.tam) ?? brief.tam}</p>
+        </div>
+      )}
+      {brief.cagr && (
+        <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
+          <TrendingUp className="w-3 h-3 text-emerald-400/60 mx-auto mb-0.5" />
+          <p className="text-[9px] text-gray-600 uppercase tracking-wider">CAGR</p>
+          <p className="text-[10px] text-emerald-300 font-medium">{firstPercent(brief.cagr) ?? brief.cagr}</p>
+        </div>
+      )}
+      {brief.roi && (
+        <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
+          <Gauge className="w-3 h-3 text-blue-400/60 mx-auto mb-0.5" />
+          <p className="text-[9px] text-gray-600 uppercase tracking-wider">ROI</p>
+          <p className="text-[10px] text-blue-300 font-medium">{brief.roi_value ? `${brief.roi_value}x` : brief.roi}</p>
+        </div>
+      )}
+      {brief.capital_required && (
+        <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
+          <DollarSign className="w-3 h-3 text-amber-400/60 mx-auto mb-0.5" />
+          <p className="text-[9px] text-gray-600 uppercase tracking-wider">Capital</p>
+          <p className="text-[10px] text-amber-300 font-medium truncate">{firstMoneyToken(brief.capital_required) ?? brief.capital_required}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CoverImage({ brief }: { brief: MarketplaceBrief }) {
+  if (!brief.cover_image_url) {
+    return (
+      <div className="w-full h-full bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-t-lg flex items-center justify-center">
+        <img src="/brand/logo-white.webp" alt="Spacenomics" className="hidden dark:block h-10 opacity-40" width={800} height={446} loading="lazy" />
+        <img src="/brand/logo-navy.webp" alt="Spacenomics" className="block dark:hidden h-10 opacity-40" width={800} height={446} loading="lazy" />
+      </div>
+    );
+  }
+  return (
+    <img
+      src={brief.cover_image_url}
+      alt={brief.title}
+      loading="lazy"
+      decoding="async"
+      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+    />
+  );
+}
+
+function PortraitCard({ brief, owned, isAdmin, onPurchase }: { brief: MarketplaceBrief; owned: boolean; isAdmin: boolean; onPurchase: (id: string) => void }) {
+  return (
+    <Card key={brief.id} className="bg-gray-900/40 border-gray-800/40 hover:border-gray-700/50 transition-all group hover:bg-gray-900/60">
+      <CardContent className="p-0">
+        <div className="aspect-[3/4] overflow-hidden rounded-t-lg">
+          <CoverImage brief={brief} />
+        </div>
+
+        <div className="p-4 space-y-3">
+          <div>
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="text-sm font-semibold text-white group-hover:text-[#2EC4C6] transition-colors leading-snug">
+                {brief.title}
+              </h3>
+              <div className="flex items-center gap-1.5 shrink-0">
+                {owned && (
+                  <Badge className="text-[9px] h-4 px-1.5 bg-emerald-500/10 text-emerald-400 border-0 rounded-full">
+                    <CheckCircle2 className="w-2.5 h-2.5 mr-0.5" /> Owned
+                  </Badge>
+                )}
+                <Badge className="text-[9px] h-4 px-1.5 bg-[#2EC4C6]/10 text-[#2EC4C6] border-0 rounded-full">
+                  {BRIEF_PRICE}
+                </Badge>
+              </div>
+            </div>
+            {brief.category && (
+              <Badge className="text-[9px] h-4 px-1.5 bg-gray-800 text-gray-400 border-0 rounded-full mt-1">
+                {brief.category}
+              </Badge>
+            )}
+            {brief.subtitle && (
+              <p className="text-[11px] text-gray-500 mt-0.5 line-clamp-1">{brief.subtitle}</p>
+            )}
+          </div>
+
+          {brief.summary && (
+            <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">{brief.summary}</p>
+          )}
+
+          <MetricChips brief={brief} />
+
+          {brief.tags && brief.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {brief.tags.slice(0, 3).map((tag) => (
+                <span key={tag} className="text-[8px] bg-gray-800/50 text-gray-500 px-1.5 py-0.5 rounded-full">{tag}</span>
+              ))}
+              {brief.tags.length > 3 && (
+                <span className="text-[8px] text-gray-600">+{brief.tags.length - 3}</span>
+              )}
+            </div>
+          )}
+
+          <CardActions brief={brief} owned={owned} isAdmin={isAdmin} onPurchase={onPurchase} />
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function LandscapeCard({ brief, owned, isAdmin, onPurchase }: { brief: MarketplaceBrief; owned: boolean; isAdmin: boolean; onPurchase: (id: string) => void }) {
+  return (
+    <Card key={brief.id} className="bg-gray-900/40 border-gray-800/40 hover:border-gray-700/50 transition-all group hover:bg-gray-900/60">
+      <CardContent className="p-0 flex flex-col sm:flex-row">
+        {/* Cover — portrait aspect, compact on the left */}
+        <div className="sm:w-44 md:w-52 shrink-0 aspect-[3/4] sm:aspect-auto sm:min-h-[220px] overflow-hidden rounded-t-lg sm:rounded-t-none sm:rounded-l-lg">
+          <CoverImage brief={brief} />
+        </div>
+
+        <div className="flex-1 p-4 sm:p-5 space-y-3">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                {owned && (
+                  <Badge className="text-[9px] h-4 px-1.5 bg-emerald-500/10 text-emerald-400 border-0 rounded-full">
+                    <CheckCircle2 className="w-2.5 h-2.5 mr-0.5" /> Owned
+                  </Badge>
+                )}
+                <h3 className="text-sm md:text-[15px] font-semibold text-white group-hover:text-[#2EC4C6] transition-colors leading-snug">
+                  {brief.title}
+                </h3>
+              </div>
+              <div className="flex items-center gap-2 mt-1 flex-wrap">
+                {brief.category && (
+                  <Badge className="text-[9px] h-4 px-1.5 bg-gray-800 text-gray-400 border-0 rounded-full">
+                    {brief.category}
+                  </Badge>
+                )}
+                <Badge className="text-[9px] h-4 px-1.5 bg-[#2EC4C6]/10 text-[#2EC4C6] border-0 rounded-full">
+                  {BRIEF_PRICE}
+                </Badge>
+              </div>
+            </div>
+          </div>
+
+          {brief.subtitle && (
+            <p className="text-[11px] text-gray-500 line-clamp-1">{brief.subtitle}</p>
+          )}
+          {brief.summary && (
+            <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">{brief.summary}</p>
+          )}
+
+          <MetricChips brief={brief} />
+
+          {brief.tags && brief.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {brief.tags.slice(0, 4).map((tag) => (
+                <span key={tag} className="text-[8px] bg-gray-800/50 text-gray-500 px-1.5 py-0.5 rounded-full">{tag}</span>
+              ))}
+              {brief.tags.length > 4 && (
+                <span className="text-[8px] text-gray-600">+{brief.tags.length - 4}</span>
+              )}
+            </div>
+          )}
+
+          <CardActions brief={brief} owned={owned} isAdmin={isAdmin} onPurchase={onPurchase} />
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function CardActions({ brief, owned, isAdmin, onPurchase }: { brief: MarketplaceBrief; owned: boolean; isAdmin: boolean; onPurchase: (id: string) => void }) {
+  return (
+    <div className="flex items-center gap-2 pt-1">
+      {owned ? (
+        <>
+          {brief.pdf_url ? (
+            <>
+              <a href={brief.pdf_url} target="_blank" rel="noreferrer" className="flex-1">
+                <Button className="w-full bg-[#2EC4C6] hover:bg-[#28B0B2] text-black text-[10px] h-7 rounded-lg font-medium">
+                  <Eye className="w-3 h-3 mr-1" /> View Brief
+                </Button>
+              </a>
+              <a href={brief.pdf_url} download className="flex-1">
+                <Button variant="outline" className="w-full border-gray-700/50 text-gray-300 hover:text-white text-[10px] h-7 rounded-lg font-medium">
+                  <Download className="w-3 h-3 mr-1" /> Download
+                </Button>
+              </a>
+            </>
+          ) : (
+            <Button disabled className="flex-1 bg-gray-800/50 text-gray-500 text-[10px] h-7 rounded-lg font-medium">
+              PDF Coming Soon
+            </Button>
+          )}
+        </>
+      ) : (
+        <>
+          <Link href={`/preview/${brief.id}`} className="shrink-0">
+            <Button variant="outline" size="sm" className="border-gray-700/50 text-gray-400 hover:text-white h-7 text-[10px] rounded-lg">
+              <BookOpen className="w-3 h-3 mr-1" /> Preview
+            </Button>
+          </Link>
+          <Button
+            onClick={() => onPurchase(brief.id)}
+            className="flex-1 bg-[#2EC4C6] hover:bg-[#28B0B2] text-black text-[10px] h-7 rounded-lg font-medium"
+          >
+            <ShoppingBag className="w-3 h-3 mr-1" /> Purchase · {BRIEF_PRICE}
+          </Button>
+        </>
+      )}
+      {brief.video_url && (
+        <a href={brief.video_url} target="_blank" rel="noreferrer">
+          <Button variant="outline" size="sm" className="border-gray-700/50 text-gray-400 h-7 w-7 p-0 rounded-lg" title="Watch related video">
+            <Play className="w-3 h-3" />
+          </Button>
+        </a>
+      )}
+      {isAdmin && (
+        <Link href={`/briefs/${brief.id}`}>
+          <Button variant="ghost" size="sm" className="text-gray-600 hover:text-white h-7 text-[10px] rounded-lg">
+            Details
+          </Button>
+        </Link>
+      )}
+    </div>
+  );
+}
 
 export default function OpportunitiesPage() {
   const router = useRouter();
@@ -38,7 +274,11 @@ export default function OpportunitiesPage() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem(VIEW_STORAGE_KEY);
-      if (saved === 'landscape') setView('landscape');
+      // Defer the setState off the synchronous effect body (same read, no
+      // cascading render — react-hooks/set-state-in-effect).
+      queueMicrotask(() => {
+        if (saved === 'landscape') setView('landscape');
+      });
     } catch {
       /* noop */
     }
@@ -153,248 +393,8 @@ export default function OpportunitiesPage() {
 
   const clearCapital = () => { setCapitalMin(''); setCapitalMax(''); };
 
-  /* ————— Card renderers ————— */
 
-  function MetricChips({ brief }: { brief: MarketplaceBrief }) {
-    return (
-      <div className="grid grid-cols-4 gap-2">
-        {brief.tam && (
-          <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
-            <BarChart3 className="w-3 h-3 text-[#2EC4C6]/60 mx-auto mb-0.5" />
-            <p className="text-[9px] text-gray-600 uppercase tracking-wider">TAM</p>
-            <p className="text-[10px] text-gray-300 font-medium truncate">{firstMoneyToken(brief.tam) ?? brief.tam}</p>
-          </div>
-        )}
-        {brief.cagr && (
-          <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
-            <TrendingUp className="w-3 h-3 text-emerald-400/60 mx-auto mb-0.5" />
-            <p className="text-[9px] text-gray-600 uppercase tracking-wider">CAGR</p>
-            <p className="text-[10px] text-emerald-300 font-medium">{firstPercent(brief.cagr) ?? brief.cagr}</p>
-          </div>
-        )}
-        {brief.roi && (
-          <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
-            <Gauge className="w-3 h-3 text-blue-400/60 mx-auto mb-0.5" />
-            <p className="text-[9px] text-gray-600 uppercase tracking-wider">ROI</p>
-            <p className="text-[10px] text-blue-300 font-medium">{brief.roi_value ? `${brief.roi_value}x` : brief.roi}</p>
-          </div>
-        )}
-        {brief.capital_required && (
-          <div className="bg-gray-800/30 rounded-md p-1.5 text-center">
-            <DollarSign className="w-3 h-3 text-amber-400/60 mx-auto mb-0.5" />
-            <p className="text-[9px] text-gray-600 uppercase tracking-wider">Capital</p>
-            <p className="text-[10px] text-amber-300 font-medium truncate">{firstMoneyToken(brief.capital_required) ?? brief.capital_required}</p>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  function CoverImage({ brief }: { brief: MarketplaceBrief }) {
-    if (!brief.cover_image_url) {
-      return (
-        <div className="w-full h-full bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-t-lg flex items-center justify-center">
-          <img src="/brand/logo-white.webp" alt="Spacenomics" className="hidden dark:block h-10 opacity-40" width={800} height={446} loading="lazy" />
-          <img src="/brand/logo-navy.webp" alt="Spacenomics" className="block dark:hidden h-10 opacity-40" width={800} height={446} loading="lazy" />
-        </div>
-      );
-    }
-    return (
-      <img
-        src={brief.cover_image_url}
-        alt={brief.title}
-        loading="lazy"
-        decoding="async"
-        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-      />
-    );
-  }
-
-  function PortraitCard({ brief, owned }: { brief: MarketplaceBrief; owned: boolean }) {
-    return (
-      <Card key={brief.id} className="bg-gray-900/40 border-gray-800/40 hover:border-gray-700/50 transition-all group hover:bg-gray-900/60">
-        <CardContent className="p-0">
-          <div className="aspect-[3/4] overflow-hidden rounded-t-lg">
-            <CoverImage brief={brief} />
-          </div>
-
-          <div className="p-4 space-y-3">
-            <div>
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="text-sm font-semibold text-white group-hover:text-[#2EC4C6] transition-colors leading-snug">
-                  {brief.title}
-                </h3>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  {owned && (
-                    <Badge className="text-[9px] h-4 px-1.5 bg-emerald-500/10 text-emerald-400 border-0 rounded-full">
-                      <CheckCircle2 className="w-2.5 h-2.5 mr-0.5" /> Owned
-                    </Badge>
-                  )}
-                  <Badge className="text-[9px] h-4 px-1.5 bg-[#2EC4C6]/10 text-[#2EC4C6] border-0 rounded-full">
-                    {BRIEF_PRICE}
-                  </Badge>
-                </div>
-              </div>
-              {brief.category && (
-                <Badge className="text-[9px] h-4 px-1.5 bg-gray-800 text-gray-400 border-0 rounded-full mt-1">
-                  {brief.category}
-                </Badge>
-              )}
-              {brief.subtitle && (
-                <p className="text-[11px] text-gray-500 mt-0.5 line-clamp-1">{brief.subtitle}</p>
-              )}
-            </div>
-
-            {brief.summary && (
-              <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">{brief.summary}</p>
-            )}
-
-            <MetricChips brief={brief} />
-
-            {brief.tags && brief.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {brief.tags.slice(0, 3).map((tag) => (
-                  <span key={tag} className="text-[8px] bg-gray-800/50 text-gray-500 px-1.5 py-0.5 rounded-full">{tag}</span>
-                ))}
-                {brief.tags.length > 3 && (
-                  <span className="text-[8px] text-gray-600">+{brief.tags.length - 3}</span>
-                )}
-              </div>
-            )}
-
-            <CardActions brief={brief} owned={owned} />
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  function LandscapeCard({ brief, owned }: { brief: MarketplaceBrief; owned: boolean }) {
-    return (
-      <Card key={brief.id} className="bg-gray-900/40 border-gray-800/40 hover:border-gray-700/50 transition-all group hover:bg-gray-900/60">
-        <CardContent className="p-0 flex flex-col sm:flex-row">
-          {/* Cover — portrait aspect, compact on the left */}
-          <div className="sm:w-44 md:w-52 shrink-0 aspect-[3/4] sm:aspect-auto sm:min-h-[220px] overflow-hidden rounded-t-lg sm:rounded-t-none sm:rounded-l-lg">
-            <CoverImage brief={brief} />
-          </div>
-
-          <div className="flex-1 p-4 sm:p-5 space-y-3">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  {owned && (
-                    <Badge className="text-[9px] h-4 px-1.5 bg-emerald-500/10 text-emerald-400 border-0 rounded-full">
-                      <CheckCircle2 className="w-2.5 h-2.5 mr-0.5" /> Owned
-                    </Badge>
-                  )}
-                  <h3 className="text-sm md:text-[15px] font-semibold text-white group-hover:text-[#2EC4C6] transition-colors leading-snug">
-                    {brief.title}
-                  </h3>
-                </div>
-                <div className="flex items-center gap-2 mt-1 flex-wrap">
-                  {brief.category && (
-                    <Badge className="text-[9px] h-4 px-1.5 bg-gray-800 text-gray-400 border-0 rounded-full">
-                      {brief.category}
-                    </Badge>
-                  )}
-                  <Badge className="text-[9px] h-4 px-1.5 bg-[#2EC4C6]/10 text-[#2EC4C6] border-0 rounded-full">
-                    {BRIEF_PRICE}
-                  </Badge>
-                </div>
-              </div>
-            </div>
-
-            {brief.subtitle && (
-              <p className="text-[11px] text-gray-500 line-clamp-1">{brief.subtitle}</p>
-            )}
-            {brief.summary && (
-              <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">{brief.summary}</p>
-            )}
-
-            <MetricChips brief={brief} />
-
-            {brief.tags && brief.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {brief.tags.slice(0, 4).map((tag) => (
-                  <span key={tag} className="text-[8px] bg-gray-800/50 text-gray-500 px-1.5 py-0.5 rounded-full">{tag}</span>
-                ))}
-                {brief.tags.length > 4 && (
-                  <span className="text-[8px] text-gray-600">+{brief.tags.length - 4}</span>
-                )}
-              </div>
-            )}
-
-            <CardActions brief={brief} owned={owned} />
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  function CardActions({ brief, owned }: { brief: MarketplaceBrief; owned: boolean }) {
-    return (
-      <div className="flex items-center gap-2 pt-1">
-        {owned ? (
-          <>
-            {brief.pdf_url ? (
-              <>
-                <a href={brief.pdf_url} target="_blank" rel="noreferrer" className="flex-1">
-                  <Button className="w-full bg-[#2EC4C6] hover:bg-[#28B0B2] text-black text-[10px] h-7 rounded-lg font-medium">
-                    <Eye className="w-3 h-3 mr-1" /> View Brief
-                  </Button>
-                </a>
-                <a href={brief.pdf_url} download className="flex-1">
-                  <Button variant="outline" className="w-full border-gray-700/50 text-gray-300 hover:text-white text-[10px] h-7 rounded-lg font-medium">
-                    <Download className="w-3 h-3 mr-1" /> Download
-                  </Button>
-                </a>
-              </>
-            ) : (
-              <Button disabled className="flex-1 bg-gray-800/50 text-gray-500 text-[10px] h-7 rounded-lg font-medium">
-                PDF Coming Soon
-              </Button>
-            )}
-          </>
-        ) : (
-          <>
-            <Link href={`/preview/${brief.id}`} className="shrink-0">
-              <Button variant="outline" size="sm" className="border-gray-700/50 text-gray-400 hover:text-white h-7 text-[10px] rounded-lg">
-                <BookOpen className="w-3 h-3 mr-1" /> Preview
-              </Button>
-            </Link>
-            <Button
-              onClick={() => handlePurchase(brief.id)}
-              className="flex-1 bg-[#2EC4C6] hover:bg-[#28B0B2] text-black text-[10px] h-7 rounded-lg font-medium"
-            >
-              <ShoppingBag className="w-3 h-3 mr-1" /> Purchase · {BRIEF_PRICE}
-            </Button>
-          </>
-        )}
-        {brief.video_url && (
-          <a href={brief.video_url} target="_blank" rel="noreferrer">
-            <Button variant="outline" size="sm" className="border-gray-700/50 text-gray-400 h-7 w-7 p-0 rounded-lg" title="Watch related video">
-              <Play className="w-3 h-3" />
-            </Button>
-          </a>
-        )}
-        {isAdmin && (
-          <Link href={`/briefs/${brief.id}`}>
-            <Button variant="ghost" size="sm" className="text-gray-600 hover:text-white h-7 text-[10px] rounded-lg">
-              Details
-            </Button>
-          </Link>
-        )}
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" />
-      </div>
-    );
-  }
+  if (loading) return <Spinner />;
 
   return (
     <div className="space-y-8">
@@ -535,11 +535,11 @@ export default function OpportunitiesPage() {
         </Card>
       ) : view === 'portrait' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((brief) => <PortraitCard key={brief.id} brief={brief} owned={ownedIds.has(brief.id)} />)}
+          {filtered.map((brief) => <PortraitCard key={brief.id} brief={brief} owned={ownedIds.has(brief.id)} isAdmin={isAdmin} onPurchase={handlePurchase} />)}
         </div>
       ) : (
         <div className="space-y-4 max-w-4xl mx-auto">
-          {filtered.map((brief) => <LandscapeCard key={brief.id} brief={brief} owned={ownedIds.has(brief.id)} />)}
+          {filtered.map((brief) => <LandscapeCard key={brief.id} brief={brief} owned={ownedIds.has(brief.id)} isAdmin={isAdmin} onPurchase={handlePurchase} />)}
         </div>
       )}
     </div>

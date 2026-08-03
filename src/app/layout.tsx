@@ -48,7 +48,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     let active = true;
     try {
       const t = localStorage.getItem('theme');
-      if (active) setTheme(t === 'light' ? 'light' : 'dark');
+      // Defer the setState off the synchronous effect body
+      // (react-hooks/set-state-in-effect) — same read, no cascading render.
+      queueMicrotask(() => {
+        if (active) setTheme(t === 'light' ? 'light' : 'dark');
+      });
     } catch {
       /* keep dark */
     }

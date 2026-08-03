@@ -8,9 +8,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, Plus, X } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useAdminGuard } from '@/lib/auth';
+import { Spinner } from '@/components/spinner';
 
 const VIDEO_TOPIC_CATEGORIES = [
   'Foundational / Cross-Cutting',
@@ -25,7 +26,7 @@ const VIDEO_TOPIC_CATEGORIES = [
 export default function NewBriefPage() {
   const supabase = useSupabase();
   const router = useRouter();
-  const { allowed, loading: guardLoading } = useAdminGuard();
+  const { loading: guardLoading } = useAdminGuard();
   const [saving, setSaving] = useState(false);
   const [tagInput, setTagInput] = useState('');
   const [form, setForm] = useState({
@@ -131,13 +132,7 @@ export default function NewBriefPage() {
     ]},
   ];
 
-  if (guardLoading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2EC4C6] border-t-transparent" />
-      </div>
-    );
-  }
+  if (guardLoading) return <Spinner />;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -164,17 +159,9 @@ export default function NewBriefPage() {
                     {label}
                     {required && <span className="text-red-400 ml-0.5">*</span>}
                   </Label>
-                  {component === 'textarea' ? (
+                  {component === 'textarea' || component === 'textarea2' || component === 'textarea4' ? (
                     <Textarea id={id} value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
-                      placeholder={placeholder} rows={3}
-                      className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg focus:border-[#2EC4C6]/50 resize-none" />
-                  ) : component === 'textarea2' ? (
-                    <Textarea id={id} value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
-                      placeholder={placeholder} rows={2}
-                      className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg focus:border-[#2EC4C6]/50 resize-none" />
-                  ) : component === 'textarea4' ? (
-                    <Textarea id={id} value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
-                      placeholder={placeholder} rows={4}
+                      placeholder={placeholder} rows={component === 'textarea' ? 3 : component === 'textarea2' ? 2 : 4}
                       className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg focus:border-[#2EC4C6]/50 resize-none" />
                   ) : component === 'date' ? (
                     <Input id={id} type="date" value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}

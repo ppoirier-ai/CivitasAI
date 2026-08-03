@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { isAdminPath } from '@/lib/paths';
 
 /**
  * Auth + role enforcement.
@@ -69,12 +70,9 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Admin-only paths
-  const adminOnly = ['/dashboard', '/briefs', '/calendar', '/admin', '/api/admin'];
-  const needsAdmin = adminOnly.some(
-    (p) => pathname === p || pathname.startsWith(`${p}/`)
-  );
-  if (needsAdmin && !isAdmin) {
+  // Admin-only paths (shared list — includes the protected API routes as
+  // defense-in-depth in front of the route-level checks).
+  if (isAdminPath(pathname) && !isAdmin) {
     return NextResponse.redirect(new URL('/opportunities', request.url));
   }
 

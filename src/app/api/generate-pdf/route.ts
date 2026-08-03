@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase/server';
+import { escapeHtml } from '@/lib/utils';
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,13 +18,7 @@ export async function POST(request: NextRequest) {
       return Response.json({ error: 'briefId required' }, { status: 400 });
     }
 
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        cookies: { getAll: () => [], setAll: () => {} },
-      }
-    );
+    const supabase = await createSupabaseServiceClient();
 
     const { data: brief } = await supabase
       .from('venture_briefs')
@@ -46,10 +40,6 @@ export async function POST(request: NextRequest) {
       month: 'long',
       day: 'numeric',
     });
-
-    const coverImageHtml = brief.cover_image_url
-      ? `<img src="${brief.cover_image_url}" style="width: 100%; max-width: 600px; border: 1px solid #1f2937; border-radius: 8px;" />`
-      : '';
 
     const pdfHtml = `<!DOCTYPE html>
 <html>
@@ -269,8 +259,8 @@ export async function POST(request: NextRequest) {
     <div class="logo">SPACENOMICS</div>
     <div class="accent-line"></div>
     <div class="eyebrow">SMOOTH CAPITAL LLC</div>
-    <h1>${brief.title}</h1>
-    ${brief.subtitle ? `<p class="subtitle">${brief.subtitle}</p>` : ''}
+    <h1>${escapeHtml(brief.title)}</h1>
+    ${brief.subtitle ? `<p class="subtitle">${escapeHtml(brief.subtitle)}</p>` : ''}
     <div class="meta">
       <span>${today}</span>
       <span>Prepared by Smooth Capital LLC</span>
@@ -280,12 +270,12 @@ export async function POST(request: NextRequest) {
 
   <!-- Content Page -->
   <div class="page content-page">
-    <h1>${brief.title}</h1>
-    ${brief.subtitle ? `<p style="color: #6B7280; font-size: 14px; margin-top: -8px;">${brief.subtitle}</p>` : ''}
+    <h1>${escapeHtml(brief.title)}</h1>
+    ${brief.subtitle ? `<p style="color: #6B7280; font-size: 14px; margin-top: -8px;">${escapeHtml(brief.subtitle)}</p>` : ''}
 
     <div class="callout">
       <div class="label">Key Thesis</div>
-      <p style="margin: 0;">${brief.topic || 'Analysis of the commercial space opportunity.'}</p>
+      <p style="margin: 0;">${escapeHtml(brief.topic) || 'Analysis of the commercial space opportunity.'}</p>
     </div>
 
     <h2>Market Overview</h2>
@@ -347,7 +337,7 @@ export async function POST(request: NextRequest) {
 
     // Upload PDF to Supabase Storage
     const fileName = `pdfs/${briefId}-${Date.now()}.html`;
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('venture_assets')
       .upload(fileName, pdfHtml, {
         contentType: 'text/html',
@@ -355,12 +345,16 @@ export async function POST(request: NextRequest) {
       });
 
     if (uploadError) {
+      // A3 fix: never report success when the asset did not land in storage.
       console.error('PDF upload error:', uploadError);
       await supabase
         .from('venture_briefs')
-        .update({ status: 'pdf_ready' })
+        .update({ status: 'generating_pdf' })
         .eq('id', briefId);
-      return Response.json({ success: true, note: 'PDF generated but upload pending' });
+      return Response.json(
+        { success: false, error: 'PDF upload failed. Please try again.' },
+        { status: 500 }
+      );
     }
 
     const { data: { publicUrl } } = supabase.storage
