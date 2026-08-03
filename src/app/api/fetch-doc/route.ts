@@ -1,7 +1,17 @@
 import { NextRequest } from 'next/server';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
+    // VULN-04 fix: require an authenticated admin session.
+    const supabase = await createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user || user.app_metadata?.role !== 'admin') {
+      return Response.json({ error: 'Unauthorized.' }, { status: 401 });
+    }
+
     const { url } = await request.json();
     if (!url) {
       return Response.json({ error: 'url required' }, { status: 400 });

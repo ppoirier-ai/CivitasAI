@@ -4,7 +4,13 @@ import { NextResponse, type NextRequest } from 'next/server';
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const next = searchParams.get('next') ?? '/';
+  let next = searchParams.get('next') ?? '/';
+
+  // VULN-03 fix: only allow same-origin relative paths. Blocks protocol-relative
+  // and backslash tricks like //attacker.com or /\attacker.com.
+  if (!next.startsWith('/') || next.startsWith('//') || next.startsWith('/\\')) {
+    next = '/';
+  }
 
   if (code) {
     const supabase = createServerClient(

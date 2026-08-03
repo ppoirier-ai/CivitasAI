@@ -1,8 +1,18 @@
 import { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
+    // VULN-01 fix: require an authenticated admin session before generating assets.
+    const authSupabase = await createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await authSupabase.auth.getUser();
+    if (!user || user.app_metadata?.role !== 'admin') {
+      return Response.json({ error: 'Unauthorized. Admin access required.' }, { status: 403 });
+    }
+
     const { briefId } = await request.json();
     if (!briefId) {
       return Response.json({ error: 'briefId required' }, { status: 400 });
@@ -364,12 +374,12 @@ export async function POST(request: NextRequest) {
       .eq('id', briefId);
 
     // Create approval record
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user: approver } } = await supabase.auth.getUser();
     await supabase.from('approvals').insert({
       brief_id: briefId,
       step: 'pdf_ready',
       approved: false,
-      approved_by: user?.id ?? null,
+      approved_by: approver?.id ?? null,
     });
 
     return Response.json({ success: true, pdf_url: publicUrl });

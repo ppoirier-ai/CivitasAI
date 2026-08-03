@@ -10,6 +10,26 @@ export const runtime = 'edge';
 
 export async function POST(request: NextRequest) {
   try {
+    // VULN-01 fix: require an authenticated admin session (edge-safe cookie read).
+    const authSupabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll() {},
+        },
+      }
+    );
+    const {
+      data: { user },
+    } = await authSupabase.auth.getUser();
+    if (!user || user.app_metadata?.role !== 'admin') {
+      return Response.json({ error: 'Unauthorized. Admin access required.' }, { status: 403 });
+    }
+
     const { briefId } = await request.json();
     if (!briefId) {
       return Response.json({ error: 'briefId required' }, { status: 400 });
