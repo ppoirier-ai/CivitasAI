@@ -110,7 +110,7 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
         <div className="relative max-w-3xl mx-auto text-center px-6 py-24 z-10">
           <Badge className="mx-auto mb-8 text-[10px] h-6 px-4 bg-white/[0.03] border border-white/15 text-[#2EC4C6] rounded-full uppercase tracking-[0.28em] backdrop-blur">
             <span className="w-1 h-1 rounded-full bg-[#2EC4C6] pulse-dot mr-2.5" />
-            Institutional Space Market Intelligence
+            Institutional Commercial Space Intelligence
           </Badge>
 
           <h1 className="text-4xl sm:text-6xl lg:text-[68px] font-light text-white tracking-[-0.03em] leading-[1.05]">
@@ -119,8 +119,7 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
           </h1>
 
           <p className="text-sm sm:text-base text-gray-400 mt-7 leading-relaxed max-w-xl mx-auto">
-            Institutional-grade venture briefs on the most compelling opportunities in orbit —
-            market sizing, capital requirements, and ROI analysis for founders and investors.
+            Practical market intelligence, unit economics, and capital pathways for commercial space founders, operators, career-aware talent, and PE/VC investors.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10">
@@ -247,10 +246,10 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
         <div className="relative max-w-6xl mx-auto px-6">
           <Reveal>
             <div className="text-center mb-14">
-              <Eyebrow>Inside Every Brief</Eyebrow>
-              <h2 className="text-3xl sm:text-[40px] font-semibold tracking-[-0.02em] text-white tracking-tight mt-4">Seven sections. Zero fluff.</h2>
+              <Eyebrow>Institutional Intelligence Stack</Eyebrow>
+              <h2 className="text-3xl sm:text-[40px] font-semibold tracking-[-0.02em] text-white tracking-tight mt-4">Built for Founders, Talent, & Investors</h2>
               <p className="text-sm text-gray-500 mt-4 max-w-xl mx-auto">
-                The same analytical framework a PE deal team would use, distilled into a readable brief.
+                Turning space-economy hype into bottom-up unit economics, supply-chain clarity, equity benchmarks, and capital execution.
               </p>
             </div>
           </Reveal>
@@ -267,6 +266,37 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
                 </div>
               </Reveal>
             ))}
+          </div>
+
+          {/* Persona Audience Cards */}
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-5">
+            <Reveal delay={100}>
+              <div className="h-full rounded-xl glass-card p-6 border border-[#2EC4C6]/20 bg-white/[0.02]">
+                <Badge className="text-[9px] h-5 px-2 bg-[#2EC4C6]/10 text-[#2EC4C6] border border-[#2EC4C6]/20 rounded-full mb-3">A1 · Founders & Operators</Badge>
+                <h3 className="text-lg font-semibold text-white">Commercial Space Ventures</h3>
+                <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+                  Identify real TAM, validate bottom-up unit economics ($/kg, BOM costs), map vetted supply-chain vendors, and access capital formation playbooks.
+                </p>
+              </div>
+            </Reveal>
+            <Reveal delay={200}>
+              <div className="h-full rounded-xl glass-card p-6 border border-white/10 bg-white/[0.02]">
+                <Badge className="text-[9px] h-5 px-2 bg-purple-500/10 text-purple-300 border border-purple-500/20 rounded-full mb-3">A2 · Talent & Engineers</Badge>
+                <h3 className="text-lg font-semibold text-white">Career & Equity Intelligence</h3>
+                <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+                  Evaluate space startups, decode stock-option plans, track hiring waves, and benchmark equity compensation before taking your next role.
+                </p>
+              </div>
+            </Reveal>
+            <Reveal delay={300}>
+              <div className="h-full rounded-xl glass-card p-6 border border-white/10 bg-white/[0.02]">
+                <Badge className="text-[9px] h-5 px-2 bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 rounded-full mb-3">A3 · PE & VC Investors</Badge>
+                <h3 className="text-lg font-semibold text-white">Diligence & Deal Flow</h3>
+                <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+                  Access institutional venture briefs, sector risk registers, capital structure commentary, and private equity/SPAC advisory support.
+                </p>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
