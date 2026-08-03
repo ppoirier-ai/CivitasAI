@@ -11,12 +11,13 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: 'Spacenomics — Institutional Venture Briefs for the Commercial Space Economy',
+  title: 'Spacenomics — Institutional Space Market Intelligence & Venture Briefs',
   description:
-    'Institutional-grade venture briefs on the most compelling opportunities in the commercial space economy. Market sizing, capital requirements, and ROI analysis for founders and investors — $99.99, lifetime access.',
+    'Institutional-grade commercial space market intelligence, unit economics models, and venture briefs. Sizing TAM, capital requirements, and ROI for space founders, operators, talent, and investors.',
   keywords: [
-    'space economy', 'venture brief', 'commercial space', 'space startups', 'in-space manufacturing',
-    'satellite internet', 'space investment', 'space market research', 'orbital infrastructure', 'spacenomics',
+    'space economy', 'commercial space economy', 'venture brief', 'space unit economics', 'space startups',
+    'in-space manufacturing', 'space venture capital', 'orbital infrastructure', 'space market research', 'spacenomics',
+    'space startup financial model', 'space supply chain database'
   ],
   openGraph: {
     type: 'website',
