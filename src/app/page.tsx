@@ -23,15 +23,15 @@ export const metadata: Metadata = {
     type: 'website',
     url: '/',
     siteName: 'Spacenomics',
-    title: 'Spacenomics — Venture Briefs for the Commercial Space Economy',
+    title: 'Spacenomics — Commercial Space Market Intelligence & Unit Economics',
     description:
-      'Institutional-grade venture briefs on the most compelling opportunities in the commercial space economy. $99.99, lifetime access.',
-    images: [{ url: '/covers/zblan.jpg', width: 900, height: 1165, alt: 'Spacenomics Venture Brief cover' }],
+      'Institutional-grade commercial space market intelligence, unit economics models, and venture briefs for space founders, operators, talent, and investors.',
+    images: [{ url: '/covers/zblan.jpg', width: 900, height: 1165, alt: 'Spacenomics Commercial Space Market Intelligence' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Spacenomics — Venture Briefs for the Commercial Space Economy',
-    description: 'Institutional-grade venture briefs on the commercial space economy. $99.99, lifetime access.',
+    title: 'Spacenomics — Commercial Space Market Intelligence & Unit Economics',
+    description: 'Institutional-grade commercial space market intelligence, unit economics models, and venture briefs for founders, operators, talent, and investors.',
     images: ['/covers/zblan.jpg'],
   },
   robots: { index: true, follow: true },
@@ -46,14 +46,14 @@ const jsonLd = {
       name: 'Spacenomics',
       url: `${SITE_URL}/`,
       description:
-        'Institutional-grade venture briefs on the most compelling opportunities in the commercial space economy.',
+        'Institutional-grade commercial space market intelligence, unit economics models, and venture briefs for founders, operators, talent, and investors.',
       publisher: { '@type': 'Organization', name: 'Smooth Capital LLC' },
     },
     {
       '@type': 'Product',
-      name: 'Spacenomics Venture Brief',
+      name: 'Spacenomics Venture Brief & Market Intelligence',
       description:
-        'A venture brief covering market sizing, competitive analysis, capital requirements, and ROI outlook for a commercial space opportunity.',
+        'Commercial space market intelligence briefs covering market sizing (TAM/SAM/SOM), bottom-up unit economics ($/kg, BOM costs), competitive analysis, capital requirements, equity benchmarks, and ROI outlook.',
       brand: { '@type': 'Brand', name: 'Spacenomics' },
       offers: {
         '@type': 'Offer',
