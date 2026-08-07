@@ -26,16 +26,17 @@ CREATE INDEX IF NOT EXISTS calendar_events_date_idx ON public.calendar_events (e
 -- 2. Row Level Security --------------------------------------------------------
 ALTER TABLE public.calendar_events ENABLE ROW LEVEL SECURITY;
 
--- Admins (via profiles.role) manage events; authenticated users can read.
+-- Admins manage events; authenticated users can read.
+-- NOTE: admin check uses JWT app_metadata role ('admin'), the SAME mechanism
+-- used by venture_briefs RLS (migration_security_rls.sql) and every server-side
+-- API guard (src/app/api/*/route.ts). Do NOT switch this to a profiles-table
+-- lookup: an admin created in the Supabase dashboard without a profiles row
+-- would lose calendar access while retaining brief access (silent drift).
 DROP POLICY IF EXISTS "calendar_events admin all" ON public.calendar_events;
 CREATE POLICY "calendar_events admin all" ON public.calendar_events
   FOR ALL TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role = 'admin')
-  )
-  WITH CHECK (
-    EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role = 'admin')
-  );
+  USING ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin')
+  WITH CHECK ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 
 DROP POLICY IF EXISTS "calendar_events read" ON public.calendar_events;
 CREATE POLICY "calendar_events read" ON public.calendar_events
