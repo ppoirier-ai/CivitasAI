@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import { createSupabaseServiceClient } from '@/lib/supabase/server';
 import { CoverJSX } from '@/components/cover-jsx';
 
 // We need React for createElement since route handlers can't use JSX
@@ -10,18 +11,32 @@ export const runtime = 'edge';
 
 export async function POST(request: NextRequest) {
   try {
+    // VULN-01 fix: require an authenticated admin session (edge-safe cookie read).
+    const authSupabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll() {},
+        },
+      }
+    );
+    const {
+      data: { user },
+    } = await authSupabase.auth.getUser();
+    if (!user || user.app_metadata?.role !== 'admin') {
+      return Response.json({ error: 'Unauthorized. Admin access required.' }, { status: 403 });
+    }
+
     const { briefId } = await request.json();
     if (!briefId) {
       return Response.json({ error: 'briefId required' }, { status: 400 });
     }
 
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        cookies: { getAll: () => [], setAll: () => {} },
-      }
-    );
+    const supabase = await createSupabaseServiceClient();
 
     const { data: brief } = await supabase
       .from('venture_briefs')
@@ -61,9 +76,13 @@ export async function POST(request: NextRequest) {
       });
 
     if (uploadError) {
+      // A3 fix: never report success when the asset did not land in storage.
       console.error('Upload error:', uploadError);
-      await supabase.from('venture_briefs').update({ status: 'cover_ready' }).eq('id', briefId);
-      return Response.json({ success: true, note: 'Cover generated but upload failed' });
+      await supabase.from('venture_briefs').update({ status: 'generating_cover' }).eq('id', briefId);
+      return Response.json(
+        { success: false, error: 'Cover upload failed. Please try again.' },
+        { status: 500 }
+      );
     }
 
     const { data: { publicUrl } } = supabase.storage.from('venture_assets').getPublicUrl(fileName);

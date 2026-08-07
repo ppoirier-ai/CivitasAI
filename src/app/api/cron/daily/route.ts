@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
+import { createSupabaseServiceClient } from '@/lib/supabase/server';
 
 export const runtime = 'edge';
 
@@ -15,13 +15,7 @@ export async function GET(request: NextRequest) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        cookies: { getAll: () => [], setAll: () => {} },
-      }
-    );
+    const supabase = await createSupabaseServiceClient();
 
     const today = new Date().toISOString().split('T')[0];
 
@@ -47,6 +41,8 @@ export async function GET(request: NextRequest) {
           results.push({ id: brief.id, title: brief.title, status: brief.status });
         }
       } catch (err) {
+        // M7 fix: log the swallowed error instead of silently dropping it.
+        console.error(`Cron: failed to process brief ${brief.id}`, err);
         results.push({ id: brief.id, title: brief.title, status: 'error' });
       }
     }

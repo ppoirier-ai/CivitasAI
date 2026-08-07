@@ -7,9 +7,23 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans-var, "Inter", ui-sans-serif, system-ui, sans-serif);
+  --font-mono: var(--font-geist-mono, ui-monospace, monospace);
+  --font-heading: var(--font-display-var, "Space Grotesk", "Inter", ui-sans-serif, sans-serif);
+  --font-display: var(--font-display-var, "Space Grotesk", "Inter", ui-sans-serif, sans-serif);
+  /* Semantic text/surface tones — flip with the theme class on <html> */
+  --color-white: var(--text-primary);
+  --color-gray-50: var(--tone-100);
+  --color-gray-100: var(--tone-100);
+  --color-gray-200: var(--tone-200);
+  --color-gray-300: var(--tone-300);
+  --color-gray-400: var(--tone-400);
+  --color-gray-500: var(--tone-500);
+  --color-gray-600: var(--tone-600);
+  --color-gray-700: var(--tone-700);
+  --color-gray-800: var(--tone-800);
+  --color-gray-900: var(--tone-900);
+  --color-gray-950: var(--tone-950);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -48,73 +62,129 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ================= LIGHT THEME (default) ================= */
 :root {
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --background: #f6f7fa;
+  --foreground: #0a1222;
+  --card: #ffffff;
+  --card-foreground: #0a1222;
+  --popover: #ffffff;
+  --popover-foreground: #0a1222;
+  --primary: #0a1222;
+  --primary-foreground: #ffffff;
+  --secondary: #e9edf3;
+  --secondary-foreground: #0a1222;
+  --muted: #edf0f5;
+  --muted-foreground: #5a6476;
+  --accent: #e9edf3;
+  --accent-foreground: #0a1222;
+  --destructive: #d64545;
+  --border: #dce1ea;
+  --input: #dce1ea;
+  --ring: #2ec4c6;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --chart-1: #2ec4c6;
+  --chart-2: #0e7490;
+  --chart-3: #64748b;
+  --chart-4: #94a3b8;
+  --chart-5: #0a1222;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0a1222;
+  --sidebar-primary: #0a1222;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e9edf3;
+  --sidebar-accent-foreground: #0a1222;
+  --sidebar-border: #dce1ea;
+  --sidebar-ring: #2ec4c6;
+
+  /* Brand semantics */
+  --text-primary: #0a1222;
+  --tone-100: #1a2440;
+  --tone-200: #243252;
+  --tone-300: #33415f;
+  --tone-400: #475569;
+  --tone-500: #64748b;
+  --tone-600: #94a3b8;
+  --tone-700: #cbd5e1;
+  --tone-800: #dde3ec;
+  --tone-900: #e9edf4;
+  --tone-950: #f4f6fa;
+  --hairline: rgba(10, 18, 34, 0.1);
+  --header-bg: rgba(255, 255, 255, 0.88);
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-border: rgba(10, 18, 34, 0.1);
+  --glass-shadow: 0 14px 40px -22px rgba(10, 18, 34, 0.18);
+  --star-a: rgba(10, 18, 34, 0.5);
+  --star-b: rgba(46, 196, 198, 0.55);
+  --star-c: rgba(10, 18, 34, 0.3);
+  --grid-line: rgba(10, 18, 34, 0.06);
+  --orbit-line: rgba(10, 18, 34, 0.2);
+  --orbit-dash: rgba(10, 18, 34, 0.3);
+  --icon-grad-a: #0e7490;
+  --icon-grad-b: #2ec4c6;
+  --cosmic-grad: linear-gradient(120deg, #0a1222 0%, #0e7490 55%, #2ec4c6 100%);
 }
 
+/* ================= DARK THEME ================= */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #05070f;
+  --foreground: #ffffff;
+  --card: #0d1424;
+  --card-foreground: #ffffff;
+  --popover: #0d1424;
+  --popover-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #0a1222;
+  --secondary: #1a2438;
+  --secondary-foreground: #ffffff;
+  --muted: #182234;
+  --muted-foreground: #8b93a7;
+  --accent: #1a2438;
+  --accent-foreground: #ffffff;
+  --destructive: #f87171;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.14);
+  --ring: #2ec4c6;
+  --chart-1: #2ec4c6;
+  --chart-2: #5eead4;
+  --chart-3: #a5f3fc;
+  --chart-4: #94a3b8;
+  --chart-5: #64748b;
+  --sidebar: #0d1424;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #2ec4c6;
+  --sidebar-primary-foreground: #0a1222;
+  --sidebar-accent: #1a2438;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #2ec4c6;
+
+  /* Brand semantics */
+  --text-primary: #ffffff;
+  --tone-100: #f1f5f9;
+  --tone-200: #e2e8f0;
+  --tone-300: #cbd5e1;
+  --tone-400: #94a3b8;
+  --tone-500: #6b7280;
+  --tone-600: #4b5563;
+  --tone-700: #374151;
+  --tone-800: #1f2937;
+  --tone-900: #111827;
+  --tone-950: #0b101b;
+  --hairline: rgba(255, 255, 255, 0.07);
+  --header-bg: rgba(5, 7, 15, 0.85);
+  --glass-bg: rgba(255, 255, 255, 0.028);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-shadow: 0 18px 50px -24px rgba(0, 0, 0, 0.55);
+  --star-a: rgba(255, 255, 255, 0.9);
+  --star-b: rgba(190, 230, 255, 0.8);
+  --star-c: rgba(255, 255, 255, 0.5);
+  --grid-line: rgba(255, 255, 255, 0.035);
+  --orbit-line: rgba(148, 197, 255, 0.16);
+  --orbit-dash: rgba(46, 196, 198, 0.22);
+  --icon-grad-a: #2ec4c6;
+  --icon-grad-b: #5eead4;
+  --cosmic-grad: linear-gradient(120deg, #2ec4c6 0%, #5eead4 55%, #a5f3fc 100%);
 }
 
 @layer base {
@@ -126,5 +196,356 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  /* Modern professional display type (Space Grotesk) for headings */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display-var, "Space Grotesk", "Inter", ui-sans-serif, sans-serif);
+  }
+}
+
+/* ============ Cosmic landing styles ============ */
+
+/* Twinkling starfield (two tiled layers for parallax shimmer) */
+.cosmic-stars {
+  background-image:
+    radial-gradient(1px 1px at 15% 25%, var(--star-a) 0, transparent 100%),
+    radial-gradient(1px 1px at 35% 65%, var(--star-c) 0, transparent 100%),
+    radial-gradient(1.5px 1.5px at 55% 15%, var(--star-a) 0, transparent 100%),
+    radial-gradient(1px 1px at 72% 45%, var(--star-c) 0, transparent 100%),
+    radial-gradient(1.5px 1.5px at 88% 75%, var(--star-a) 0, transparent 100%),
+    radial-gradient(1px 1px at 25% 85%, var(--star-c) 0, transparent 100%),
+    radial-gradient(1px 1px at 45% 40%, var(--star-b) 0, transparent 100%),
+    radial-gradient(1px 1px at 65% 85%, var(--star-b) 0, transparent 100%),
+    radial-gradient(1.5px 1.5px at 10% 60%, var(--star-a) 0, transparent 100%),
+    radial-gradient(1px 1px at 92% 20%, var(--star-c) 0, transparent 100%);
+  background-size: 480px 480px;
+  animation: cosmic-twinkle 5s ease-in-out infinite alternate;
+}
+
+.cosmic-stars-2 {
+  background-size: 300px 300px;
+  opacity: 0.7;
+  animation-delay: -2.5s;
+  animation-duration: 7s;
+}
+
+@keyframes cosmic-twinkle {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+/* ============ Page transitions (smooth, fluid) ============ */
+
+/* Fade + slight rise for route changes (wrapped by PageTransition) */
+.page-enter {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.page-exit-active {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.28s cubic-bezier(0.64, 0, 0.78, 0),
+    transform 0.28s cubic-bezier(0.64, 0, 0.78, 0);
+}
+
+/* Global smooth easing for interactive elements */
+.smooth-ease {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============ Modern decoration (Aug 2026) ============ */
+
+/* Glass card — fine hairline, soft depth */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Deep-space glass panel with subtle inner glow */
+.space-panel {
+  background:
+    radial-gradient(120% 120% at 20% 0%, rgba(46, 196, 198, 0.05) 0%, transparent 55%),
+    var(--glass-bg);
+  border: 1px solid rgba(148, 197, 255, 0.09);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Fine film grain for tactile, printed-institutional texture */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Scroll-reveal (opacity + rise) */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* Subtle blueprint grid for the hero */
+.cosmic-grid {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 35%, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 35%, black 30%, transparent 75%);
+}
+
+/* Bouncing scroll cue */
+.scroll-cue {
+  animation: scroll-bounce 2.2s ease-in-out infinite;
+}
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+/* Pulsing status dot for the hero badge */
+.pulse-dot {
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(46, 196, 198, 0.45); }
+  50% { box-shadow: 0 0 0 6px rgba(46, 196, 198, 0); }
+}
+
+/* ============ Satellite / orbital system ============ */
+
+/* Slow-drifting nebula glows — kept in both themes */
+.nebula {
+  filter: blur(90px);
+  pointer-events: none;
+  animation: nebula-drift 22s ease-in-out infinite alternate;
+}
+.nebula-teal { background: rgba(46, 196, 198, 0.1); }
+.nebula-indigo { background: rgba(99, 102, 241, 0.08); animation-delay: -8s; }
+.nebula-purple { background: rgba(168, 85, 247, 0.06); animation-delay: -14s; }
+
+@keyframes nebula-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(40px, -30px, 0) scale(1.12); }
+}
+
+/* Gradient headline text — clean aurora shimmer */
+.cosmic-text {
+  background: var(--cosmic-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: cosmic-shimmer 6s ease-in-out infinite alternate;
+}
+
+@keyframes cosmic-shimmer {
+  from { filter: brightness(1); }
+  to { filter: brightness(1.25); }
+}
+
+/* Earth (CSS) — deep blue marble with terminator */
+.earth {
+  position: relative;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 26%, #7dd3fc 0%, #2563eb 30%, #1e3a8a 60%, #070d1f 92%);
+  box-shadow:
+    inset -30px -28px 80px rgba(0, 0, 0, 0.8),
+    inset 10px 8px 40px rgba(125, 211, 252, 0.12),
+    0 0 90px rgba(46, 196, 198, 0.28);
+}
+.earth::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 68% 62%, transparent 40%, rgba(3, 7, 18, 0.55) 82%);
+}
+
+/* Orbital ring (elliptical path) */
+.orbit-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid var(--orbit-line);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotateX(68deg);
+  transform-style: preserve-3d;
+}
+.orbit-ring.orbit-dashed {
+  border-style: dashed;
+  border-color: var(--orbit-dash);
+}
+
+/* Satellite node riding an orbit ring */
+.satellite {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  animation: satellite-orbit var(--orbit-duration, 18s) linear infinite;
+}
+
+/* Detailed SVG satellite — crisp on both themes */
+.satellite-node {
+  position: relative;
+}
+.satellite-node::before {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(46, 196, 198, 0.5) 0%, transparent 70%);
+  filter: blur(5px);
+  pointer-events: none;
+}
+.dark .satellite-node::before {
+  background: radial-gradient(circle, rgba(46, 196, 198, 0.3) 0%, transparent 70%);
+}
+.satellite-art {
+  position: relative;
+  display: block;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9)) drop-shadow(0 1px 4px rgba(10, 18, 34, 0.5));
+}
+.dark .satellite-art {
+  filter: drop-shadow(0 0 6px rgba(148, 197, 255, 0.45));
+}
+
+/* Blinking beacon (SVG circle) */
+.sat-beacon {
+  animation: beacon-blink 1.6s ease-in-out infinite;
+}
+@keyframes beacon-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+@keyframes satellite-orbit {
+  from { transform: rotate(0deg) translateX(var(--orbit-radius, 160px)) rotate(0deg) rotateX(-68deg); }
+  to { transform: rotate(360deg) translateX(var(--orbit-radius, 160px)) rotate(-360deg) rotateX(-68deg); }
+}
+
+/* Floating satellite scene (gentle hover drift) */
+.satellite-scene {
+  perspective: 1000px;
+  animation: scene-float 16s ease-in-out infinite alternate;
+}
+@keyframes scene-float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-16px); }
+}
+
+/* Signal arc (transmission sweep) */
+.signal-arc {
+  position: absolute;
+  border: 1px solid rgba(46, 196, 198, 0.25);
+  border-radius: 50%;
+  animation: signal-ping 3.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes signal-ping {
+  0% { transform: scale(0.4); opacity: 0.9; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Hairline divider with center node (orbital motif) */
+.orbit-divider {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orbit-line), transparent);
+}
+.orbit-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #2ec4c6;
+  box-shadow: 0 0 10px rgba(46, 196, 198, 0.8);
+  transform: translate(-50%, -50%);
+}
+
+/* Hero legibility veil behind centered satellite visual */
+.hero-veil {
+  background: radial-gradient(
+    ellipse 58% 46% at 50% 44%,
+    var(--veil-core, rgba(5, 7, 15, 0.62)) 0%,
+    var(--veil-core, rgba(5, 7, 15, 0.62)) 24%,
+    transparent 68%
+  );
+}
+.dark .hero-veil {
+  --veil-core: rgba(5, 7, 15, 0.62);
+}
+:root:not(.dark) .hero-veil {
+  --veil-core: rgba(246, 247, 250, 0.55);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .cosmic-stars,
+  .cosmic-stars-2,
+  .nebula,
+  .cosmic-text,
+  .satellite-scene,
+  .satellite,
+  .sat-beacon,
+  .signal-arc,
+  .scroll-cue,
+  .pulse-dot {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .page-enter,
+  .page-exit,
+  .page-enter-active,
+  .page-exit-active {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }

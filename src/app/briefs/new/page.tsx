@@ -8,8 +8,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, Plus, X } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import Link from 'next/link';
+import { useAdminGuard } from '@/lib/auth';
+import { Spinner } from '@/components/spinner';
 
 const VIDEO_TOPIC_CATEGORIES = [
   'Foundational / Cross-Cutting',
@@ -24,6 +26,7 @@ const VIDEO_TOPIC_CATEGORIES = [
 export default function NewBriefPage() {
   const supabase = useSupabase();
   const router = useRouter();
+  const { loading: guardLoading } = useAdminGuard();
   const [saving, setSaving] = useState(false);
   const [tagInput, setTagInput] = useState('');
   const [form, setForm] = useState({
@@ -39,6 +42,7 @@ export default function NewBriefPage() {
     cagr: '',
     capital_required: '',
     profit_margin: '',
+    roi: '',
     category: '',
     purchase_url: '',
     video_url: '',
@@ -80,6 +84,7 @@ export default function NewBriefPage() {
         cagr: form.cagr || null,
         capital_required: form.capital_required || null,
         profit_margin: form.profit_margin || null,
+        roi: form.roi || null,
         category: form.category || null,
         purchase_url: form.purchase_url || null,
         video_url: form.video_url || null,
@@ -113,6 +118,7 @@ export default function NewBriefPage() {
       { id: 'cagr', label: 'CAGR (Growth over 5 years)', required: false, placeholder: 'e.g., 45% CAGR over next 5 years' },
       { id: 'capital_required', label: 'Capital Required', required: false, placeholder: 'e.g., $45M for initial manufacturing capacity' },
       { id: 'profit_margin', label: 'Expected Profit Margin', required: false, placeholder: 'e.g., 65-75% gross margin' },
+      { id: 'roi', label: 'ROI (Return on Investment)', required: false, placeholder: 'e.g., 3.2x in 5 years or 220% over 5 years' },
     ]},
     { section: 'Marketplace', fields: [
       { id: 'purchase_url', label: 'Purchase URL', required: false, placeholder: 'https://smooth.fund/venture-briefs/...' },
@@ -126,10 +132,12 @@ export default function NewBriefPage() {
     ]},
   ];
 
+  if (guardLoading) return <Spinner />;
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="flex items-center gap-3 mb-6">
-        <Link href="/">
+        <Link href="/dashboard">
           <Button variant="ghost" size="icon" className="w-8 h-8 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg">
             <ArrowLeft className="w-4 h-4" />
           </Button>
@@ -151,23 +159,15 @@ export default function NewBriefPage() {
                     {label}
                     {required && <span className="text-red-400 ml-0.5">*</span>}
                   </Label>
-                  {component === 'textarea' ? (
-                    <Textarea id={id} value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
-                      placeholder={placeholder} rows={3}
-                      className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg focus:border-[#2EC4C6]/50 resize-none" />
-                  ) : component === 'textarea2' ? (
-                    <Textarea id={id} value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
-                      placeholder={placeholder} rows={2}
-                      className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg focus:border-[#2EC4C6]/50 resize-none" />
-                  ) : component === 'textarea4' ? (
-                    <Textarea id={id} value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
-                      placeholder={placeholder} rows={4}
+                  {component === 'textarea' || component === 'textarea2' || component === 'textarea4' ? (
+                    <Textarea id={id} value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                      placeholder={placeholder} rows={component === 'textarea' ? 3 : component === 'textarea2' ? 2 : 4}
                       className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg focus:border-[#2EC4C6]/50 resize-none" />
                   ) : component === 'date' ? (
-                    <Input id={id} type="date" value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                    <Input id={id} type="date" value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
                       className="bg-gray-800/60 border-gray-700/50 text-white text-sm rounded-lg h-9 focus:border-[#2EC4C6]/50" />
                   ) : component === 'select' ? (
-                    <select id={id} value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                    <select id={id} value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
                       className="w-full bg-gray-800/60 border border-gray-700/50 text-white text-sm rounded-lg h-9 px-3 focus:border-[#2EC4C6]/50 focus:outline-none">
                       <option value="" className="bg-gray-800">{placeholder}</option>
                       {VIDEO_TOPIC_CATEGORIES.map((cat) => (
@@ -175,7 +175,7 @@ export default function NewBriefPage() {
                       ))}
                     </select>
                   ) : (
-                    <Input id={id} value={(form as any)[id]} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                    <Input id={id} value={(form[id as keyof typeof form])} onChange={(e) => setForm({ ...form, [id]: e.target.value })}
                       placeholder={placeholder}
                       className="bg-gray-800/60 border-gray-700/50 text-white text-sm placeholder:text-gray-600 rounded-lg h-9 focus:border-[#2EC4C6]/50" />
                   )}
@@ -210,7 +210,7 @@ export default function NewBriefPage() {
 
         {/* Submit */}
         <div className="flex items-center justify-end gap-2.5">
-          <Link href="/">
+          <Link href="/dashboard">
             <Button type="button" variant="ghost" size="sm" className="text-gray-500 hover:text-white h-9 text-sm">Cancel</Button>
           </Link>
           <Button type="submit" disabled={saving || !form.title}
