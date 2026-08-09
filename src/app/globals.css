@@ -549,3 +549,17 @@
     scroll-behavior: auto;
   }
 }
+
+/* ---- Scroll-film hero ---- */
+.film-vignette {
+  background:
+    radial-gradient(ellipse 120% 90% at 50% 50%, transparent 55%, rgba(2, 4, 9, 0.55) 100%);
+}
+.beat-scrim::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -40% -18%;
+  background: radial-gradient(58% 55% at 50% 50%, rgba(3, 6, 12, 0.68), rgba(3, 6, 12, 0.35) 50%, transparent 80%);
+  pointer-events: none;
+}

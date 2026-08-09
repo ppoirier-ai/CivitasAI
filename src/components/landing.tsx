@@ -12,6 +12,7 @@ import {
   IconBrowse, IconPreview, IconPurchase, IconRocket, IconBook,
 } from '@/components/landing-icons';
 import SatelliteScene from '@/components/satellite-scene';
+import ScrollFilmHero from '@/components/scroll-film-hero';
 
 /** Fade-up on scroll into view (modern micro-interaction). */
 function Reveal({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -87,67 +88,8 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
 
   return (
     <div className="relative grain -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden">
-      {/* ============ HERO ============ */}
-      <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
-        {/* Cosmic background */}
-        <div className="absolute inset-0 cosmic-stars" />
-        <div className="absolute inset-0 cosmic-stars cosmic-stars-2" />
-        <div className="absolute inset-0 cosmic-grid" />
-        <div className="absolute -top-40 -left-40 w-[520px] h-[520px] rounded-full nebula nebula-teal" />
-        <div className="absolute -bottom-52 -right-32 w-[600px] h-[600px] rounded-full nebula nebula-indigo" />
-        <div className="absolute top-1/3 right-1/4 w-[380px] h-[380px] rounded-full nebula nebula-purple" />
-
-        {/* Satellite orbiting Earth — the centered centerpiece */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1]">
-          <div className="scale-[0.5] sm:scale-[0.7] md:scale-[0.88] lg:scale-100">
-            <SatelliteScene size={620} />
-          </div>
-        </div>
-
-        {/* Legibility veil — keeps the headline crisp while the visual shows through */}
-        <div className="absolute inset-0 hero-veil pointer-events-none" />
-
-        <div className="relative max-w-3xl mx-auto text-center px-6 py-24 z-10">
-          <Badge className="mx-auto mb-8 text-[10px] h-6 px-4 bg-white/[0.03] border border-white/15 text-[#2EC4C6] rounded-full uppercase tracking-[0.28em] backdrop-blur">
-            <span className="w-1 h-1 rounded-full bg-[#2EC4C6] pulse-dot mr-2.5" />
-            Institutional Commercial Space Intelligence
-          </Badge>
-
-          <h1 className="text-4xl sm:text-6xl lg:text-[68px] font-light text-white tracking-[-0.03em] leading-[1.05]">
-            The Commercial Space Economy,
-            <span className="block mt-3 font-semibold cosmic-text tracking-[-0.02em]">Decoded.</span>
-          </h1>
-
-          <p className="text-sm sm:text-base text-gray-400 mt-7 leading-relaxed max-w-xl mx-auto">
-            Practical market intelligence, unit economics, and capital pathways for commercial space founders, operators, career-aware talent, and PE/VC investors.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10">
-            <Link href="/opportunities">
-              <Button className="w-full sm:w-auto bg-[#2EC4C6] hover:bg-[#35D0D2] text-[#04222A] font-semibold h-12 px-9 rounded-lg text-sm transition-all duration-300 hover:shadow-[0_0_28px_rgba(46,196,198,0.28)] active:scale-[0.98]">
-                <IconRocket className="w-4 h-4 mr-2" /> Explore Opportunities
-              </Button>
-            </Link>
-            <Link href="#inside">
-              <Button variant="outline" className="w-full sm:w-auto border-white/15 bg-white/[0.03] text-gray-200 hover:text-white hover:border-[#2EC4C6]/50 hover:bg-white/[0.05] h-12 px-9 rounded-lg text-sm backdrop-blur transition-all duration-300">
-                <IconBook className="w-4 h-4 mr-2" /> See What&apos;s Inside
-              </Button>
-            </Link>
-          </div>
-
-          <p className="text-[11px] text-gray-600 mt-8">
-            Prepared by Smooth Capital LLC &nbsp;·&nbsp; {BRIEF_PRICE} per brief &nbsp;·&nbsp; Lifetime access
-          </p>
-        </div>
-
-        {/* Scroll cue */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden sm:flex items-center gap-2 text-[10px] text-gray-600 uppercase tracking-[0.25em] scroll-cue">
-          Scroll <ChevronDown className="w-3.5 h-3.5" />
-        </div>
-
-        {/* bottom fade into page bg */}
-        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-b from-transparent to-[var(--background)]" />
-      </section>
+      {/* ============ HERO: scroll-film ============ */}
+      <ScrollFilmHero />
 
       {/* ============ STAT BAND ============ */}
       <section className="border-y border-white/5 bg-white/[0.015]">
