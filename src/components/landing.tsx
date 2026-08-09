@@ -60,13 +60,13 @@ const SECTIONS = [
   { icon: IconGrowth, title: 'Growth Outlook', desc: 'CAGR and the 5-year trajectory of the category.' },
   { icon: IconCapital, title: 'Capital Requirements', desc: 'What it really costs to enter the market.' },
   { icon: IconRoi, title: 'ROI Outlook', desc: 'Return profile and profitability expectations.' },
-  { icon: IconLifetime, title: 'Lifetime Access', desc: 'One purchase, forever: view or download any time.' },
+  { icon: IconLifetime, title: 'Lifetime Access', desc: 'One purchase per brief, forever: view or download any time.' },
 ];
 
 const STEPS = [
   { icon: IconBrowse, title: 'Browse the marketplace', desc: 'Search by sector, filter by capital you can deploy, sort by ROI.' },
   { icon: IconPreview, title: 'Preview every brief', desc: 'Read the table of contents and sample sections before you buy.' },
-  { icon: IconPurchase, title: 'Purchase once, own forever', desc: `${BRIEF_PRICE}: instant PDF access in your library, no subscription.` },
+  { icon: IconPurchase, title: 'Purchase once, own forever', desc: `${BRIEF_PRICE} per brief: instant PDF access in your library, no subscription.` },
 ];
 
 export default function LandingPage({ initialBriefs }: { initialBriefs?: MarketplaceBrief[] }) {
@@ -98,7 +98,7 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
             { value: '$1.2T+', label: 'Markets analyzed' },
             { value: '7', label: 'Analysis sections per brief' },
             { value: loading ? '-' : String(briefs.length), label: 'Briefs published' },
-            { value: BRIEF_PRICE, label: 'One-time, lifetime access' },
+            { value: BRIEF_PRICE, label: 'Per brief, lifetime access' },
           ].map((s) => (
             <div key={s.label} className="text-center">
               <p className="text-2xl md:text-[28px] font-semibold text-[#2EC4C6] cosmic-text tracking-tight">{s.value}</p>
@@ -277,7 +277,7 @@ export default function LandingPage({ initialBriefs }: { initialBriefs?: Marketp
               Your next venture is <span className="cosmic-text">in orbit.</span>
             </h2>
             <p className="text-sm text-gray-400 mt-5">
-              Stop reading headlines. Start reading the numbers: {BRIEF_PRICE} per brief, yours forever.
+              Stop reading headlines. Start reading the numbers: {BRIEF_PRICE} per brief, lifetime access to every brief you purchase.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-9">
               <Link href="/opportunities">

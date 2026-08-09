@@ -149,7 +149,7 @@ export default function CheckoutPage() {
               <span className="text-base font-bold text-[#2EC4C6]">{BRIEF_PRICE}</span>
             </div>
             <p className="text-[9px] text-gray-700 leading-relaxed">
-              One-time purchase. Includes lifetime access to the PDF: view and download without limits.
+              One-time purchase. Includes lifetime access to this brief's PDF: view and download without limits.
             </p>
           </CardContent>
         </Card>

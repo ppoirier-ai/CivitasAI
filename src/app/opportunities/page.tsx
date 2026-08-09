@@ -405,7 +405,7 @@ export default function OpportunitiesPage() {
           Institutional-grade venture briefs on the most compelling opportunities in the commercial space economy. Each brief includes market sizing, competitive analysis, and capital requirements.
         </p>
         <p className="text-[11px] text-[#2EC4C6] mt-3 inline-flex items-center gap-1.5 bg-[#2EC4C6]/10 px-3 py-1 rounded-full">
-          <ShoppingBag className="w-3 h-3" /> {BRIEF_PRICE} per brief · lifetime access
+          <ShoppingBag className="w-3 h-3" /> {BRIEF_PRICE} per brief · lifetime access to each brief you purchase
         </p>
         {role !== 'none' && role !== 'admin' && (
           <Link
@@ -422,6 +422,9 @@ export default function OpportunitiesPage() {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <Input
+            id="opportunities-search"
+            name="opportunities-search"
+            autoComplete="off"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search opportunities, keywords, tags..."
@@ -457,6 +460,7 @@ export default function OpportunitiesPage() {
             <DollarSign className="w-3 h-3 text-gray-500" />
             <span className="text-[10px] text-gray-600 uppercase tracking-wider">Capital</span>
             <input
+              id="capital-min" name="capital-min" autoComplete="off"
               type="number" min="0" value={capitalMin}
               onChange={(e) => setCapitalMin(e.target.value)}
               placeholder="5" inputMode="numeric"
@@ -465,6 +469,7 @@ export default function OpportunitiesPage() {
             />
             <span className="text-[10px] text-gray-600">–</span>
             <input
+              id="capital-max" name="capital-max" autoComplete="off"
               type="number" min="0" value={capitalMax}
               onChange={(e) => setCapitalMax(e.target.value)}
               placeholder="25" inputMode="numeric"
