@@ -103,12 +103,12 @@ export default function LibraryPage() {
 
                   {brief.pdf_url ? (
                     <div className="flex items-center gap-2">
-                      <a href={brief.pdf_url} target="_blank" rel="noreferrer" className="flex-1">
+                      <a href={`/api/brief-pdf?id=${brief.id}`} target="_blank" rel="noreferrer" className="flex-1">
                         <Button className="w-full bg-[#2EC4C6] hover:bg-[#28B0B2] text-black text-[10px] h-7 rounded-lg font-medium">
                           <Eye className="w-3 h-3 mr-1" /> View Brief
                         </Button>
                       </a>
-                      <a href={brief.pdf_url} download className="flex-1">
+                      <a href={`/api/brief-pdf?id=${brief.id}`} className="flex-1">
                         <Button variant="outline" className="w-full border-gray-700/50 text-gray-300 hover:text-white text-[10px] h-7 rounded-lg font-medium">
                           <Download className="w-3 h-3 mr-1" /> Download
                         </Button>

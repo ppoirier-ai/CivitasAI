@@ -209,12 +209,12 @@ export default function PreviewPage() {
                   </p>
                   {brief.pdf_url && (
                     <>
-                      <a href={brief.pdf_url} target="_blank" rel="noreferrer" className="block">
+                      <a href={`/api/brief-pdf?id=${brief.id}`} target="_blank" rel="noreferrer" className="block">
                         <Button className="w-full bg-[#2EC4C6] hover:bg-[#28B0B2] text-black font-medium h-10 rounded-lg">
                           <Eye className="w-4 h-4 mr-2" /> View Brief
                         </Button>
                       </a>
-                      <a href={brief.pdf_url} download className="block">
+                      <a href={`/api/brief-pdf?id=${brief.id}`} className="block">
                         <Button variant="outline" className="w-full border-gray-700/50 text-gray-300 hover:text-white h-10 rounded-lg">
                           <Download className="w-4 h-4 mr-2" /> Download PDF
                         </Button>

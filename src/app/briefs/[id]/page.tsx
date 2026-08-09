@@ -227,7 +227,7 @@ export default function BriefDetailPage() {
                   <p className="text-xs text-gray-500 leading-relaxed">The final PDF is ready. Approve to publish, or reject to revise.</p>
                   <div className="flex flex-wrap items-center gap-2">
                     {brief.pdf_url && (
-                      <a href={brief.pdf_url} target="_blank" rel="noreferrer">
+                      <a href={`/api/brief-pdf?id=${brief.id}`} target="_blank" rel="noreferrer">
                         <Button variant="outline" size="sm" className="border-gray-700/50 text-gray-400 h-8 text-xs rounded-lg">
                           <Eye className="w-3.5 h-3.5 mr-1.5" />Preview
                         </Button>
@@ -250,7 +250,7 @@ export default function BriefDetailPage() {
                   <CheckCircle className="w-4 h-4" />
                   <span className="text-sm font-medium">Published</span>
                   {brief.pdf_url && (
-                    <a href={brief.pdf_url} target="_blank" rel="noreferrer">
+                    <a href={`/api/brief-pdf?id=${brief.id}`} target="_blank" rel="noreferrer">
                       <Button variant="outline" size="sm" className="border-gray-700/50 text-gray-400 h-7 text-[10px] rounded-lg ml-2">
                         <Eye className="w-3 h-3 mr-1" />View PDF
                       </Button>

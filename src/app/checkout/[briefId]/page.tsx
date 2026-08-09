@@ -106,8 +106,8 @@ export default function CheckoutPage() {
                   <BookOpen className="w-4 h-4 mr-2" /> Go to My Library
                 </Button>
               </Link>
-              {brief?.pdf_url && (
-                <a href={brief.pdf_url} target="_blank" rel="noreferrer">
+              {brief?.pdf_url && brief?.id && (
+                <a href={`/api/brief-pdf?id=${brief.id}`} target="_blank" rel="noreferrer">
                   <Button variant="outline" className="w-full border-gray-700/50 text-gray-300 hover:text-white h-10 rounded-lg">
                     <Eye className="w-4 h-4 mr-2" /> View Brief Now
                   </Button>

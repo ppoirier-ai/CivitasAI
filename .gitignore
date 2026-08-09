@@ -46,3 +46,4 @@ next-env.d.ts
 # brand temp/source files
 /public/brand/_*
 supabase/.temp
+public/pdfs/
