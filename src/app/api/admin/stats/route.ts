@@ -1,5 +1,6 @@
 import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { isAdminEmail } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,7 +14,7 @@ export async function GET() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user || user.app_metadata?.role !== 'admin') {
+  if (!user || (user.app_metadata?.role !== 'admin' && !isAdminEmail(user.email))) {
     return NextResponse.json({ error: 'Admin access required.' }, { status: 403 });
   }
 

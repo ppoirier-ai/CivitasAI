@@ -2,6 +2,7 @@ import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { createSupabaseServiceClient } from '@/lib/supabase/server';
+import { isAdminEmail } from '@/lib/auth';
 import { CoverJSX } from '@/components/cover-jsx';
 
 // We need React for createElement since route handlers can't use JSX
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
     const {
       data: { user },
     } = await authSupabase.auth.getUser();
-    if (!user || user.app_metadata?.role !== 'admin') {
+    if (!user || (user.app_metadata?.role !== 'admin' && !isAdminEmail(user.email))) {
       return Response.json({ error: 'Unauthorized. Admin access required.' }, { status: 403 });
     }
 

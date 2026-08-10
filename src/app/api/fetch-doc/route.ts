@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { isAdminEmail } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,7 +9,7 @@ export async function POST(request: NextRequest) {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (!user || user.app_metadata?.role !== 'admin') {
+    if (!user || (user.app_metadata?.role !== 'admin' && !isAdminEmail(user.email))) {
       return Response.json({ error: 'Unauthorized.' }, { status: 401 });
     }
 

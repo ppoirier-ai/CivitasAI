@@ -7,12 +7,26 @@ import type { User } from '@supabase/supabase-js';
 import type { UserRole } from '@/lib/types';
 
 /**
+ * Email allowlist of admin accounts. A user whose email is listed here is
+ * treated as admin regardless of the profiles table / app_metadata role.
+ * Configure via NEXT_PUBLIC_ADMIN_EMAILS="a@x.com,b@y.com" (comma separated).
+ */
+export function isAdminEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  const list = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? '')
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  return list.includes(email.toLowerCase());
+}
+
+/**
  * Client-side role resolution.
- * Single source of truth is the `profiles` table (role column).
- * Falls back to auth.users app_metadata.role (set at account creation).
+ * Order: admin email allowlist → profiles table role → app_metadata.role.
  */
 export function resolveRole(user: User | null): UserRole {
   if (!user) return 'none';
+  if (isAdminEmail(user.email)) return 'admin';
   const fromMeta = user.app_metadata?.role as string | undefined;
   if (fromMeta === 'admin' || fromMeta === 'customer') return fromMeta;
   return 'customer';
@@ -40,6 +54,12 @@ export function useRole(): RoleState {
       setUser(u);
       if (!u) {
         setRole('none');
+        setLoading(false);
+        return;
+      }
+      // Email allowlist always wins — no need to hit the profiles table.
+      if (isAdminEmail(u.email)) {
+        setRole('admin');
         setLoading(false);
         return;
       }

@@ -1,10 +1,11 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { isAdminPath } from '@/lib/paths';
+import { isAdminEmail } from '@/lib/auth';
 
 /**
  * Auth + role enforcement.
- * - Public: /opportunities, /auth/*, /api/public-briefs, /api/auth/signup, /api/cron/*
+ * - Public: /opportunities, /auth/*, /api/public-briefs, /api/cron/*
  * - Signed-out users hitting anything else are sent to /auth/login?next=...
  * - Admin-only (brief lifecycle + admin console): /, /briefs/*, /calendar, /admin, /api/admin/*
  * - Customers are redirected to /library from admin-only paths.
@@ -39,7 +40,7 @@ export async function proxy(request: NextRequest) {
 
   const { pathname, search } = request.nextUrl;
   const role = (user?.app_metadata?.role as string | undefined) ?? null;
-  const isAdmin = role === 'admin';
+  const isAdmin = role === 'admin' || isAdminEmail(user?.email);
 
   // Public paths (no session required)
   const isPublic = [
@@ -49,7 +50,6 @@ export async function proxy(request: NextRequest) {
     '/auth/login',
     '/auth/callback',
     '/api/public-briefs',
-    '/api/auth/signup',
     '/api/cron',
   ].some((p) => pathname === p || (p !== '/' && pathname.startsWith(`${p}/`)));
 

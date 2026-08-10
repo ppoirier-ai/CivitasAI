@@ -1,5 +1,6 @@
 import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { isAdminEmail } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,7 +51,9 @@ export async function GET(request: Request) {
     .eq('id', user.id)
     .single();
   const isAdmin =
-    profile?.role === 'admin' || user.app_metadata?.role === 'admin';
+    profile?.role === 'admin' ||
+    user.app_metadata?.role === 'admin' ||
+    isAdminEmail(user.email);
 
   if (!isAdmin) {
     const { data: purchase } = await service
