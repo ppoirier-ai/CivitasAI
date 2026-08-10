@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase/server';
 import { escapeHtml } from '@/lib/utils';
-import { isAdminEmail } from '@/lib/auth';
+import { isAdminEmail } from '@/lib/admin';
 
 export async function POST(request: NextRequest) {
   try {

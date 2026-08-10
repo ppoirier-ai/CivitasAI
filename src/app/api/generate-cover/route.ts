@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { createSupabaseServiceClient } from '@/lib/supabase/server';
-import { isAdminEmail } from '@/lib/auth';
+import { isAdminEmail } from '@/lib/admin';
 import { CoverJSX } from '@/components/cover-jsx';
 
 // We need React for createElement since route handlers can't use JSX

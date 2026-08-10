@@ -6,19 +6,8 @@ import { useSupabase } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import type { UserRole } from '@/lib/types';
 
-/**
- * Email allowlist of admin accounts. A user whose email is listed here is
- * treated as admin regardless of the profiles table / app_metadata role.
- * Configure via NEXT_PUBLIC_ADMIN_EMAILS="a@x.com,b@y.com" (comma separated).
- */
-export function isAdminEmail(email: string | null | undefined): boolean {
-  if (!email) return false;
-  const list = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? '')
-    .split(',')
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
-  return list.includes(email.toLowerCase());
-}
+export { isAdminEmail } from '@/lib/admin';
+import { isAdminEmail } from '@/lib/admin';
 
 /**
  * Client-side role resolution.

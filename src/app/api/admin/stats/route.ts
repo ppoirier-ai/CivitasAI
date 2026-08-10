@@ -1,6 +1,6 @@
 import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-import { isAdminEmail } from '@/lib/auth';
+import { isAdminEmail } from '@/lib/admin';
 
 export const dynamic = 'force-dynamic';
 

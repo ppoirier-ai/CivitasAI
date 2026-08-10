@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { isAdminPath } from '@/lib/paths';
-import { isAdminEmail } from '@/lib/auth';
+import { isAdminEmail } from '@/lib/admin';
 
 /**
  * Auth + role enforcement.
